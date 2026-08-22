@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_referential_employee,smq.referential employee,model_smq_referential,smq_quality.group_smq_employee,1,0,0,0
+access_smq_referential_quality_manager,smq.referential quality manager,model_smq_referential,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_referential_requirement_employee,smq.referential.requirement employee,model_smq_referential_requirement,smq_quality.group_smq_employee,1,0,0,0
+access_smq_referential_requirement_quality_manager,smq.referential.requirement quality manager,model_smq_referential_requirement,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_compliance_line_employee,smq.compliance.line employee,model_smq_compliance_line,smq_quality.group_smq_employee,1,0,0,0
+access_smq_compliance_line_writer,smq.compliance.line writer,model_smq_compliance_line,smq_quality.group_smq_writer,1,1,1,0
+access_smq_compliance_line_quality_manager,smq.compliance.line quality manager,model_smq_compliance_line,smq_quality.group_smq_quality_manager,1,1,1,1

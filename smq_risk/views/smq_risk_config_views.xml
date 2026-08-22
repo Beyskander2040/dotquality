@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Probabilité -->
+    <record id="view_smq_risk_probability_tree" model="ir.ui.view">
+        <field name="name">smq.risk.probability.tree</field>
+        <field name="model">smq.risk.probability</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="value" />
+                <field name="description" />
+                <field name="active" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_risk_probability" model="ir.actions.act_window">
+        <field name="name">Probabilités</field>
+        <field name="res_model">smq.risk.probability</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- Impact -->
+    <record id="view_smq_risk_impact_tree" model="ir.ui.view">
+        <field name="name">smq.risk.impact.tree</field>
+        <field name="model">smq.risk.impact</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="value" />
+                <field name="description" />
+                <field name="active" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_risk_impact" model="ir.actions.act_window">
+        <field name="name">Impacts</field>
+        <field name="res_model">smq.risk.impact</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- Criticité -->
+    <record id="view_smq_risk_criticality_level_tree" model="ir.ui.view">
+        <field name="name">smq.risk.criticality.level.tree</field>
+        <field name="model">smq.risk.criticality.level</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="min_score" />
+                <field name="max_score" />
+                <field name="color" widget="color_picker" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_risk_criticality_level" model="ir.actions.act_window">
+        <field name="name">Niveaux de criticité</field>
+        <field name="res_model">smq.risk.criticality.level</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Type de source -->
+    <record id="view_smq_risk_source_type_tree" model="ir.ui.view">
+        <field name="name">smq.risk.source.type.tree</field>
+        <field name="model">smq.risk.source.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="code" readonly="1" />
+                <field name="active" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_risk_source_type" model="ir.actions.act_window">
+        <field name="name">Types de source (risques)</field>
+        <field name="res_model">smq.risk.source.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+</odoo>

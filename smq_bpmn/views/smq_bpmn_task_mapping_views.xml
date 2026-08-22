@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_bpmn_task_mapping_tree" model="ir.ui.view">
+        <field name="name">smq.bpmn.task.mapping.tree</field>
+        <field name="model">smq.bpmn.task.mapping</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="bpmn_element_id" />
+                <field name="element_name" />
+                <field name="element_type" />
+                <field name="task_type" />
+                <field name="odoo_model_id" />
+                <field name="odoo_method" />
+                <field name="odoo_action_id" />
+                <field name="active" widget="boolean_toggle" />
+                <field
+                    name="is_orphaned"
+                    widget="badge"
+                    decoration-danger="is_orphaned"
+                    decoration-success="not is_orphaned"
+                />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_bpmn_task_mapping_form" model="ir.ui.view">
+        <field name="name">smq.bpmn.task.mapping.form</field>
+        <field name="model">smq.bpmn.task.mapping</field>
+        <field name="arch" type="xml">
+            <form string="Mapping BPMN">
+                <sheet>
+                    <group>
+                        <group string="Élément BPMN (source de vérité : le diagramme)">
+                            <field name="process_version_id" />
+                            <field name="bpmn_element_id" />
+                            <field name="element_name" />
+                            <field name="element_type" />
+                            <field name="is_orphaned" readonly="1" />
+                        </group>
+                        <group string="Mapping Odoo (source de vérité : ce mapping)">
+                            <field name="task_type" />
+                            <field name="odoo_model_id" />
+                            <field name="odoo_method" />
+                            <field name="odoo_action_id" />
+                            <field name="active" />
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

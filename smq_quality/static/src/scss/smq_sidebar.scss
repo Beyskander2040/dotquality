@@ -1,0 +1,231 @@
+// Les variables $smq-* viennent de smq_tokens.scss, chargé avant ce
+// fichier dans le manifest (voir la note dans smq_dashboard.scss).
+
+// WebClient monte NavBar / ActionContainer / SmqSidebar comme enfants
+// directs de <body> (pas de conteneur commun) : la sidebar se positionne
+// donc en "fixed" sous la navbar plutôt que via flex/grid entre frères.
+.o_smq_sidebar {
+    position: fixed;
+    top: var(--o-navbar-height, 46px);
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    width: $smq-sidebar-width;
+    background: $smq-sidebar-bg;
+    color: $smq-text;
+    border-right: 1px solid $smq-border;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: width 0.15s ease;
+    font-size: $smq-font-size-body;
+
+    &.o_smq_sidebar_collapsed {
+        width: $smq-sidebar-width-collapsed;
+    }
+}
+
+.o_smq_sidebar_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $smq-space-3 $smq-space-4;
+    border-bottom: 1px solid $smq-border;
+    flex: none;
+}
+
+// En mode réduit, le logo (icône seule) et le bouton de bascule n'ont que
+// ~32px de large disponibles (64px - paddings) : pas assez pour les mettre
+// côte à côte, donc on les empile verticalement plutôt que de masquer le logo.
+.o_smq_sidebar_collapsed .o_smq_sidebar_header {
+    flex-direction: column;
+    justify-content: center;
+    gap: $smq-space-2;
+    padding: $smq-space-3 $smq-space-2;
+}
+
+.o_smq_sidebar_brand {
+    display: flex;
+    align-items: center;
+}
+
+.o_smq_sidebar_brand_logo {
+    display: block;
+    height: 34px;
+    width: auto;
+}
+
+.o_smq_sidebar_brand_mark {
+    display: block;
+    height: 32px;
+    width: auto;
+}
+
+.o_smq_sidebar_toggle {
+    background: transparent;
+    border: none;
+    color: $smq-text-muted;
+    padding: $smq-space-1 $smq-space-2;
+    border-radius: $smq-radius-sm;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        background: $smq-sidebar-bg-hover;
+        color: $smq-text;
+        outline: none;
+    }
+}
+
+.o_smq_sidebar_body {
+    flex: 1;
+    overflow-y: auto;
+    padding: $smq-space-3 $smq-space-2;
+}
+
+.o_smq_sidebar_link {
+    display: flex;
+    align-items: center;
+    gap: $smq-space-3;
+    padding: $smq-space-2 $smq-space-3;
+    border-radius: $smq-radius-sm;
+    color: $smq-text-muted;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        background: $smq-sidebar-bg-hover;
+        color: $smq-text;
+        outline: 1px solid $smq-border;
+        outline-offset: -1px;
+        text-decoration: none;
+    }
+}
+
+.o_smq_sidebar_top_link {
+    font-weight: 600;
+    color: $smq-text;
+    margin-bottom: $smq-space-2;
+
+    &:hover,
+    &:focus-visible {
+        background: $smq-primary-light;
+        color: $smq-primary;
+    }
+}
+
+.o_smq_sidebar_icon {
+    width: 18px;
+    text-align: center;
+    flex: none;
+}
+
+.o_smq_sidebar_section_title {
+    margin-top: $smq-space-4;
+    padding: $smq-space-3 $smq-space-3 $smq-space-1;
+    border-top: 1px solid $smq-border;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $smq-inactive;
+}
+
+.o_smq_sidebar_group {
+    margin-bottom: $smq-space-3;
+}
+
+.o_smq_sidebar_group_title {
+    display: flex;
+    align-items: center;
+    gap: $smq-space-3;
+    padding: $smq-space-2 $smq-space-3;
+    font-size: $smq-font-size-label;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $smq-text-muted;
+    font-weight: 700;
+    border-radius: $smq-radius-sm;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover,
+    &:focus-visible {
+        background: $smq-sidebar-bg-hover;
+        color: $smq-text;
+        outline: none;
+    }
+}
+
+.o_smq_sidebar_group_caret {
+    margin-left: auto;
+    font-size: 0.68rem;
+    opacity: 0.7;
+}
+
+.o_smq_sidebar_soon_tag {
+    margin-left: auto;
+    font-size: 0.62rem;
+    text-transform: none;
+    background: $smq-inactive-bg;
+    color: $smq-text-muted;
+    padding: 0.1em 0.5em;
+    border-radius: 999px;
+}
+
+.o_smq_sidebar_children {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.o_smq_sidebar_child_link {
+    padding-left: $smq-space-6;
+    justify-content: space-between;
+}
+
+.o_smq_sidebar_link_soon {
+    color: $smq-inactive;
+}
+
+.o_smq_sidebar_lock {
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+// ---------------------------------------------------------------------
+// Intégration au webclient : on réserve la place de la sidebar en
+// décalant .o_action_manager (classe déjà fournie par Odoo pour le
+// conteneur de l'action courante), uniquement pendant que l'app SMQ est
+// active (classe posée par le composant lui-même) — aucune autre
+// application n'est donc affectée.
+// ---------------------------------------------------------------------
+body.o_smq_app_active .o_action_manager {
+    margin-left: $smq-sidebar-width;
+    transition: margin-left 0.15s ease;
+}
+
+body.o_smq_app_active.o_smq_sidebar_is_collapsed .o_action_manager {
+    margin-left: $smq-sidebar-width-collapsed;
+}
+
+@media (max-width: 1024px) {
+    body.o_smq_app_active .o_action_manager {
+        margin-left: $smq-sidebar-width-collapsed;
+    }
+
+    .o_smq_sidebar:not(.o_smq_sidebar_collapsed) {
+        width: $smq-sidebar-width-collapsed;
+
+        .o_smq_sidebar_label,
+        .o_smq_sidebar_brand,
+        .o_smq_sidebar_soon_tag {
+            display: none;
+        }
+
+        .o_smq_sidebar_children {
+            display: none;
+        }
+    }
+}

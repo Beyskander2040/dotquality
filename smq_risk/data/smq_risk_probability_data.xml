@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_risk_probability_1" model="smq.risk.probability">
+        <field name="name">Rare</field>
+        <field name="value">1</field>
+        <field name="sequence">10</field>
+        <field name="description">N'est jamais survenu, ou de façon exceptionnelle.</field>
+    </record>
+
+    <record id="smq_risk_probability_2" model="smq.risk.probability">
+        <field name="name">Peu probable</field>
+        <field name="value">2</field>
+        <field name="sequence">20</field>
+        <field name="description">Peu susceptible de survenir, mais déjà observé.</field>
+    </record>
+
+    <record id="smq_risk_probability_3" model="smq.risk.probability">
+        <field name="name">Possible</field>
+        <field name="value">3</field>
+        <field name="sequence">30</field>
+        <field name="description">Pourrait survenir à un moment ou un autre.</field>
+    </record>
+
+    <record id="smq_risk_probability_4" model="smq.risk.probability">
+        <field name="name">Probable</field>
+        <field name="value">4</field>
+        <field name="sequence">40</field>
+        <field name="description">Susceptible de survenir dans la plupart des circonstances.</field>
+    </record>
+
+    <record id="smq_risk_probability_5" model="smq.risk.probability">
+        <field name="name">Presque certain</field>
+        <field name="value">5</field>
+        <field name="sequence">50</field>
+        <field name="description">Surviendra très probablement, voire de façon récurrente.</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_document_type_employee,smq.document.type employee,model_smq_document_type,smq_quality.group_smq_employee,1,0,0,0
+access_smq_document_type_admin,smq.document.type admin,model_smq_document_type,smq_quality.group_smq_admin,1,1,1,1
+access_smq_document_stage_employee,smq.document.stage employee,model_smq_document_stage,smq_quality.group_smq_employee,1,0,0,0
+access_smq_document_stage_admin,smq.document.stage admin,model_smq_document_stage,smq_quality.group_smq_admin,1,1,1,1
+access_smq_document_employee,smq.document employee,model_smq_document,smq_quality.group_smq_employee,1,0,0,0
+access_smq_document_writer,smq.document writer,model_smq_document,smq_quality.group_smq_writer,1,1,1,0
+access_smq_document_quality_manager,smq.document quality manager,model_smq_document,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_document_version_employee,smq.document.version employee,model_smq_document_version,smq_quality.group_smq_employee,1,0,0,0
+access_smq_document_version_writer,smq.document.version writer,model_smq_document_version,smq_quality.group_smq_writer,1,1,1,0
+access_smq_document_version_quality_manager,smq.document.version quality manager,model_smq_document_version,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_document_version_reject_wizard,smq.document.version.reject.wizard,model_smq_document_version_reject_wizard,smq_quality.group_smq_verifier,1,1,1,1
+access_smq_document_version_effective_wizard,smq.document.version.effective.wizard,model_smq_document_version_effective_wizard,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_document_periodic_review_wizard,smq.document.periodic.review.wizard,model_smq_document_periodic_review_wizard,smq_quality.group_smq_quality_manager,1,1,1,1

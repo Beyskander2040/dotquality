@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_site_hq" model="smq.site">
+        <field name="code">SITE-01</field>
+        <field name="name">Siège social</field>
+        <field name="description">Site principal : direction, développement et support.</field>
+    </record>
+
+    <record id="smq_site_remote" model="smq.site">
+        <field name="code">SITE-02</field>
+        <field name="name">Site secondaire</field>
+        <field name="description">Site secondaire / équipes distantes.</field>
+    </record>
+
+    <record id="smq_activity_software" model="smq.activity">
+        <field name="name">Édition logicielle</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="smq_activity_support" model="smq.activity">
+        <field name="name">Support client</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="smq_activity_hosting" model="smq.activity">
+        <field name="name">Hébergement &amp; infrastructure</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="smq_activity_consulting" model="smq.activity">
+        <field name="name">Conseil &amp; intégration</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="smq_stakeholder_customers" model="smq.stakeholder">
+        <field name="name">Clients grands comptes</field>
+        <field name="category">customer</field>
+        <field name="influence_level">high</field>
+        <field name="expectations">Disponibilité du service, conformité contractuelle, traitement rapide des anomalies.</field>
+    </record>
+
+    <record id="smq_stakeholder_authority" model="smq.stakeholder">
+        <field name="name">Autorité de régulation</field>
+        <field name="category">authority</field>
+        <field name="influence_level">high</field>
+        <field name="expectations">Conformité réglementaire et sécurité des données traitées.</field>
+    </record>
+
+    <record id="smq_stakeholder_shareholders" model="smq.stakeholder">
+        <field name="name">Actionnaires</field>
+        <field name="category">shareholder</field>
+        <field name="influence_level">medium</field>
+        <field name="expectations">Pérennité et performance du système de management de la qualité.</field>
+    </record>
+
+    <record id="smq_scope_certification" model="smq.scope">
+        <field name="name">Périmètre de certification ISO 9001</field>
+        <field name="description">Couvre l'ensemble des activités de conception, réalisation et support des services numériques du groupe.</field>
+        <field name="site_ids" eval="[(6, 0, [ref('smq_site_hq'), ref('smq_site_remote')])]" />
+        <field name="activity_ids" eval="[(6, 0, [
+            ref('smq_activity_software'),
+            ref('smq_activity_support'),
+            ref('smq_activity_hosting'),
+            ref('smq_activity_consulting'),
+        ])]" />
+        <field name="process_ids" eval="[(6, 0, [
+            ref('smq_quality.smq_process_pr01'),
+            ref('smq_quality.smq_process_pr02'),
+            ref('smq_quality.smq_process_pr03'),
+            ref('smq_quality.smq_process_pr05'),
+            ref('smq_quality.smq_process_pr07'),
+        ])]" />
+    </record>
+
+</odoo>

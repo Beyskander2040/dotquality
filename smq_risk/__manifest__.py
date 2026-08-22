@@ -1,0 +1,25 @@
+{
+    "name": "SMQ - Risques & Opportunités",
+    "summary": "Registre générique des risques et opportunités (ISO 9001 §6.1), multi-secteurs",
+    "version": "17.0.1.0.0",
+    "category": "Quality",
+    "author": "Medianet",
+    "license": "AGPL-3",
+    "application": False,
+    "depends": [
+        "smq_quality",
+        "smq_organization",
+        "mgmtsystem_action",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/ir_sequence_data.xml",
+        "data/smq_risk_probability_data.xml",
+        "data/smq_risk_impact_data.xml",
+        "data/smq_risk_criticality_level_data.xml",
+        "data/smq_risk_source_type_data.xml",
+        "views/smq_risk_views.xml",
+        "views/smq_risk_config_views.xml",
+        "views/smq_risk_menus.xml",
+    ],
+}

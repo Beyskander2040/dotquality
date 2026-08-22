@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Bandes pour une matrice 5x5 (score de 1 à 25). Seuils et libellés
+         restent modifiables par l'administrateur (menu Configuration). -->
+
+    <record id="smq_risk_criticality_low" model="smq.risk.criticality.level">
+        <field name="name">Faible</field>
+        <field name="min_score">1</field>
+        <field name="max_score">4</field>
+        <field name="color">10</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="smq_risk_criticality_moderate" model="smq.risk.criticality.level">
+        <field name="name">Modéré</field>
+        <field name="min_score">5</field>
+        <field name="max_score">9</field>
+        <field name="color">3</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="smq_risk_criticality_high" model="smq.risk.criticality.level">
+        <field name="name">Élevé</field>
+        <field name="min_score">10</field>
+        <field name="max_score">14</field>
+        <field name="color">2</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="smq_risk_criticality_critical" model="smq.risk.criticality.level">
+        <field name="name">Critique</field>
+        <field name="min_score">15</field>
+        <field name="max_score">25</field>
+        <field name="color">1</field>
+        <field name="sequence">40</field>
+    </record>
+
+</odoo>

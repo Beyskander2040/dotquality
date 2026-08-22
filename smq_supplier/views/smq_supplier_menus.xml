@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_smq_supplier"
+        name="Fournisseurs"
+        action="action_smq_supplier_evaluation"
+        parent="smq_quality.menu_smq_root"
+        sequence="69"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_supplier_configuration"
+        name="Fournisseurs"
+        parent="smq_quality.menu_smq_configuration"
+        sequence="40"
+        groups="smq_quality.group_smq_admin"
+    />
+
+    <menuitem
+        id="menu_smq_supplier_criterion"
+        name="Critères d'évaluation"
+        action="action_smq_supplier_criterion"
+        parent="menu_smq_supplier_configuration"
+        sequence="10"
+        groups="smq_quality.group_smq_admin"
+    />
+
+    <menuitem
+        id="menu_smq_supplier_qualification_level"
+        name="Niveaux de qualification"
+        action="action_smq_supplier_qualification_level"
+        parent="menu_smq_supplier_configuration"
+        sequence="20"
+        groups="smq_quality.group_smq_admin"
+    />
+
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- LOT 8 : ajoute uniquement l'accès aux versions BPMN sur le
+         processus existant (bouton statistique + colonne + section liste).
+         Aucun champ métier existant (code, name, status, category_id...)
+         n'est retiré ni réorganisé. -->
+
+    <record id="view_smq_process_form_bpmn" model="ir.ui.view">
+        <field name="name">smq.process.form.bpmn</field>
+        <field name="model">smq.process</field>
+        <field name="inherit_id" ref="smq_quality.view_smq_process_form" />
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <div class="oe_button_box" name="button_box">
+                    <button
+                        name="action_view_process_versions"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-sitemap"
+                    >
+                        <field name="version_count" widget="statinfo" string="Versions" />
+                    </button>
+                </div>
+            </field>
+            <field name="company_id" position="after">
+                <field name="current_version_id" readonly="1" />
+            </field>
+            <xpath expr="//field[@name='description']/parent::group" position="after">
+                <group string="Versions BPMN" col="1">
+                    <field name="version_ids" nolabel="1">
+                        <tree>
+                            <field name="version" />
+                            <field name="name" />
+                            <field
+                                name="state"
+                                widget="badge"
+                                decoration-muted="state in ('draft', 'rejected')"
+                                decoration-info="state == 'review'"
+                                decoration-success="state in ('approved', 'effective')"
+                                decoration-warning="state == 'obsolete'"
+                                decoration-danger="state == 'rejected'"
+                            />
+                            <field name="created_by" />
+                            <field name="created_date" />
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_smq_process_tree_bpmn" model="ir.ui.view">
+        <field name="name">smq.process.tree.bpmn</field>
+        <field name="model">smq.process</field>
+        <field name="inherit_id" ref="smq_quality.view_smq_process_tree" />
+        <field name="arch" type="xml">
+            <field name="responsible_id" position="after">
+                <field name="current_version_id" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

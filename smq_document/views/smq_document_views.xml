@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- js_class : réutilise le vrai type "tree" (aucune extension du champ
+         ir.ui.view.type nécessaire, contrairement à une première tentative)
+         — Odoo résout js_class vers un Renderer JS dédié qui rend les
+         documents en arbre plié/déplié sur parent_document_id au lieu
+         d'une liste plate, y compris à l'intérieur d'un regroupement natif
+         ("Grouper par Processus") ; voir smq_document_hierarchy_list_view.esm.js. -->
+    <record id="view_smq_document_tree" model="ir.ui.view">
+        <field name="name">smq.document.tree</field>
+        <field name="model">smq.document</field>
+        <field name="arch" type="xml">
+            <tree js_class="smq_document_hierarchy_list">
+                <field name="parent_document_id" column_invisible="1" />
+                <field name="code" />
+                <field name="name" />
+                <field name="complete_name" string="Hiérarchie" optional="show" />
+                <field name="document_type_id" />
+                <field name="process_id" />
+                <field name="current_version_id" string="Version" />
+                <field name="responsible_id" />
+                <field name="stage_id" />
+                <field name="publication_date" />
+                <field name="next_review_date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_document_kanban" model="ir.ui.view">
+        <field name="name">smq.document.kanban</field>
+        <field name="model">smq.document</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id">
+                <field name="code" />
+                <field name="name" />
+                <field name="document_type_id" />
+                <field name="responsible_id" />
+                <field name="current_version_id" />
+                <field name="has_revision_in_progress" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <span><t t-esc="record.code.value" /> — <t t-esc="record.name.value" /></span>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="document_type_id" />
+                                <span
+                                    class="badge text-bg-warning ms-1"
+                                    invisible="not has_revision_in_progress"
+                                >Révision en cours</span>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <t t-esc="record.current_version_id.value or '—'" />
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="responsible_id" widget="many2one_avatar_user" />
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_smq_document_form" model="ir.ui.view">
+        <field name="name">smq.document.form</field>
+        <field name="model">smq.document</field>
+        <field name="arch" type="xml">
+            <form string="Document SMQ">
+                <header>
+                    <button
+                        name="action_submit_validation"
+                        string="Soumettre à validation"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="workflow_state != 'draft'"
+                        groups="smq_quality.group_smq_writer"
+                    />
+                    <button
+                        name="action_validate"
+                        string="Valider"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="workflow_state != 'in_validation'"
+                        groups="smq_quality.group_smq_verifier"
+                    />
+                    <button
+                        name="action_reject"
+                        string="Rejeter"
+                        type="object"
+                        invisible="workflow_state != 'in_validation'"
+                        groups="smq_quality.group_smq_verifier"
+                    />
+                    <button
+                        name="action_publish"
+                        string="Publier"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="workflow_state != 'approved'"
+                        groups="smq_quality.group_smq_quality_manager"
+                    />
+                    <button
+                        name="action_set_effective"
+                        string="Rendre effectif"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="workflow_state != 'published'"
+                        groups="smq_quality.group_smq_quality_manager"
+                    />
+                    <button
+                        name="action_create_new_version"
+                        string="Nouvelle version"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="workflow_state != 'effective'"
+                        groups="smq_quality.group_smq_quality_manager"
+                    />
+                    <field name="stage_id" widget="statusbar" />
+                </header>
+                <sheet>
+                    <field name="workflow_state" invisible="1" />
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_versions"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-history"
+                        >
+                            <field name="version_count" widget="statinfo" string="Versions" />
+                        </button>
+                        <button
+                            name="action_view_child_documents"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-sitemap"
+                            invisible="child_document_count == 0"
+                        >
+                            <field name="child_document_count" widget="statinfo" string="Documents liés" />
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archivé" bg_color="bg-danger" invisible="active" />
+                    <widget
+                        name="web_ribbon"
+                        title="Révision en cours"
+                        bg_color="bg-warning"
+                        invisible="not has_revision_in_progress"
+                    />
+                    <field name="active" invisible="1" />
+                    <div class="oe_title">
+                        <label for="code" string="Référence" />
+                        <h2>
+                            <field name="code" readonly="id" placeholder="Généré automatiquement si laissé vide" />
+                        </h2>
+                        <label for="name" string="Titre" />
+                        <h1>
+                            <field name="name" placeholder="ex. Procédure de gestion documentaire" />
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page name="general" string="Informations générales">
+                            <group>
+                                <group>
+                                    <field name="document_type_id" />
+                                    <field name="process_id" />
+                                    <field name="parent_document_id" />
+                                    <field name="responsible_id" />
+                                    <field name="department" />
+                                </group>
+                                <group>
+                                    <field name="confidentiality_level" />
+                                    <field name="company_id" groups="base.group_multi_company" />
+                                </group>
+                            </group>
+                            <group string="Description / Objet">
+                                <field name="description" nolabel="1" placeholder="Objet du document..." />
+                            </group>
+                        </page>
+                        <page name="control" string="Contrôle documentaire">
+                            <group>
+                                <group string="Version">
+                                    <field name="current_version_id" readonly="1" />
+                                    <field name="workflow_version_id" readonly="1" string="Version en cours" />
+                                    <field name="has_revision_in_progress" />
+                                </group>
+                                <group string="Dates">
+                                    <field name="create_date" string="Date de création" readonly="1" />
+                                    <field name="approval_date" readonly="1" />
+                                    <field name="publication_date" readonly="1" />
+                                    <field name="next_review_date" readonly="1" />
+                                    <field name="review_period" />
+                                    <field name="last_periodic_review_date" readonly="1" />
+                                    <field name="last_periodic_reviewer_id" readonly="1" />
+                                    <button
+                                        name="action_periodic_review"
+                                        string="Effectuer la revue périodique"
+                                        type="object"
+                                        class="btn-secondary"
+                                        invisible="stage_id.code != 'effective'"
+                                        groups="smq_quality.group_smq_quality_manager"
+                                    />
+                                </group>
+                            </group>
+                        </page>
+                        <page name="file" string="Fichier / Contenu">
+                            <p class="text-muted">
+                                Fichiers de la version active — pour joindre ou remplacer un fichier, ouvrez cette version depuis l'onglet "Versions" (seule une version en brouillon peut être modifiée).
+                            </p>
+                            <field name="workflow_attachment_ids" widget="many2many_binary" nolabel="1" readonly="1" />
+                        </page>
+                        <page name="versions" string="Versions">
+                            <field name="version_ids" readonly="1">
+                                <tree>
+                                    <field name="display_version" string="Version" />
+                                    <field name="state" />
+                                    <field name="author_id" />
+                                    <field name="change_reason" />
+                                    <field name="effective_date" />
+                                    <field name="obsolete_date" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="validation" string="Validation">
+                            <group string="Soumission">
+                                <field name="workflow_submitted_by" readonly="1" string="Soumis par" />
+                                <field name="workflow_submission_date" readonly="1" string="Date de soumission" />
+                            </group>
+                            <group string="Décision la plus récente">
+                                <field name="workflow_validated_by" readonly="1" string="Validé par" invisible="not workflow_validated_by" />
+                                <field name="workflow_approval_date" readonly="1" string="Date de validation" invisible="not workflow_approval_date" />
+                                <field name="workflow_rejected_by" readonly="1" string="Rejeté par" invisible="not workflow_rejected_by" />
+                                <field name="workflow_rejection_date" readonly="1" string="Date de rejet" invisible="not workflow_rejected_by" />
+                                <field name="workflow_rejection_reason" readonly="1" string="Motif du rejet" invisible="not workflow_rejected_by" />
+                            </group>
+                            <p class="text-muted">
+                                L'historique complet des validations et rejets successifs est disponible dans le fil de discussion ci-dessous.
+                            </p>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_document_search" model="ir.ui.view">
+        <field name="name">smq.document.search</field>
+        <field name="model">smq.document</field>
+        <field name="arch" type="xml">
+            <search string="Documents SMQ">
+                <field name="code" />
+                <field name="name" />
+                <field name="document_type_id" />
+                <field name="process_id" />
+                <field name="parent_document_id" />
+                <field name="responsible_id" />
+                <filter name="filter_draft" string="Brouillons" domain="[('stage_id.code', '=', 'draft')]" />
+                <filter name="filter_in_validation" string="En validation" domain="[('stage_id.code', '=', 'in_validation')]" />
+                <filter name="filter_approved" string="Approuvés" domain="[('stage_id.code', '=', 'approved')]" />
+                <filter name="filter_published" string="Publiés" domain="[('stage_id.code', '=', 'published')]" />
+                <filter name="filter_effective" string="Effectifs" domain="[('stage_id.code', '=', 'effective')]" />
+                <filter name="filter_obsolete" string="Obsolètes" domain="[('stage_id.code', '=', 'obsolete')]" />
+                <filter name="filter_to_review" string="À réviser" domain="[('next_review_date', '&lt;=', context_today().strftime('%Y-%m-%d'))]" />
+                <filter name="filter_mine" string="Mes documents" domain="[('responsible_id', '=', uid)]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_type" string="Type" context="{'group_by': 'document_type_id'}" />
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'process_id'}" />
+                    <filter name="group_by_parent" string="Document parent" context="{'group_by': 'parent_document_id'}" />
+                    <filter name="group_by_stage" string="Statut" context="{'group_by': 'stage_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_document" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Créez votre premier document qualité.</p>
+        </field>
+    </record>
+
+    <record id="action_smq_document_all" model="ir.actions.act_window">
+        <field name="name">Tous les documents</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+    </record>
+
+    <record id="action_smq_document_mine" model="ir.actions.act_window">
+        <field name="name">Mes documents</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('responsible_id', '=', uid)]</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+    </record>
+
+    <record id="action_smq_document_in_validation" model="ir.actions.act_window">
+        <field name="name">Documents en validation</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('stage_id.code', 'in', ('in_validation', 'approved'))]</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+    </record>
+
+    <record id="action_smq_document_effective" model="ir.actions.act_window">
+        <field name="name">Documents en vigueur</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('stage_id.code', '=', 'effective')]</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+    </record>
+
+    <record id="action_smq_document_obsolete" model="ir.actions.act_window">
+        <field name="name">Documents obsolètes</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('stage_id.code', '=', 'obsolete')]</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+    </record>
+
+    <!-- Réutilise exactement le filtre "filter_to_review" déjà défini dans
+         view_smq_document_search, plutôt que de dupliquer la comparaison de
+         date sur un domaine propre à cette action. -->
+    <record id="action_smq_document_to_review" model="ir.actions.act_window">
+        <field name="name">Documents à réviser</field>
+        <field name="res_model">smq.document</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_smq_document_search" />
+        <field name="context">{'search_default_filter_to_review': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun document n'arrive à échéance de révision pour le moment.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Chaque smq.document crée automatiquement sa V1 (brouillon) à la
+         création — voir smq.document.create(). Les fonctions ci-dessous
+         configurent cette V1 pour la démonstration au lieu d'en créer une
+         seconde en doublon. -->
+
+    <!-- POL-001 — Politique Qualité — en vigueur -->
+    <record id="smq_document_pol_001" model="smq.document">
+        <field name="name">Politique Qualité</field>
+        <field name="document_type_id" ref="smq_document_type_pol" />
+        <field name="process_id" ref="smq_quality.smq_process_pr01" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Direction</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_pol_001')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'state': 'effective',
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-02-05 09:00:00',
+                'validated_by': ref('base.user_admin'),
+                'approval_date': '2026-02-10 09:00:00',
+                'published_by': ref('base.user_admin'),
+                'publication_date': '2026-02-12 09:00:00',
+                'set_effective_by': ref('base.user_admin'),
+                'effective_date': '2026-03-01 09:00:00',
+            }"
+        />
+    </function>
+
+    <!-- MAN-001 — Manuel Qualité — publié, pas encore en vigueur -->
+    <record id="smq_document_man_001" model="smq.document">
+        <field name="name">Manuel Qualité</field>
+        <field name="document_type_id" ref="smq_document_type_man" />
+        <field name="process_id" ref="smq_quality.smq_process_pr01" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Direction</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_man_001')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'state': 'published',
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-07-15 09:00:00',
+                'validated_by': ref('base.user_admin'),
+                'approval_date': '2026-07-20 09:00:00',
+                'published_by': ref('base.user_admin'),
+                'publication_date': '2026-07-22 09:00:00',
+            }"
+        />
+    </function>
+
+    <!-- PROC-001 — Procédure de gestion documentaire — V1 obsolète, V2 en vigueur -->
+    <record id="smq_document_proc_001" model="smq.document">
+        <field name="name">Procédure de gestion documentaire</field>
+        <field name="document_type_id" ref="smq_document_type_proc" />
+        <field name="process_id" ref="smq_quality.smq_process_pr02" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Qualité</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_proc_001')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'state': 'obsolete',
+                'validated_by': ref('base.user_admin'),
+                'approval_date': '2025-03-05 09:00:00',
+                'published_by': ref('base.user_admin'),
+                'publication_date': '2025-03-07 09:00:00',
+                'set_effective_by': ref('base.user_admin'),
+                'effective_date': '2025-03-15 09:00:00',
+                'obsolete_date': '2026-03-01 09:00:00',
+            }"
+        />
+    </function>
+    <function model="smq.document" name="_demo_add_next_version">
+        <value eval="[ref('smq_document_proc_001')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'change_reason': 'process_improvement',
+                'change_description': 'Ajout du circuit de validation des révisions.',
+                'state': 'effective',
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-02-15 09:00:00',
+                'validated_by': ref('base.user_admin'),
+                'approval_date': '2026-02-20 09:00:00',
+                'published_by': ref('base.user_admin'),
+                'publication_date': '2026-02-25 09:00:00',
+                'set_effective_by': ref('base.user_admin'),
+                'effective_date': '2026-03-01 09:00:00',
+            }"
+        />
+    </function>
+
+    <!-- PROC-002 — Procédure de gestion des non-conformités — en vigueur -->
+    <record id="smq_document_proc_002" model="smq.document">
+        <field name="name">Procédure de gestion des non-conformités</field>
+        <field name="document_type_id" ref="smq_document_type_proc" />
+        <field name="process_id" ref="smq_quality.smq_process_pr05" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Qualité</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_proc_002')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'state': 'effective',
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-05-05 09:00:00',
+                'validated_by': ref('base.user_admin'),
+                'approval_date': '2026-05-10 09:00:00',
+                'published_by': ref('base.user_admin'),
+                'publication_date': '2026-05-12 09:00:00',
+                'set_effective_by': ref('base.user_admin'),
+                'effective_date': '2026-05-15 09:00:00',
+            }"
+        />
+    </function>
+
+    <!-- INS-001 — Instruction de contrôle qualité — en validation -->
+    <record id="smq_document_ins_001" model="smq.document">
+        <field name="name">Instruction de contrôle qualité</field>
+        <field name="document_type_id" ref="smq_document_type_ins" />
+        <field name="process_id" ref="smq_quality.smq_process_pr02" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Qualité</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_ins_001')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'state': 'in_validation',
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-08-05 09:00:00',
+            }"
+        />
+    </function>
+
+    <!-- FORM-001 — Formulaire de demande d'action corrective — brouillon -->
+    <record id="smq_document_form_001" model="smq.document">
+        <field name="name">Formulaire de demande d'action corrective</field>
+        <field name="document_type_id" ref="smq_document_type_form" />
+        <field name="process_id" ref="smq_quality.smq_process_pr05" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Qualité</field>
+    </record>
+
+    <!-- Nouveau : DOC-PROC-003 (auto) — Procédure de traitement des
+         réclamations clients — approuvée, pas encore publiée -->
+    <record id="smq_document_proc_003" model="smq.document">
+        <field name="name">Procédure de traitement des réclamations clients</field>
+        <field name="document_type_id" ref="smq_document_type_proc" />
+        <field name="process_id" ref="smq_quality.smq_process_pr07" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Relation client</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_proc_003')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'state': 'approved',
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-08-01 09:00:00',
+                'validated_by': ref('base.user_admin'),
+                'approval_date': '2026-08-03 09:00:00',
+            }"
+        />
+    </function>
+
+    <!-- Nouveau : DOC-INS-002 (auto) — Instruction de traitement d'une
+         non-conformité — de retour en brouillon après un rejet (montre la
+         traçabilité du rejet) -->
+    <record id="smq_document_ins_002" model="smq.document">
+        <field name="name">Instruction de traitement d'une non-conformité</field>
+        <field name="document_type_id" ref="smq_document_type_ins" />
+        <field name="process_id" ref="smq_quality.smq_process_pr05" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="department">Qualité</field>
+    </record>
+    <function model="smq.document" name="_demo_configure_first_version">
+        <value eval="[ref('smq_document_ins_002')]" />
+        <value
+            eval="{
+                'author_id': ref('base.user_admin'),
+                'submitted_by': ref('base.user_admin'),
+                'submission_date': '2026-07-28 09:00:00',
+                'rejected_by': ref('base.user_admin'),
+                'rejection_date': '2026-07-30 09:00:00',
+                'rejection_reason': 'Le circuit de traitement décrit ne correspond pas à la procédure PROC-002 en vigueur — à corriger.',
+            }"
+        />
+    </function>
+
+</odoo>

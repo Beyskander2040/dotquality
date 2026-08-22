@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_dashboard_tile_document" model="smq.dashboard.tile">
+        <field name="sequence">10</field>
+        <field name="key">document</field>
+        <field name="name">Documents</field>
+        <field name="icon">fa-file-text-o</field>
+        <field name="action_xmlid">smq_quality.action_smq_coming_soon_documents</field>
+    </record>
+
+    <record id="smq_dashboard_tile_nonconformity" model="smq.dashboard.tile">
+        <field name="sequence">20</field>
+        <field name="key">nonconformity</field>
+        <field name="name">Non-conformités</field>
+        <field name="icon">fa-exclamation-triangle</field>
+        <field name="action_xmlid">smq_quality.action_smq_coming_soon_nonconformity</field>
+    </record>
+
+    <record id="smq_dashboard_tile_action" model="smq.dashboard.tile">
+        <field name="sequence">30</field>
+        <field name="key">action</field>
+        <field name="name">Actions correctives</field>
+        <field name="icon">fa-check-square-o</field>
+        <field name="action_xmlid">smq_quality.action_smq_coming_soon_action</field>
+    </record>
+
+    <record id="smq_dashboard_tile_audit" model="smq.dashboard.tile">
+        <field name="sequence">40</field>
+        <field name="key">audit</field>
+        <field name="name">Audits</field>
+        <field name="icon">fa-search</field>
+        <field name="action_xmlid">smq_quality.action_smq_coming_soon_audit</field>
+    </record>
+
+    <record id="smq_dashboard_tile_process" model="smq.dashboard.tile">
+        <field name="sequence">50</field>
+        <field name="key">process</field>
+        <field name="name">Processus</field>
+        <field name="icon">fa-sitemap</field>
+        <field name="action_xmlid">smq_quality.action_smq_process</field>
+    </record>
+
+    <!-- Ligne d'en-tête KPI du dashboard (kind="kpi") -->
+
+    <record id="smq_dashboard_kpi_document_active" model="smq.dashboard.tile">
+        <field name="sequence">10</field>
+        <field name="kind">kpi</field>
+        <field name="key">document_active</field>
+        <field name="name">Documents actifs</field>
+        <field name="icon">fa-file-text-o</field>
+    </record>
+
+    <record id="smq_dashboard_kpi_document_pending" model="smq.dashboard.tile">
+        <field name="sequence">20</field>
+        <field name="kind">kpi</field>
+        <field name="key">document_pending</field>
+        <field name="name">Documents à valider</field>
+        <field name="icon">fa-clock-o</field>
+    </record>
+
+</odoo>

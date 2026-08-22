@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- On complète les séquences OCA existantes (pas de nouveau mécanisme) :
+         NC-2026-001, ACT-2026-001... -->
+    <record id="mgmtsystem_nonconformity.seq_mgmtsystem_nonconformity" model="ir.sequence">
+        <field name="prefix">NC-%(year)s-</field>
+    </record>
+
+    <record id="mgmtsystem_action.seq_mgmtsystem_action" model="ir.sequence">
+        <field name="prefix">ACT-%(year)s-</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_referential_requirement_tree" model="ir.ui.view">
+        <field name="name">smq.referential.requirement.tree</field>
+        <field name="model">smq.referential.requirement</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="referential_id" />
+                <field name="code" />
+                <field name="name" />
+                <field name="parent_id" />
+                <field name="compliance_count" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_referential_requirement_form" model="ir.ui.view">
+        <field name="name">smq.referential.requirement.form</field>
+        <field name="model">smq.referential.requirement</field>
+        <field name="arch" type="xml">
+            <form string="Exigence">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nom" />
+                        <h1>
+                            <field name="name" placeholder="ex. Maîtrise des documents" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="referential_id" />
+                            <field name="parent_id" domain="[('referential_id', '=', referential_id)]" />
+                            <field name="code" />
+                        </group>
+                        <group>
+                            <field name="sequence" />
+                            <field name="active" />
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" />
+                    </group>
+                    <field name="child_ids" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_referential_requirement_search" model="ir.ui.view">
+        <field name="name">smq.referential.requirement.search</field>
+        <field name="model">smq.referential.requirement</field>
+        <field name="arch" type="xml">
+            <search string="Exigences">
+                <field name="name" />
+                <field name="code" />
+                <field name="referential_id" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_referential" string="Référentiel" context="{'group_by': 'referential_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_referential_requirement" model="ir.actions.act_window">
+        <field name="name">Exigences</field>
+        <field name="res_model">smq.referential.requirement</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_smq_referential_requirement_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre première exigence, rattachée à un référentiel.
+            </p>
+        </field>
+    </record>
+
+</odoo>

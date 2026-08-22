@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Client fictif (aucune donnée personnelle réelle) -->
+    <record id="res_partner_meditel_assurances" model="res.partner">
+        <field name="name">Meditel Assurances SA</field>
+        <field name="is_company">True</field>
+        <field name="email">contact@meditel-assurances-demo.tn</field>
+    </record>
+
+    <!-- Réclamation 1 : en traitement, reliée à une action corrective.
+         L'action est créée avant la réclamation, pour pouvoir renseigner
+         action_ids directement dans le <record> de la réclamation plutôt
+         que par un <function> — un <function> sans "id" propre est ignoré
+         par Odoo en mode "update" (-u) lorsque le fichier est noupdate="1"
+         (seul le mode "init", -i, l'exécute) ; les données de démo doivent
+         rester correctes qu'elles soient chargées par -i ou par -u. -->
+    <record id="act_complaint_billing_delay" model="mgmtsystem.action">
+        <field name="name">Mettre en place un accusé de réception automatique pour les incidents de facturation</field>
+        <field name="type_action">correction</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="date_deadline" eval="(datetime.today() + relativedelta(days=15)).strftime('%Y-%m-%d')" />
+        <field name="description">Configurer un accusé de réception automatique et une relance à J+3 sur les incidents de facturation non répondus.</field>
+    </record>
+
+    <record id="smq_complaint_billing_delay" model="smq.complaint">
+        <field name="name">Retard de réponse sur un incident de facturation</field>
+        <field name="description">Le client signale une absence de réponse pendant plus de 5 jours sur un incident de facturation ouvert via le support BTSNet.</field>
+        <field name="partner_id" ref="res_partner_meditel_assurances" />
+        <field name="stakeholder_id" ref="smq_organization.smq_stakeholder_customers" />
+        <field name="channel">email</field>
+        <field name="date_received">2026-07-28 10:00:00</field>
+        <field name="process_id" ref="smq_quality.smq_process_pr07" />
+        <field name="severity">major</field>
+        <field name="state">traitement</field>
+        <field name="response_due_date">2026-08-04</field>
+        <field name="action_ids" eval="[(4, ref('act_complaint_billing_delay'))]" />
+    </record>
+
+    <!-- Réclamation 2 : cycle complet, clôturée avec satisfaction mesurée -->
+    <record id="res_partner_ben_salah_cabinet" model="res.partner">
+        <field name="name">Cabinet Ben Salah &amp; Associés</field>
+        <field name="is_company">True</field>
+        <field name="email">contact@bensalah-associes-demo.tn</field>
+    </record>
+
+    <record id="smq_complaint_export_error" model="smq.complaint">
+        <field name="name">Erreur constatée dans un export de données mensuel</field>
+        <field name="description">Le client a identifié des doublons dans l'export de données mensuel généré par le module backoffice BTSNet.</field>
+        <field name="partner_id" ref="res_partner_ben_salah_cabinet" />
+        <field name="channel">phone</field>
+        <field name="date_received">2026-06-20 14:30:00</field>
+        <field name="process_id" ref="smq_quality.smq_process_pr07" />
+        <field name="severity">minor</field>
+        <field name="state">cloturee</field>
+        <field name="response_due_date">2026-06-27</field>
+        <field name="response_sent_date">2026-06-25 09:00:00</field>
+        <field name="response_summary">Correction du script d'export appliquée ; fichier corrigé renvoyé au client le 25/06.</field>
+        <field name="satisfaction_after_treatment">satisfied</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_dashboard_tile_complaint" model="smq.dashboard.tile">
+        <field name="sequence">55</field>
+        <field name="key">complaint</field>
+        <field name="name">Réclamations clients</field>
+        <field name="icon">fa-comments-o</field>
+        <field name="action_xmlid">smq_complaint.action_smq_complaint</field>
+    </record>
+
+</odoo>

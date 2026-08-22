@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_referential_iso9001" model="smq.referential">
+        <field name="name">ISO 9001</field>
+        <field name="code">ISO9001</field>
+        <field name="version">2015</field>
+        <field name="issuing_body">ISO</field>
+        <field name="description">Exigences relatives aux systèmes de management de la qualité.</field>
+    </record>
+
+    <record id="smq_requirement_4" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="code">4</field>
+        <field name="name">Contexte de l'organisme</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="smq_requirement_4_4" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="parent_id" ref="smq_requirement_4" />
+        <field name="code">4.4</field>
+        <field name="name">Système de management de la qualité et ses processus</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="smq_requirement_7" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="code">7</field>
+        <field name="name">Support</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="smq_requirement_7_5" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="parent_id" ref="smq_requirement_7" />
+        <field name="code">7.5</field>
+        <field name="name">Informations documentées</field>
+        <field name="sequence">21</field>
+    </record>
+
+    <record id="smq_requirement_7_5_3" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="parent_id" ref="smq_requirement_7_5" />
+        <field name="code">7.5.3</field>
+        <field name="name">Maîtrise des informations documentées</field>
+        <field name="sequence">22</field>
+    </record>
+
+    <record id="smq_requirement_10" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="code">10</field>
+        <field name="name">Amélioration</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="smq_requirement_10_2" model="smq.referential.requirement">
+        <field name="referential_id" ref="smq_referential_iso9001" />
+        <field name="parent_id" ref="smq_requirement_10" />
+        <field name="code">10.2</field>
+        <field name="name">Non-conformité et action corrective</field>
+        <field name="sequence">31</field>
+    </record>
+
+    <record id="smq_compliance_line_4_4" model="smq.compliance.line">
+        <field name="requirement_id" ref="smq_requirement_4_4" />
+        <field name="state">compliant</field>
+        <field name="evidence_document_ids" eval="[(6, 0, [ref('smq_document.smq_document_man_001')])]" />
+        <field name="evaluation_date">2026-06-01</field>
+    </record>
+
+    <record id="smq_compliance_line_7_5_3" model="smq.compliance.line">
+        <field name="requirement_id" ref="smq_requirement_7_5_3" />
+        <field name="process_id" ref="smq_quality.smq_process_pr02" />
+        <field name="state">compliant</field>
+        <field name="evidence_document_ids" eval="[(6, 0, [ref('smq_document.smq_document_proc_001')])]" />
+        <field name="evaluation_date">2026-06-01</field>
+    </record>
+
+    <record id="smq_compliance_line_10_2" model="smq.compliance.line">
+        <field name="requirement_id" ref="smq_requirement_10_2" />
+        <field name="process_id" ref="smq_quality.smq_process_pr05" />
+        <field name="state">partial</field>
+        <field name="gap_description">Le délai moyen de clôture des actions correctives dépasse encore l'objectif fixé.</field>
+        <field name="evaluation_date">2026-06-01</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_risk_tree" model="ir.ui.view">
+        <field name="name">smq.risk.tree</field>
+        <field name="model">smq.risk</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'cloture'">
+                <field name="reference" />
+                <field name="name" />
+                <field name="nature" widget="badge" decoration-success="nature == 'opportunity'" decoration-warning="nature == 'risk'" />
+                <field name="process_id" />
+                <field name="probability_id" />
+                <field name="impact_id" />
+                <field name="risk_score" sum="Total" />
+                <field name="criticality_level_id" />
+                <field name="state" widget="badge" decoration-success="state == 'cloture'" decoration-info="state == 'en_traitement'" />
+                <field name="responsible_user_id" widget="many2one_avatar_user" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_risk_kanban" model="ir.ui.view">
+        <field name="name">smq.risk.kanban</field>
+        <field name="model">smq.risk</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="nature" />
+                <field name="criticality_level_id" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="reference" />
+                                        <span> — </span>
+                                        <field name="name" />
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <span class="badge badge-pill" t-attf-class="badge-{{record.nature.raw_value == 'opportunity' and 'success' or 'warning'}}">
+                                    <field name="nature" />
+                                </span>
+                                <span class="badge badge-pill badge-secondary" t-if="record.criticality_level_id.value">
+                                    <field name="criticality_level_id" />
+                                </span>
+                                <div>
+                                    <field name="process_id" />
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="risk_score" />
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="responsible_user_id" widget="many2one_avatar_user" />
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_smq_risk_form" model="ir.ui.view">
+        <field name="name">smq.risk.form</field>
+        <field name="model">smq.risk</field>
+        <field name="arch" type="xml">
+            <form string="Risque / Opportunité">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="nouveau,en_traitement,sous_surveillance,cloture" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_actions"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-tasks"
+                            invisible="action_count == 0"
+                        >
+                            <field name="action_count" string="Actions" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="reference" readonly="1" class="oe_inline" />
+                            <span> — </span>
+                            <field name="name" placeholder="Titre du risque ou de l'opportunité" class="oe_inline" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="nature" widget="radio" options="{'horizontal': true}" />
+                            <field name="process_id" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                        <group>
+                            <field name="responsible_user_id" />
+                            <field name="risk_score" />
+                            <field name="criticality_level_id" />
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description..." />
+                    <notebook>
+                        <page string="Source" name="source">
+                            <group>
+                                <field name="source_type_id" />
+                                <field name="stakeholder_id" required="source_type_id.code == 'stakeholder'" invisible="source_type_id.code != 'stakeholder'" />
+                            </group>
+                            <field
+                                name="source_description"
+                                required="source_type_id.code in ('context', 'other')"
+                                invisible="source_type_id.code not in ('context', 'other')"
+                            />
+                        </page>
+                        <page string="Évaluation" name="evaluation">
+                            <group>
+                                <group string="Évaluation initiale">
+                                    <field name="probability_id" />
+                                    <field name="impact_id" />
+                                    <field name="risk_score" />
+                                    <field name="criticality_level_id" />
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Traitement" name="treatment">
+                            <field name="current_control_description" placeholder="Mesures déjà en place avant tout nouveau traitement..." />
+                        </page>
+                        <page string="Risque résiduel" name="residual">
+                            <group>
+                                <field name="residual_probability_id" />
+                                <field name="residual_impact_id" />
+                                <field name="residual_risk_score" />
+                            </group>
+                        </page>
+                        <page string="Actions" name="actions">
+                            <button
+                                name="action_create_treatment_action"
+                                type="object"
+                                string="Créer une action"
+                                class="btn-primary mb-2"
+                            />
+                            <field name="action_ids" nolabel="1">
+                                <tree>
+                                    <field name="reference" />
+                                    <field name="name" />
+                                    <field name="type_action" />
+                                    <field name="user_id" />
+                                    <field name="date_deadline" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_risk_search" model="ir.ui.view">
+        <field name="name">smq.risk.search</field>
+        <field name="model">smq.risk</field>
+        <field name="arch" type="xml">
+            <search string="Risques &amp; Opportunités">
+                <field name="reference" />
+                <field name="name" />
+                <field name="process_id" />
+                <field name="source_type_id" />
+                <field name="responsible_user_id" />
+                <separator />
+                <filter name="filter_risks" string="Risques" domain="[('nature', '=', 'risk')]" />
+                <filter name="filter_opportunities" string="Opportunités" domain="[('nature', '=', 'opportunity')]" />
+                <separator />
+                <filter name="filter_critical" string="Critiques" domain="[('criticality_level_id.max_score', '&gt;=', 15)]" />
+                <filter name="filter_without_action" string="Sans action" domain="[('action_ids', '=', False)]" />
+                <separator />
+                <filter name="filter_open" string="Ouverts" domain="[('state', '!=', 'cloture')]" />
+                <filter name="filter_closed" string="Clôturés" domain="[('state', '=', 'cloture')]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_nature" string="Nature" context="{'group_by': 'nature'}" />
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'process_id'}" />
+                    <filter name="group_by_criticality" string="Criticité" context="{'group_by': 'criticality_level_id'}" />
+                    <filter name="group_by_state" string="Statut" context="{'group_by': 'state'}" />
+                    <filter name="group_by_source_type" string="Type de source" context="{'group_by': 'source_type_id'}" />
+                    <filter name="group_by_responsible" string="Responsable" context="{'group_by': 'responsible_user_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_smq_risk_pivot" model="ir.ui.view">
+        <field name="name">smq.risk.pivot</field>
+        <field name="model">smq.risk</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des risques &amp; opportunités">
+                <field name="process_id" type="row" />
+                <field name="criticality_level_id" type="col" />
+                <field name="risk_score" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_smq_risk_graph" model="ir.ui.view">
+        <field name="name">smq.risk.graph</field>
+        <field name="model">smq.risk</field>
+        <field name="arch" type="xml">
+            <graph string="Répartition des risques &amp; opportunités" type="bar">
+                <field name="nature" type="row" />
+                <field name="risk_score" type="measure" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_smq_risk" model="ir.actions.act_window">
+        <field name="name">Risques &amp; Opportunités</field>
+        <field name="res_model">smq.risk</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_smq_risk_search" />
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun risque ou opportunité identifié pour le moment.
+            </p>
+        </field>
+    </record>
+
+</odoo>

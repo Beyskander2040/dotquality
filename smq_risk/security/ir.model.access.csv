@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_risk_employee,smq.risk employee,model_smq_risk,smq_quality.group_smq_employee,1,0,0,0
+access_smq_risk_writer,smq.risk writer,model_smq_risk,smq_quality.group_smq_writer,1,1,1,0
+access_smq_risk_quality_manager,smq.risk quality manager,model_smq_risk,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_risk_probability_employee,smq.risk.probability employee,model_smq_risk_probability,smq_quality.group_smq_employee,1,0,0,0
+access_smq_risk_probability_admin,smq.risk.probability admin,model_smq_risk_probability,smq_quality.group_smq_admin,1,1,1,1
+access_smq_risk_impact_employee,smq.risk.impact employee,model_smq_risk_impact,smq_quality.group_smq_employee,1,0,0,0
+access_smq_risk_impact_admin,smq.risk.impact admin,model_smq_risk_impact,smq_quality.group_smq_admin,1,1,1,1
+access_smq_risk_criticality_level_employee,smq.risk.criticality.level employee,model_smq_risk_criticality_level,smq_quality.group_smq_employee,1,0,0,0
+access_smq_risk_criticality_level_admin,smq.risk.criticality.level admin,model_smq_risk_criticality_level,smq_quality.group_smq_admin,1,1,1,1
+access_smq_risk_source_type_employee,smq.risk.source.type employee,model_smq_risk_source_type,smq_quality.group_smq_employee,1,0,0,0
+access_smq_risk_source_type_admin,smq.risk.source.type admin,model_smq_risk_source_type,smq_quality.group_smq_admin,1,1,1,1

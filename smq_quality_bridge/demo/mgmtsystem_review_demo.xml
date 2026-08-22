@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Revue de direction clôturée, avec un ordre du jour cohérent avec le
+         scénario NC/Action déjà présent (cycle NC-2026-004 -> ACT-2026-002,
+         clôturé et jugé efficace). -->
+    <!-- state="done" est renseigné directement (équivalent exact de
+         button_close(), qui ne fait que self.write({"state": "done"}))
+         plutôt que d'appeler la méthode via <function> : un <function>
+         sans "id" propre est ignoré par Odoo en mode "update" (-u) lorsque
+         le fichier est noupdate="1" (seul le mode "init", -i, l'exécute). -->
+    <record id="mgmtsystem_review_2026_s1" model="mgmtsystem.review">
+        <field name="name">Revue de direction — 1er semestre 2026</field>
+        <field name="date">2026-06-30 09:00:00</field>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]" />
+        <field name="policy">Le SMQ vise la satisfaction durable des clients du backoffice BTSNet, la maîtrise des délais de traitement des réclamations et l'amélioration continue des processus qualité.</field>
+        <field name="changes">Mise en service du module de gestion des réclamations clients et du module de gestion des non-conformités depuis le dernier semestre.</field>
+        <field name="conclusion">Le SMQ progresse conformément aux objectifs. La maîtrise des délais de traitement des réclamations reste un point de vigilance pour le second semestre.</field>
+        <field name="state">done</field>
+    </record>
+
+    <record id="mgmtsystem_review_line_2026_s1_nc" model="mgmtsystem.review.line">
+        <field name="review_id" ref="mgmtsystem_review_2026_s1" />
+        <field name="name">Erreur dans un enregistrement qualité (NC-2026-004)</field>
+        <field name="type">nonconformity</field>
+        <field name="nonconformity_id" ref="smq_quality_bridge.nc_2026_004" />
+        <field name="decision">Action corrective jugée efficace, aucune récidive constatée. Non-conformité clôturée.</field>
+    </record>
+
+    <record id="mgmtsystem_review_line_2026_s1_action" model="mgmtsystem.review.line">
+        <field name="review_id" ref="mgmtsystem_review_2026_s1" />
+        <field name="name">Corriger la fiche d'enregistrement et former l'opérateur concerné (ACT-2026-002)</field>
+        <field name="type">action</field>
+        <field name="action_id" ref="smq_quality_bridge.act_2026_002" />
+        <field name="decision">Vérification d'efficacité réalisée 15 jours après la formation de l'opérateur ; action clôturée.</field>
+    </record>
+
+</odoo>

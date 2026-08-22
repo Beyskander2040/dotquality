@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Vue de consultation SMQ sur les compétences RH existantes
+         (hr.employee.skill, module hr_skills) : aucune donnée dupliquée,
+         aucun nouveau modèle — uniquement une nouvelle vue liste/recherche
+         pour un accès direct depuis le SMQ, en lecture. -->
+
+    <record id="view_smq_employee_skill_tree" model="ir.ui.view">
+        <field name="name">smq.employee.skill.tree</field>
+        <field name="model">hr.employee.skill</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="employee_id" />
+                <field name="skill_type_id" />
+                <field name="skill_id" />
+                <field name="skill_level_id" />
+                <field name="level_progress" optional="hide" widget="progressbar" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_employee_skill_search" model="ir.ui.view">
+        <field name="name">smq.employee.skill.search</field>
+        <field name="model">hr.employee.skill</field>
+        <field name="arch" type="xml">
+            <search string="Compétences">
+                <field name="employee_id" />
+                <field name="skill_id" />
+                <field name="skill_type_id" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_employee" string="Employé" context="{'group_by': 'employee_id'}" />
+                    <filter name="group_by_skill_type" string="Type de compétence" context="{'group_by': 'skill_type_id'}" />
+                    <filter name="group_by_skill" string="Compétence" context="{'group_by': 'skill_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_employee_skill" model="ir.actions.act_window">
+        <field name="name">Compétences</field>
+        <field name="res_model">hr.employee.skill</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_smq_employee_skill_search" />
+        <field name="context">{'search_default_group_by_skill_type': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune compétence renseignée : ajoutez-en depuis la fiche de l'employé (app Employés).
+            </p>
+        </field>
+    </record>
+
+</odoo>

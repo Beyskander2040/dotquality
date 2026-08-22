@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_process_pr01" model="smq.process">
+        <field name="code">PR-01</field>
+        <field name="name">Management</field>
+        <field name="category_id" ref="smq_process_category_management" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">active</field>
+        <field name="description">Pilotage et revue de direction du système de management de la qualité.</field>
+    </record>
+
+    <record id="smq_process_pr02" model="smq.process">
+        <field name="code">PR-02</field>
+        <field name="name">Gestion documentaire</field>
+        <field name="category_id" ref="smq_process_category_support" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">active</field>
+        <field name="description">Création, validation, publication et révision des documents qualité.</field>
+    </record>
+
+    <record id="smq_process_pr03" model="smq.process">
+        <field name="code">PR-03</field>
+        <field name="name">Ressources humaines</field>
+        <field name="category_id" ref="smq_process_category_support" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">active</field>
+        <field name="description">Recrutement, compétences et habilitations du personnel.</field>
+    </record>
+
+    <record id="smq_process_pr04" model="smq.process">
+        <field name="code">PR-04</field>
+        <field name="name">Formation</field>
+        <field name="category_id" ref="smq_process_category_support" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">draft</field>
+        <field name="description">Plan de formation et suivi des habilitations qualité.</field>
+    </record>
+
+    <record id="smq_process_pr05" model="smq.process">
+        <field name="code">PR-05</field>
+        <field name="name">Amélioration continue</field>
+        <field name="category_id" ref="smq_process_category_management" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">active</field>
+        <field name="description">Traitement des non-conformités, actions correctives et audits internes.</field>
+    </record>
+
+    <record id="smq_process_pr06" model="smq.process">
+        <field name="code">PR-06</field>
+        <field name="name">Gestion des risques</field>
+        <field name="category_id" ref="smq_process_category_management" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">draft</field>
+        <field name="description">Identification et traitement des risques du système qualité.</field>
+    </record>
+
+    <record id="smq_process_pr07" model="smq.process">
+        <field name="code">PR-07</field>
+        <field name="name">Satisfaction client</field>
+        <field name="category_id" ref="smq_process_category_realisation" />
+        <field name="responsible_id" ref="base.user_admin" />
+        <field name="status">active</field>
+        <field name="description">Écoute client, réclamations et mesure de la satisfaction.</field>
+    </record>
+
+</odoo>

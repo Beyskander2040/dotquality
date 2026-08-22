@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_process_form_nonconformity_button" model="ir.ui.view">
+        <field name="name">smq.process.form.nonconformity.button</field>
+        <field name="model">smq.process</field>
+        <field name="inherit_id" ref="smq_quality.view_smq_process_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//widget[@name='web_ribbon']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button
+                        name="action_view_nonconformities"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-exclamation-triangle"
+                        invisible="nonconformity_count == 0"
+                    >
+                        <field name="nonconformity_count" widget="statinfo" string="Non-conformités" />
+                    </button>
+                    <button
+                        name="action_view_audits"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-search"
+                        invisible="audit_count == 0"
+                    >
+                        <field name="audit_count" widget="statinfo" string="Audits" />
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

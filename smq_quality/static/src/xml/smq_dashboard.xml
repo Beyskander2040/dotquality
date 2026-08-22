@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="smq_quality.SmqDashboard" owl="1">
+        <div class="o_smq_dashboard">
+
+            <div class="o_smq_hero">
+                <div class="o_smq_hero_context">
+                    <span class="o_smq_hero_context_item" t-if="state.companyName" t-esc="state.companyName" />
+                    <span class="o_smq_hero_context_sep" t-if="state.companyName">·</span>
+                    <span class="o_smq_hero_context_item" t-esc="today" />
+                </div>
+                <div class="o_smq_hero_row">
+                    <h1 class="o_smq_hero_title">Tableau de bord qualité</h1>
+                    <div class="o_smq_quick_actions">
+                        <Dropdown
+                            class="'o_smq_quick_actions_dropdown'"
+                            togglerClass="'btn btn-outline-primary o_smq_quick_actions_toggle'"
+                        >
+                            <t t-set-slot="toggler">
+                                <i class="fa fa-plus-circle" aria-hidden="true" />
+                                <span>Créer ou déclarer</span>
+                            </t>
+                            <t t-foreach="quickActionGroups" t-as="group" t-key="group.label">
+                                <div class="dropdown-divider" role="separator" t-if="!group_first" />
+                                <div class="dropdown-header o_smq_dropdown_group_label" role="presentation">
+                                    <t t-esc="group.label" />
+                                </div>
+                                <DropdownItem
+                                    t-foreach="group.actions"
+                                    t-as="qa"
+                                    t-key="qa.label"
+                                    onSelected="() => this.onQuickAction(qa)"
+                                >
+                                    <i t-attf-class="fa #{qa.icon} o_smq_dropdown_item_icon" aria-hidden="true" />
+                                    <span t-esc="qa.label" />
+                                </DropdownItem>
+                            </t>
+                        </Dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEVEL 1 : état global -->
+            <div class="o_smq_section o_smq_health">
+                <div
+                    t-attf-class="o_smq_health_score #{healthScoreClass}"
+                    t-on-click="toggleHealthDetails"
+                >
+                    <div class="o_smq_health_value">
+                        <t t-if="state.qualityHealth.score !== null" t-esc="state.qualityHealth.score" />
+                        <t t-else="">—</t>
+                        <span class="o_smq_health_max">/100</span>
+                    </div>
+                    <div class="o_smq_health_label">
+                        Quality Health Score
+                        <div class="o_smq_health_sublabel" t-esc="state.qualityHealth.label" />
+                    </div>
+                    <i
+                        t-attf-class="fa #{state.healthDetailsOpen ? 'fa-chevron-up' : 'fa-chevron-down'} o_smq_health_toggle"
+                    />
+                </div>
+                <div class="o_smq_health_details" t-if="state.healthDetailsOpen">
+                    <div
+                        class="o_smq_health_component"
+                        t-foreach="state.qualityHealth.components"
+                        t-as="component"
+                        t-key="component.key"
+                    >
+                        <div class="o_smq_health_component_head">
+                            <span t-esc="component.label" />
+                            <strong t-esc="component.score + '%'" />
+                        </div>
+                        <div class="o_smq_health_bar">
+                            <div class="o_smq_health_bar_fill" t-attf-style="width: #{component.score}%" />
+                        </div>
+                        <div class="o_smq_health_component_detail" t-esc="component.detail" />
+                    </div>
+                    <p class="o_smq_health_explain">
+                        Calculé comme la moyenne des taux de maîtrise réels de chaque domaine (documents,
+                        non-conformités, actions, audits) — jamais une valeur décorative.
+                    </p>
+                </div>
+            </div>
+
+            <div class="o_smq_kpi_row">
+                <div
+                    t-foreach="state.kpis"
+                    t-as="kpi"
+                    t-key="kpi.key"
+                    class="o_smq_kpi_item"
+                    t-att-class="{ o_smq_kpi_clickable: kpi.action_xmlid }"
+                    t-on-click="() => this.onNavigate(kpi.action_xmlid)"
+                >
+                    <div class="o_smq_kpi_icon">
+                        <i t-attf-class="fa #{kpi.icon}" />
+                    </div>
+                    <div class="o_smq_kpi_text">
+                        <div class="o_smq_kpi_value" t-esc="kpi.count" />
+                        <div class="o_smq_kpi_label" t-esc="kpi.name" />
+                        <div
+                            t-if="kpi.trend !== null and kpi.trend !== undefined"
+                            t-attf-class="o_smq_kpi_trend #{kpi.trend > 0 ? 'o_smq_trend_up' : (kpi.trend &lt; 0 ? 'o_smq_trend_down' : 'o_smq_trend_flat')}"
+                        >
+                            <i t-attf-class="fa #{kpi.trend > 0 ? 'fa-arrow-up' : (kpi.trend &lt; 0 ? 'fa-arrow-down' : 'fa-minus')}" />
+                            <t t-esc="(kpi.trend > 0 ? '+' : '') + kpi.trend" /> vs 30j
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEVEL 2 : ce qui requiert mon attention -->
+            <div class="o_smq_section o_smq_priorities" t-if="state.watchlist.length">
+                <div class="o_smq_section_title">Priorités</div>
+                <div
+                    t-foreach="state.watchlist"
+                    t-as="item"
+                    t-key="item.label"
+                    class="o_smq_priority_group"
+                >
+                    <div class="o_smq_priority_head" t-on-click="() => this.onNavigate(item.action_xmlid)">
+                        <span t-attf-class="o_smq_dot o_smq_dot_#{item.level}" />
+                        <span class="o_smq_priority_count" t-esc="item.count" />
+                        <span class="o_smq_priority_label" t-esc="item.label" />
+                        <i class="fa fa-chevron-right o_smq_priority_arrow" />
+                    </div>
+                    <div class="o_smq_priority_records">
+                        <div
+                            t-foreach="item.records"
+                            t-as="record"
+                            t-key="record.res_id"
+                            class="o_smq_priority_record"
+                            t-on-click="() => this.onOpenRecord(record)"
+                        >
+                            <span class="o_smq_priority_record_name" t-esc="record.name" />
+                            <span class="o_smq_priority_record_meta">
+                                <span t-if="record.responsible" t-esc="record.responsible" />
+                                <span t-if="record.deadline" t-esc="record.deadline" />
+                            </span>
+                            <span class="o_smq_priority_record_action">Ouvrir →</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEVEL 3 : ce que je dois faire -->
+            <div class="o_smq_section o_smq_my_work" t-if="state.myWork.length">
+                <div class="o_smq_section_title">Mes tâches</div>
+                <div class="o_smq_my_work_row">
+                    <div
+                        t-foreach="state.myWork"
+                        t-as="task"
+                        t-key="task.key"
+                        class="o_smq_my_work_item"
+                        t-on-click="() => this.onNavigate(task.action_xmlid)"
+                    >
+                        <div class="o_smq_my_work_count" t-esc="task.count" />
+                        <div class="o_smq_my_work_label" t-esc="task.label" />
+                        <div class="o_smq_my_work_sub" t-if="task.sub_label" t-esc="task.sub_label" />
+                    </div>
+                </div>
+            </div>
+            <div class="o_smq_section o_smq_my_work_empty" t-if="!state.myWork.length">
+                <div class="o_smq_section_title">Mes tâches</div>
+                <p class="o_smq_empty">Aucune tâche en attente vous concernant directement. 🎉</p>
+            </div>
+
+            <!-- LEVEL 4 : chaîne qualité + performance -->
+            <div class="o_smq_section o_smq_chain">
+                <div class="o_smq_section_title">Chaîne qualité</div>
+                <div class="o_smq_chain_row">
+                    <t t-foreach="state.qualityChain" t-as="step" t-key="step.key">
+                        <div
+                            t-attf-class="o_smq_chain_step #{step.available ? 'o_smq_chain_step_active' : 'o_smq_chain_step_disabled'}"
+                            t-on-click="() => this.onNavigate(step.action_xmlid)"
+                        >
+                            <span class="o_smq_chain_step_label" t-esc="step.label" />
+                            <span class="o_smq_chain_step_stats" t-if="step.stats" t-esc="step.stats" />
+                        </div>
+                        <i
+                            t-if="!step_last"
+                            class="fa fa-long-arrow-right o_smq_chain_arrow"
+                        />
+                    </t>
+                </div>
+            </div>
+
+            <div class="o_smq_section o_smq_chart" t-if="state.ncTrend.length">
+                <div class="o_smq_section_title">Non-conformités — ouvertes / clôturées par mois</div>
+                <div class="o_smq_chart_row">
+                    <div
+                        t-foreach="state.ncTrend"
+                        t-as="bucket"
+                        t-key="bucket_index"
+                        class="o_smq_chart_col"
+                    >
+                        <div class="o_smq_chart_bars">
+                            <div
+                                class="o_smq_chart_bar o_smq_chart_bar_opened"
+                                t-attf-style="height: #{barHeight(bucket.opened)}%"
+                                t-att-title="bucket.opened + ' ouverte(s)'"
+                            />
+                            <div
+                                class="o_smq_chart_bar o_smq_chart_bar_closed"
+                                t-attf-style="height: #{barHeight(bucket.closed)}%"
+                                t-att-title="bucket.closed + ' clôturée(s)'"
+                            />
+                        </div>
+                        <div class="o_smq_chart_label" t-esc="bucket.label" />
+                    </div>
+                </div>
+                <div class="o_smq_chart_legend">
+                    <span><span class="o_smq_chart_swatch o_smq_chart_swatch_opened" /> Ouvertes</span>
+                    <span><span class="o_smq_chart_swatch o_smq_chart_swatch_closed" /> Clôturées</span>
+                </div>
+            </div>
+
+            <!-- LEVEL 5 : modules -->
+            <div class="o_smq_section" t-foreach="state.moduleCategories" t-as="category" t-key="category.key">
+                <div class="o_smq_section_title" t-esc="category.label" />
+                <div class="o_smq_module_grid">
+                    <div
+                        t-foreach="category.modules"
+                        t-as="module"
+                        t-key="module.key"
+                        class="o_smq_module_card"
+                        t-att-class="{ o_smq_module_future: module.count === false }"
+                        t-on-click="() => this.onModuleClick(module)"
+                    >
+                        <div class="o_smq_module_icon">
+                            <i t-attf-class="fa #{module.icon}" />
+                        </div>
+                        <div class="o_smq_module_body">
+                            <div class="o_smq_module_name" t-esc="module.name" />
+                            <span
+                                t-attf-class="o_smq_status #{module.count === false ? 'o_smq_status_soon' : 'o_smq_status_available'}"
+                            >
+                                <t t-if="module.count === false">⚪ À venir</t>
+                                <t t-else="">🟢 Disponible</t>
+                            </span>
+                        </div>
+                        <div class="o_smq_module_count" t-if="module.count !== false" t-esc="module.count" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="o_smq_bottom_row">
+                <div class="o_smq_section o_smq_recent">
+                    <div class="o_smq_section_title">Processus récents</div>
+                    <div
+                        class="o_smq_recent_row"
+                        t-foreach="state.recentProcesses"
+                        t-as="proc"
+                        t-key="proc.code"
+                    >
+                        <div class="o_smq_recent_main">
+                            <span class="o_smq_recent_code" t-esc="proc.code" />
+                            <span class="o_smq_recent_name" t-esc="proc.name" />
+                        </div>
+                        <div class="o_smq_recent_meta">
+                            <span class="o_smq_recent_category" t-esc="proc.category" />
+                            <span class="o_smq_recent_responsible" t-esc="proc.responsible" />
+                            <span
+                                t-attf-class="o_smq_badge o_smq_badge_#{proc.status}"
+                                t-esc="proc.status_label"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_smq_section o_smq_activity">
+                    <div class="o_smq_section_title">Activité récente</div>
+                    <div
+                        class="o_smq_activity_row"
+                        t-foreach="state.recentActivity"
+                        t-as="activity"
+                        t-key="activity.id"
+                        t-on-click="() => this.onRecentActivityClick(activity)"
+                    >
+                        <i class="fa fa-circle-o o_smq_activity_dot" />
+                        <span class="o_smq_activity_name" t-esc="activity.record_name" />
+                        <span class="o_smq_activity_author" t-esc="activity.author" />
+                    </div>
+                    <div class="o_smq_empty" t-if="!state.recentActivity.length">
+                        Aucune activité récente.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+
+</templates>

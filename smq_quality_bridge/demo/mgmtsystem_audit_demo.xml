@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Audit interne ayant révélé NC-2026-001 (traitement des réclamations,
+         PR-07 — Satisfaction client). La référence textuelle "Processus
+         Achats" du cahier des charges ne correspond à aucun processus/NC
+         réel de la démo ; pour rester cohérent avec les données déjà en
+         place (PR-07, NC-2026-001, PROC-003), l'audit et sa checklist
+         portent sur le processus Satisfaction client. -->
+    <record id="audit_2026_001" model="mgmtsystem.audit">
+        <field name="name">Audit interne — Processus Satisfaction client</field>
+        <field name="date">2026-07-25 09:00:00</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="auditor_user_ids" eval="[(4, ref('base.user_admin'))]" />
+        <field name="quality_process_id" ref="smq_quality.smq_process_pr07" />
+        <field name="smq_document_ids" eval="[(4, ref('smq_document.smq_document_proc_003'))]" />
+        <field name="nonconformity_ids" eval="[(4, ref('nc_2026_001'))]" />
+        <field name="state">open</field>
+        <field name="strong_points">Les réclamations clients sont systématiquement enregistrées dès leur réception.</field>
+        <field name="to_improve_points">Le respect du délai de traitement de 48 heures n'est pas contrôlé de façon fiable.</field>
+    </record>
+
+    <record id="audit_2026_001_line_1" model="mgmtsystem.verification.line">
+        <field name="audit_id" ref="audit_2026_001" />
+        <field name="seq">10</field>
+        <field name="name">La procédure de traitement des réclamations (PROC-003) est-elle disponible et à jour ?</field>
+        <field name="is_conformed" eval="True" />
+    </record>
+
+    <record id="audit_2026_001_line_2" model="mgmtsystem.verification.line">
+        <field name="audit_id" ref="audit_2026_001" />
+        <field name="seq">20</field>
+        <field name="name">Les réclamations clients sont-elles correctement enregistrées et suivies ?</field>
+        <field name="is_conformed" eval="True" />
+    </record>
+
+    <record id="audit_2026_001_line_3" model="mgmtsystem.verification.line">
+        <field name="audit_id" ref="audit_2026_001" />
+        <field name="seq">30</field>
+        <field name="name">Les réclamations sont-elles traitées dans le délai de 48 heures prévu par la procédure ?</field>
+        <field name="is_conformed" eval="False" />
+        <field name="comments">3 réclamations ont dépassé le délai de traitement prévu — à l'origine de NC-2026-001.</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Traduction du rapport PDF OCA "mgmtsystem_review.review_report" :
+         patch par héritage QWeb (même id, contenu surchargé), le rapport
+         mgmtsystem_review.review_report_template continue de fonctionner
+         sans modification, il rend simplement la version traduite. -->
+    <template id="review_report" inherit_id="mgmtsystem_review.review_report">
+
+        <xpath expr="//strong[text()='Review Report']" position="replace">
+            <strong>Rapport de revue de direction</strong>
+        </xpath>
+
+        <xpath expr="//div[normalize-space(text())='Confidentiality:']" position="replace">
+            <div class="col-3">Confidentialité :</div>
+        </xpath>
+        <xpath expr="//div[normalize-space(text())='Direction Review']" position="replace">
+            <div class="col-9 pull-right">Revue de direction</div>
+        </xpath>
+        <xpath expr="//div[normalize-space(text())='Reference:']" position="replace">
+            <div class="col-3">Référence :</div>
+        </xpath>
+        <xpath expr="//div[normalize-space(text())='Date:']" position="replace">
+            <div class="col-3">Date :</div>
+        </xpath>
+        <xpath expr="//div[normalize-space(text())='Participants:']" position="replace">
+            <div class="col-3">Participants :</div>
+        </xpath>
+        <xpath expr="//strong[text()='Policies:']" position="replace">
+            <strong>Politique qualité :</strong>
+        </xpath>
+        <xpath
+            expr="//strong[text()='Changes affecting the management systems:']"
+            position="replace"
+        >
+            <strong>Changements ayant un impact sur le SMQ :</strong>
+        </xpath>
+        <xpath expr="//strong[text()='Conclusion:']" position="replace">
+            <strong>Conclusion :</strong>
+        </xpath>
+
+        <!-- Bloc "par entrée examinée" : remplacé en une seule fois plutôt
+             que par fragments (texte mélangé à des t-if/t-foreach) pour
+             rester fiable et lisible. -->
+        <xpath expr="//t[@t-foreach='doc.line_ids']" position="replace">
+            <t t-foreach="doc.line_ids" t-as="line">
+                <h3>
+                    <strong>
+                        <span t-field="line.name" />
+                    </strong>
+                </h3>
+                <ul class="list-unstyled" style="padding-left:15px">
+                    <li>Action :
+                        <t t-if="line.type=='action'">
+                            <span t-field="line.action_id.name" />
+                        </t>
+                        <t t-if="line.type=='nonconformity'">
+                            <span t-field="line.nonconformity_id.description" />
+                        </t>
+                    </li>
+                    <li>État :
+                        <t t-if="line.type=='action'">
+                            <span t-field="line.action_id.stage_id.name" />
+                        </t>
+                        <t t-if="line.type=='nonconformity'">
+                            <span t-field="line.nonconformity_id.state" />
+                        </t>
+                    </li>
+                    <li>Décision :
+                        <span t-field="line.decision" />
+                    </li>
+                    <li>Référence :
+                        <t t-if="line.type=='action'">
+                            Action
+                            <span t-field="line.action_id.reference" />
+                        </t>
+                        <t t-if="line.type=='nonconformity'">
+                            Non-conformité
+                            <span t-field="line.nonconformity_id.ref" />
+                        </t>
+                    </li>
+                </ul>
+            </t>
+        </xpath>
+
+    </template>
+
+</odoo>

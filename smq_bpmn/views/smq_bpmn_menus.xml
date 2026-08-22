@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_smq_process_list"
+        name="Processus"
+        parent="smq_quality.menu_smq_process"
+        action="smq_quality.action_smq_process"
+        sequence="10"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_process_version_list"
+        name="Versions"
+        parent="smq_quality.menu_smq_process"
+        action="action_smq_process_version"
+        sequence="20"
+        groups="smq_quality.group_smq_employee"
+    />
+
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_risk_source_type_process" model="smq.risk.source.type">
+        <field name="code">process</field>
+        <field name="name">Processus</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="smq_risk_source_type_stakeholder" model="smq.risk.source.type">
+        <field name="code">stakeholder</field>
+        <field name="name">Partie intéressée</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="smq_risk_source_type_context" model="smq.risk.source.type">
+        <field name="code">context</field>
+        <field name="name">Enjeu / contexte</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="smq_risk_source_type_other" model="smq.risk.source.type">
+        <field name="code">other</field>
+        <field name="name">Autre</field>
+        <field name="sequence">40</field>
+    </record>
+
+</odoo>

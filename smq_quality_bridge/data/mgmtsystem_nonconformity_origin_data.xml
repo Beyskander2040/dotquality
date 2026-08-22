@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- La taxonomie OCA couvre déjà Audit interne/externe, Réclamation
+         client interne/externe, Exécution du processus, Comité qualité,
+         Revue de direction. On complète avec les sources SMQ manquantes
+         plutôt que dupliquer avec un champ Selection. context lang=fr_FR :
+         voir le commentaire dans mgmtsystem_nonconformity_stage_data.xml. -->
+    <record id="nc_origin_internal_control" model="mgmtsystem.nonconformity.origin" context="{'lang': 'fr_FR'}">
+        <field name="name">Contrôle interne</field>
+    </record>
+    <record id="nc_origin_incident" model="mgmtsystem.nonconformity.origin" context="{'lang': 'fr_FR'}">
+        <field name="name">Incident</field>
+    </record>
+    <record id="nc_origin_supplier" model="mgmtsystem.nonconformity.origin" context="{'lang': 'fr_FR'}">
+        <field name="name">Fournisseur</field>
+    </record>
+    <record id="nc_origin_document" model="mgmtsystem.nonconformity.origin" context="{'lang': 'fr_FR'}">
+        <field name="name">Document</field>
+    </record>
+    <record id="nc_origin_other" model="mgmtsystem.nonconformity.origin" context="{'lang': 'fr_FR'}">
+        <field name="name">Autre</field>
+    </record>
+
+</odoo>

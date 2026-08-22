@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_training_employee,smq.training employee,model_smq_training,smq_quality.group_smq_employee,1,0,0,0
+access_smq_training_writer,smq.training writer,model_smq_training,smq_quality.group_smq_writer,1,1,1,0
+access_smq_training_quality_manager,smq.training quality manager,model_smq_training,smq_quality.group_smq_quality_manager,1,1,1,1

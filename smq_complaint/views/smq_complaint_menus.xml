@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_smq_complaint"
+        name="Réclamations clients"
+        action="action_smq_complaint"
+        parent="smq_quality.menu_smq_root"
+        sequence="68"
+        groups="smq_quality.group_smq_employee"
+    />
+
+</odoo>

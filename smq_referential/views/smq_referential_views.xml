@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_referential_tree" model="ir.ui.view">
+        <field name="name">smq.referential.tree</field>
+        <field name="model">smq.referential</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code" />
+                <field name="name" />
+                <field name="version" />
+                <field name="issuing_body" />
+                <field name="requirement_count" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_referential_form" model="ir.ui.view">
+        <field name="name">smq.referential.form</field>
+        <field name="model">smq.referential</field>
+        <field name="arch" type="xml">
+            <form string="Référentiel">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_requirements"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list-ul"
+                        >
+                            <field name="requirement_count" widget="statinfo" string="Exigences" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Nom" />
+                        <h1>
+                            <field name="name" placeholder="ex. ISO 9001" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code" />
+                            <field name="version" />
+                            <field name="issuing_body" />
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" />
+                            <field name="active" />
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" />
+                    </group>
+                    <notebook>
+                        <page string="Exigences">
+                            <field name="requirement_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="code" />
+                                    <field name="name" />
+                                    <field name="parent_id" />
+                                </tree>
+                            </field>
+                            <button
+                                name="action_generate_compliance_lines"
+                                type="object"
+                                string="Générer les lignes de conformité manquantes"
+                                class="btn-secondary"
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_smq_referential" model="ir.actions.act_window">
+        <field name="name">Référentiels</field>
+        <field name="res_model">smq.referential</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier référentiel (ex. ISO 9001).
+            </p>
+        </field>
+    </record>
+
+</odoo>

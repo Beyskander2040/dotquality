@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_process_writer_bpmn,smq.process writer (bpmn),smq_quality.model_smq_process,smq_quality.group_smq_writer,1,1,1,0
+access_smq_process_version_employee,smq.process.version employee,model_smq_process_version,smq_quality.group_smq_employee,1,0,0,0
+access_smq_process_version_writer,smq.process.version writer,model_smq_process_version,smq_quality.group_smq_writer,1,1,1,0
+access_smq_process_version_quality_manager,smq.process.version quality manager,model_smq_process_version,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_bpmn_task_mapping_employee,smq.bpmn.task.mapping employee,model_smq_bpmn_task_mapping,smq_quality.group_smq_employee,1,0,0,0
+access_smq_bpmn_task_mapping_writer,smq.bpmn.task.mapping writer,model_smq_bpmn_task_mapping,smq_quality.group_smq_writer,1,1,1,0
+access_smq_bpmn_task_mapping_quality_manager,smq.bpmn.task.mapping quality manager,model_smq_bpmn_task_mapping,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_process_version_reject_wizard,smq.process.version.reject.wizard,model_smq_process_version_reject_wizard,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_process_step_employee,smq.process.step employee,model_smq_process_step,smq_quality.group_smq_employee,1,0,0,0
+access_smq_process_step_writer,smq.process.step writer,model_smq_process_step,smq_quality.group_smq_writer,1,1,1,0
+access_smq_process_step_quality_manager,smq.process.step quality manager,model_smq_process_step,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_process_step_transition_employee,smq.process.step.transition employee,model_smq_process_step_transition,smq_quality.group_smq_employee,1,0,0,0
+access_smq_process_step_transition_writer,smq.process.step.transition writer,model_smq_process_step_transition,smq_quality.group_smq_writer,1,1,1,0
+access_smq_process_step_transition_quality_manager,smq.process.step.transition quality manager,model_smq_process_step_transition,smq_quality.group_smq_quality_manager,1,1,1,1

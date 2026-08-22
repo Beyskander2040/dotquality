@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Remplace l'écran "à venir" par la vraie interface Documents.
+         Le parent et la séquence doivent être restatés : le raccourci <menuitem>
+         écrit tous les champs qu'il porte, y compris ceux qu'on omet (il ne les
+         "préserve" pas comme un <record> partiel le ferait). -->
+    <menuitem
+        id="smq_quality.menu_smq_documents"
+        parent="smq_quality.menu_smq_root"
+        action="action_smq_document"
+        sequence="10"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_document_all"
+        name="Tous les documents"
+        parent="smq_quality.menu_smq_documents"
+        action="action_smq_document_all"
+        sequence="10"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_document_mine"
+        name="Mes documents"
+        parent="smq_quality.menu_smq_documents"
+        action="action_smq_document_mine"
+        sequence="20"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_document_in_validation"
+        name="En validation"
+        parent="smq_quality.menu_smq_documents"
+        action="action_smq_document_in_validation"
+        sequence="30"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_document_effective"
+        name="En vigueur"
+        parent="smq_quality.menu_smq_documents"
+        action="action_smq_document_effective"
+        sequence="40"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_document_obsolete"
+        name="Obsolètes"
+        parent="smq_quality.menu_smq_documents"
+        action="action_smq_document_obsolete"
+        sequence="50"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <!-- Remplace l'écran "à venir" par le véritable écran des échéances de
+         révision documentaire (même restatement complet que ci-dessus pour
+         menu_smq_documents : le raccourci <menuitem> écrit tous les champs
+         qu'il porte, y compris s'ils sont omis). -->
+    <menuitem
+        id="smq_quality.menu_smq_revision"
+        parent="smq_quality.menu_smq_root"
+        action="action_smq_document_to_review"
+        sequence="50"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <!-- Configuration : types et statuts de document -->
+    <menuitem
+        id="menu_smq_document_type"
+        name="Types de documents"
+        parent="smq_quality.menu_smq_configuration"
+        action="action_smq_document_type"
+        sequence="20"
+        groups="smq_quality.group_smq_admin"
+    />
+
+    <menuitem
+        id="menu_smq_document_stage"
+        name="Statuts de document"
+        parent="smq_quality.menu_smq_configuration"
+        action="action_smq_document_stage"
+        sequence="30"
+        groups="smq_quality.group_smq_admin"
+    />
+
+</odoo>

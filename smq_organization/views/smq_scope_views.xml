@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_scope_tree" model="ir.ui.view">
+        <field name="name">smq.scope.tree</field>
+        <field name="model">smq.scope</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_scope_form" model="ir.ui.view">
+        <field name="name">smq.scope.form</field>
+        <field name="model">smq.scope</field>
+        <field name="arch" type="xml">
+            <form string="Périmètre du SMQ">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nom" />
+                        <h1>
+                            <field name="name" placeholder="ex. Périmètre de certification 2026" />
+                        </h1>
+                    </div>
+                    <group string="Énoncé du périmètre">
+                        <field name="description" nolabel="1" placeholder="Ce que couvre (et ne couvre pas) le SMQ..." />
+                    </group>
+                    <group>
+                        <field name="site_ids" widget="many2many_tags" />
+                        <field name="activity_ids" widget="many2many_tags" />
+                        <field name="process_ids" widget="many2many_tags" />
+                    </group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company" />
+                        <field name="active" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_smq_scope" model="ir.actions.act_window">
+        <field name="name">Périmètre du SMQ</field>
+        <field name="res_model">smq.scope</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Définissez le périmètre de votre système de management de la qualité.
+            </p>
+        </field>
+    </record>
+
+</odoo>

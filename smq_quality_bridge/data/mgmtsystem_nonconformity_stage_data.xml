@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Relabellisation FR des 6 stages OCA existants (même mécanisme,
+         aucun nouveau champ ni moteur parallèle). "Plan d'action" et
+         "Annulée" restent disponibles (statusbar cliquable) mais repliés :
+         le parcours SMQ à 5 étapes passe directement de l'analyse au
+         traitement, en s'appuyant sur la contrainte OCA existante qui
+         exige un plan d'action renseigné dès l'entrée en "open".
+
+         "name" est un champ traduit : mgmtsystem_nonconformity a déjà une
+         traduction fr_FR différente de la nôtre pour ces stages existants
+         (ex. "Brouillon" pour stage_draft). Un <field name="name">Ouverte</field>
+         ne remplacerait que la valeur source (en_US) et laisserait le fr_FR
+         d'origine s'afficher — on passe donc par _relabel_fr(), qui écrit
+         explicitement dans le contexte fr_FR. -->
+    <record id="mgmtsystem_nonconformity.stage_pending" model="mgmtsystem.nonconformity.stage">
+        <field name="fold" eval="True" />
+    </record>
+    <record id="mgmtsystem_nonconformity.stage_done" model="mgmtsystem.nonconformity.stage">
+        <field name="fold" eval="True" />
+    </record>
+    <record id="mgmtsystem_nonconformity.stage_cancel" model="mgmtsystem.nonconformity.stage">
+        <field name="fold" eval="True" />
+    </record>
+
+    <!-- Nouvelle étape "Résolue", entre "En traitement" (150) et "Clôturée" (200) -->
+    <record id="stage_resolved" model="mgmtsystem.nonconformity.stage">
+        <field name="name">Resolved</field>
+        <field name="sequence">175</field>
+        <field name="state">resolved</field>
+    </record>
+
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('mgmtsystem_nonconformity.stage_draft')]" />
+        <value>Ouverte</value>
+    </function>
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('mgmtsystem_nonconformity.stage_analysis')]" />
+        <value>En analyse</value>
+    </function>
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('mgmtsystem_nonconformity.stage_pending')]" />
+        <value>Plan d'action</value>
+    </function>
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('mgmtsystem_nonconformity.stage_open')]" />
+        <value>En traitement</value>
+    </function>
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('mgmtsystem_nonconformity.stage_done')]" />
+        <value>Clôturée</value>
+    </function>
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('mgmtsystem_nonconformity.stage_cancel')]" />
+        <value>Annulée</value>
+    </function>
+    <function model="mgmtsystem.nonconformity.stage" name="_relabel_fr">
+        <value eval="[ref('stage_resolved')]" />
+        <value>Résolue</value>
+    </function>
+
+</odoo>

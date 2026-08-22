@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_complaint_tree" model="ir.ui.view">
+        <field name="name">smq.complaint.tree</field>
+        <field name="model">smq.complaint</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'cloturee'" decoration-danger="response_due_date and response_due_date &lt; context_today().strftime('%Y-%m-%d') and state != 'cloturee'">
+                <field name="reference" />
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="channel" widget="badge" />
+                <field name="severity" widget="badge" decoration-danger="severity == 'critical'" decoration-warning="severity == 'major'" />
+                <field name="date_received" />
+                <field name="response_due_date" optional="hide" />
+                <field name="state" widget="badge" decoration-success="state == 'cloturee'" decoration-info="state == 'traitement'" />
+                <field name="responsible_user_id" widget="many2one_avatar_user" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_complaint_form" model="ir.ui.view">
+        <field name="name">smq.complaint.form</field>
+        <field name="model">smq.complaint</field>
+        <field name="arch" type="xml">
+            <form string="Réclamation client">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="nouvelle,qualification,traitement,reponse_envoyee,cloturee" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_actions"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-tasks"
+                            invisible="action_count == 0"
+                        >
+                            <field name="action_count" string="Actions" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="reference" readonly="1" class="oe_inline" />
+                            <span> — </span>
+                            <field name="name" placeholder="Objet de la réclamation" class="oe_inline" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" />
+                            <field name="stakeholder_id" />
+                            <field name="channel" />
+                            <field name="date_received" />
+                            <field name="process_id" />
+                        </group>
+                        <group>
+                            <field name="severity" />
+                            <field name="responsible_user_id" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Description de la réclamation..." />
+                    <notebook>
+                        <page string="Traitement de la réponse" name="response">
+                            <group>
+                                <field name="response_due_date" />
+                                <field name="response_sent_date" />
+                            </group>
+                            <field name="response_summary" placeholder="Ce qui a été communiqué au client..." />
+                            <group>
+                                <field name="satisfaction_after_treatment" />
+                            </group>
+                        </page>
+                        <page string="Actions" name="actions">
+                            <button
+                                name="action_create_treatment_action"
+                                type="object"
+                                string="Créer une action"
+                                class="btn-primary mb-2"
+                            />
+                            <field name="action_ids" nolabel="1">
+                                <tree>
+                                    <field name="reference" />
+                                    <field name="name" />
+                                    <field name="type_action" />
+                                    <field name="user_id" />
+                                    <field name="date_deadline" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_complaint_search" model="ir.ui.view">
+        <field name="name">smq.complaint.search</field>
+        <field name="model">smq.complaint</field>
+        <field name="arch" type="xml">
+            <search string="Réclamations clients">
+                <field name="reference" />
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="process_id" />
+                <field name="responsible_user_id" />
+                <separator />
+                <filter name="filter_mine" string="Mes réclamations" domain="[('responsible_user_id', '=', uid)]" />
+                <filter name="filter_open" string="Ouvertes" domain="[('state', '!=', 'cloturee')]" />
+                <filter name="filter_closed" string="Clôturées" domain="[('state', '=', 'cloturee')]" />
+                <separator />
+                <filter
+                    name="filter_response_overdue"
+                    string="En retard de réponse"
+                    domain="[('response_due_date', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', '!=', 'cloturee')]"
+                />
+                <filter name="filter_critical" string="Critiques" domain="[('severity', '=', 'critical')]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_state" string="Statut" context="{'group_by': 'state'}" />
+                    <filter name="group_by_severity" string="Sévérité" context="{'group_by': 'severity'}" />
+                    <filter name="group_by_channel" string="Canal" context="{'group_by': 'channel'}" />
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'process_id'}" />
+                    <filter name="group_by_responsible" string="Responsable" context="{'group_by': 'responsible_user_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_complaint" model="ir.actions.act_window">
+        <field name="name">Réclamations clients</field>
+        <field name="res_model">smq.complaint</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_smq_complaint_search" />
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune réclamation client enregistrée pour le moment.
+            </p>
+        </field>
+    </record>
+
+</odoo>
