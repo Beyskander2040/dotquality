@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker exec *)",
+      "Bash(xargs -I{} echo {})",
+      "WebSearch",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_web python3 -c \"import pdfminer; print\\('pdfminer OK', pdfminer.__version__ if hasattr\\(pdfminer,'__version__'\\) else ''\\)\")",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_web grep -n \"index_content\" /usr/lib/python3/dist-packages/odoo/addons/base/models/ir_attachment.py)",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_web odoo -d qms-demo --db_host=db --db_user=odoo --db_password=odoo_pwd --no-http -i smq_document --test-enable --test-tags /smq_document --stop-after-init)",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_web odoo -d qms-demo --db_host=db --db_user=odoo --db_password=odoo_pwd --no-http -u smq_quality,smq_document --stop-after-init)",
+      "Bash(docker restart *)",
+      "Bash(MSYS_NO_PATHCONV=1 docker logs odoo_qms_web --tail 8)",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_web odoo -d qms-demo --db_host=db --db_user=odoo --db_password=odoo_pwd --no-http -i smq_quality_bridge --test-enable --test-tags /smq_quality_bridge,/smq_quality --stop-after-init)",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_db psql -U odoo -d qms-demo -t -c ' *)",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_db psql -U odoo -d qms-demo -t -c \"select reference, name from mgmtsystem_action where reference like 'ACT-%' order by reference;\")",
+      "Bash(MSYS_NO_PATHCONV=1 docker exec odoo_qms_web odoo -d qms-demo --db_host=db --db_user=odoo --db_password=odoo_pwd --no-http -u smq_quality,smq_document,smq_quality_bridge --test-enable --test-tags /smq_quality,/smq_document,/smq_quality_bridge --stop-after-init)"
+    ]
+  }
+}
