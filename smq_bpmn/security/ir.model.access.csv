@@ -13,3 +13,7 @@ access_smq_process_step_quality_manager,smq.process.step quality manager,model_s
 access_smq_process_step_transition_employee,smq.process.step.transition employee,model_smq_process_step_transition,smq_quality.group_smq_employee,1,0,0,0
 access_smq_process_step_transition_writer,smq.process.step.transition writer,model_smq_process_step_transition,smq_quality.group_smq_writer,1,1,1,0
 access_smq_process_step_transition_quality_manager,smq.process.step.transition quality manager,model_smq_process_step_transition,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_process_instance_employee,smq.process.instance employee,model_smq_process_instance,smq_quality.group_smq_employee,1,0,0,0
+access_smq_process_instance_writer,smq.process.instance writer,model_smq_process_instance,smq_quality.group_smq_writer,1,1,1,0
+access_smq_process_instance_quality_manager,smq.process.instance quality manager,model_smq_process_instance,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_process_instance_advance_wizard,smq.process.instance.advance.wizard,model_smq_process_instance_advance_wizard,smq_quality.group_smq_writer,1,1,1,1

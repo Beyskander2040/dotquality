@@ -6,6 +6,7 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 from .smq_bpmn_generator import generate_bpmn_xml
+from .smq_bpmn_instance_engine import parse_graph
 
 # Champs figés dès qu'une version quitte le brouillon (mêmes principes que
 # smq_document/models/smq_document_version.py : une version qui n'est plus en
@@ -117,6 +118,12 @@ class SmqProcessVersion(models.Model):
         "smq.process.step.transition", "process_version_id", string="Transitions (description structurée)"
     )
 
+    # LOT 13 — instances d'exécution démarrées depuis cette version.
+    instance_ids = fields.One2many(
+        "smq.process.instance", "process_version_id", string="Instances"
+    )
+    instance_count = fields.Integer(compute="_compute_instance_count")
+
     _sql_constraints = [
         (
             "process_version_uniq",
@@ -139,6 +146,11 @@ class SmqProcessVersion(models.Model):
                 if rec.bpmn_xml
                 else False
             )
+
+    @api.depends("instance_ids")
+    def _compute_instance_count(self):
+        for version in self:
+            version.instance_count = len(version.instance_ids)
 
     @api.constrains("state")
     def _check_single_effective_version(self):
@@ -493,6 +505,63 @@ class SmqProcessVersion(models.Model):
             "res_id": new_version.id,
             "view_mode": "form",
             "target": "current",
+        }
+
+    # ------------------------------------------------------------------
+    # LOT 13 — démarrage d'une instance d'exécution. Réservé aux versions
+    # "en vigueur" (§ portée V1 : on ne fait jamais tourner un diagramme non
+    # encore approuvé/en vigueur, cohérent avec la gouvernance déjà en place
+    # sur le reste du module).
+    # ------------------------------------------------------------------
+
+    def action_start_instance(self, res_model_id=False, res_id=False):
+        self.ensure_one()
+        if not self.env.user.has_group("smq_quality.group_smq_writer"):
+            raise UserError(_("Vous n'avez pas les droits nécessaires pour démarrer une instance."))
+        if self.state != "effective":
+            raise UserError(
+                _("Seule une version « En vigueur » peut être exécutée (état actuel : %s).")
+                % _STATE_LABELS.get(self.state, self.state)
+            )
+        graph = parse_graph(self.bpmn_xml)
+        start_id = graph.unique_start_id()
+        instance = self.env["smq.process.instance"].create(
+            {
+                "process_version_id": self.id,
+                "res_model_id": res_model_id,
+                "res_id": res_id,
+                "current_element_id": start_id,
+            }
+        )
+        instance._arrive_at(start_id, graph)
+        instance._auto_advance_loop(graph)
+        return instance
+
+    def action_start_instance_button(self):
+        """Point d'entrée bouton (§ UI) : démarre sans enregistrement métier
+        rattaché — l'utilisateur peut renseigner res_model_id/res_id après
+        coup sur la fiche de l'instance nouvellement créée, évitant un
+        assistant supplémentaire rien que pour cette saisie optionnelle."""
+        self.ensure_one()
+        instance = self.action_start_instance()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Instance de processus"),
+            "res_model": "smq.process.instance",
+            "view_mode": "form",
+            "res_id": instance.id,
+            "target": "current",
+        }
+
+    def action_view_instances(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Instances"),
+            "res_model": "smq.process.instance",
+            "view_mode": "tree,form",
+            "domain": [("process_version_id", "=", self.id)],
+            "context": {"default_process_version_id": self.id},
         }
 
     # ------------------------------------------------------------------
