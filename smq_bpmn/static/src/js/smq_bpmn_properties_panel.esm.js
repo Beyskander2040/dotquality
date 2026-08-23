@@ -159,6 +159,38 @@ export class SmqBpmnPropertiesPanel extends Component {
                         </div>
                     </t>
                 </div>
+
+                <div class="o_smq_bpmn_properties_section" t-if="isMappable and hasMappingData">
+                    <h6>Documentation SMQ</h6>
+                    <p class="text-muted small">
+                        Liens purement documentaires (jamais exécutés) vers le système
+                        de gestion documentaire — indépendants du mapping technique ci-dessus.
+                    </p>
+                    <div class="o_smq_bpmn_properties_field">
+                        <label>Procédure</label>
+                        <select t-att-disabled="props.readonly" t-on-change="onProcedureDocumentChange">
+                            <option value="">-</option>
+                            <t t-foreach="props.availableDocuments" t-as="d" t-key="d.id">
+                                <option
+                                    t-att-value="d.id"
+                                    t-att-selected="d.id === currentProcedureDocumentId"
+                                ><t t-esc="d.code"/> — <t t-esc="d.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="o_smq_bpmn_properties_field">
+                        <label>Formulaire</label>
+                        <select t-att-disabled="props.readonly" t-on-change="onFormDocumentChange">
+                            <option value="">-</option>
+                            <t t-foreach="props.availableDocuments" t-as="d" t-key="d.id">
+                                <option
+                                    t-att-value="d.id"
+                                    t-att-selected="d.id === currentFormDocumentId"
+                                ><t t-esc="d.code"/> — <t t-esc="d.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
             </t>
         </div>
     `;
@@ -169,6 +201,7 @@ export class SmqBpmnPropertiesPanel extends Component {
         readonly: {type: Boolean, optional: true, default: false},
         availableModels: {type: Array, optional: true},
         availableActions: {type: Array, optional: true},
+        availableDocuments: {type: Array, optional: true},
         onElementPropertyChange: {type: Function, optional: true},
         onMappingChange: {type: Function, optional: true},
     };
@@ -221,6 +254,18 @@ export class SmqBpmnPropertiesPanel extends Component {
         return info ? info.active !== false : true;
     }
 
+    get currentProcedureDocumentId() {
+        const value = this.props.mappingInfo && this.props.mappingInfo.procedure_document_id;
+        if (!value) return false;
+        return Array.isArray(value) ? value[0] : value;
+    }
+
+    get currentFormDocumentId() {
+        const value = this.props.mappingInfo && this.props.mappingInfo.form_document_id;
+        if (!value) return false;
+        return Array.isArray(value) ? value[0] : value;
+    }
+
     onNameChange(ev) {
         if (this.props.onElementPropertyChange) {
             this.props.onElementPropertyChange(this.props.selection.elementId, {name: ev.target.value});
@@ -265,6 +310,16 @@ export class SmqBpmnPropertiesPanel extends Component {
 
     onActiveChange(ev) {
         this._emitMappingChange({active: ev.target.checked});
+    }
+
+    onProcedureDocumentChange(ev) {
+        const value = ev.target.value ? parseInt(ev.target.value, 10) : false;
+        this._emitMappingChange({procedure_document_id: value});
+    }
+
+    onFormDocumentChange(ev) {
+        const value = ev.target.value ? parseInt(ev.target.value, 10) : false;
+        this._emitMappingChange({form_document_id: value});
     }
 
     /** @private */

@@ -378,3 +378,62 @@ class TestSmqBpmnTaskMapping(TransactionCase):
         )
         with self.assertRaises(UserError):
             version.action_check_mappings()
+
+    # ------------------------------------------------------------------
+    # H. Liens documentaires Procédure/Formulaire (Option B) — purement
+    # déclaratifs, comme le reste du mapping ; suivent le même verrouillage
+    # générique (_check_version_editable), aucun test dédié nécessaire pour
+    # ça.
+    # ------------------------------------------------------------------
+
+    _doc_type_counter = 0
+
+    def _new_document(self, type_name="Procédure Test", **vals):
+        # Préfixe unique par appel (compteur, pas dérivé du nom) : les
+        # préfixes "PROC"/"FORM" existent déjà dans les données de
+        # configuration réelles (smq_document_type_data.xml, non-rollback
+        # entre tests) — les dériver de type_name="Procédure"/"Formulaire"
+        # provoquait une collision de contrainte unique.
+        type(self)._doc_type_counter += 1
+        doc_type = self.env["smq.document.type"].create(
+            {
+                "name": f"{type_name} {type(self)._doc_type_counter}",
+                "code_prefix": f"T{type(self)._doc_type_counter}",
+            }
+        )
+        values = {"name": f"Doc {type_name}", "document_type_id": doc_type.id}
+        values.update(vals)
+        return self.env["smq.document"].create(values)
+
+    def test_h1_procedure_and_form_document_can_be_set(self):
+        procedure = self._new_document("Procédure")
+        form = self._new_document("Formulaire")
+        mapping = self._new_mapping(
+            procedure_document_id=procedure.id, form_document_id=form.id
+        )
+        self.assertEqual(mapping.procedure_document_id, procedure)
+        self.assertEqual(mapping.form_document_id, form)
+
+    def test_h2_get_mapping_for_element_returns_document_links(self):
+        version = self._new_version("VH2", bpmn_xml=_XML_TASK_A)
+        procedure = self._new_document("Procédure")
+        mapping = self._new_mapping(version, "Task_A", procedure_document_id=procedure.id)
+        result = self.env["smq.bpmn.task.mapping"].get_mapping_for_element(version.id, "Task_A")
+        self.assertEqual(result["procedure_document_id"], [procedure.id, procedure.display_name])
+        self.assertFalse(result["form_document_id"])
+        self.assertEqual(mapping.id, result["id"])
+
+    def test_h3_get_available_documents_lists_created_document(self):
+        procedure = self._new_document("Procédure")
+        docs = self.env["smq.bpmn.task.mapping"].with_user(self.writer).get_available_documents()
+        self.assertTrue(any(d["id"] == procedure.id for d in docs))
+
+    def test_h4_procedure_document_locked_outside_draft(self):
+        version = self._new_version("VH4")
+        mapping = self._new_mapping(version, "Task_A")
+        version.write({"bpmn_xml": _XML_TASK_A})
+        version.action_submit_review()
+        version.action_approve()
+        procedure = self._new_document("Procédure")
+        with self.assertRaises(ValidationError):
+            mapping.write({"procedure_document_id": procedure.id})

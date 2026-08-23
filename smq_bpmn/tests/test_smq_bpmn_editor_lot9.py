@@ -117,10 +117,12 @@ class TestSmqBpmnEditorLot9(TransactionCase):
         # hérite désormais de mail.thread pour le chatter, §14) — dépendance
         # déjà transitivement présente via smq_quality, mais déclarée
         # directement puisque le module utilise mail.thread lui-même.
+        # Option B : "smq_document" ajouté — smq.bpmn.task.mapping référence
+        # désormais smq.document (procedure_document_id/form_document_id).
         import odoo.modules.module as module_tools
 
         manifest_dict = module_tools.load_manifest("smq_bpmn")
-        self.assertEqual(manifest_dict["depends"], ["smq_quality", "mail"])
+        self.assertEqual(manifest_dict["depends"], ["smq_quality", "smq_document", "mail"])
 
     def test_a3_no_external_dependencies_added(self):
         import odoo.modules.module as module_tools

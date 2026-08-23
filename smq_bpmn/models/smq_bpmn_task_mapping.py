@@ -68,6 +68,21 @@ class SmqBpmnTaskMapping(models.Model):
         "ir.actions.actions", string="Action Odoo", ondelete="set null"
     )
 
+    # Option B — liens purement documentaires vers le système documentaire
+    # SMQ (smq_document) : quelle Procédure détaille cette étape, quel
+    # Formulaire sert à en capturer les données. Complémentaires aux champs
+    # techniques ci-dessus (odoo_model_id/odoo_method/odoo_action_id), pas
+    # un remplacement — jamais exécutés, jamais lus par un moteur, juste
+    # affichés dans le panneau de propriétés BPMN pour la traçabilité ISO.
+    procedure_document_id = fields.Many2one(
+        "smq.document", string="Procédure", ondelete="set null",
+        help="Document décrivant comment réaliser cette étape (purement documentaire).",
+    )
+    form_document_id = fields.Many2one(
+        "smq.document", string="Formulaire", ondelete="set null",
+        help="Document utilisé pour capturer les données de cette étape (purement documentaire).",
+    )
+
     active = fields.Boolean(default=True)
     notes = fields.Text()
 
@@ -256,6 +271,16 @@ class SmqBpmnTaskMapping(models.Model):
                 if mapping.odoo_action_id
                 else False
             ),
+            "procedure_document_id": (
+                [mapping.procedure_document_id.id, mapping.procedure_document_id.display_name]
+                if mapping.procedure_document_id
+                else False
+            ),
+            "form_document_id": (
+                [mapping.form_document_id.id, mapping.form_document_id.display_name]
+                if mapping.form_document_id
+                else False
+            ),
             "active": mapping.active,
             "notes": mapping.notes or "",
             "is_orphaned": mapping.is_orphaned,
@@ -278,4 +303,15 @@ class SmqBpmnTaskMapping(models.Model):
         """Liste des actions fenêtre utilisables pour odoo_action_id (§9)."""
         return self.env["ir.actions.act_window"].sudo().search_read(
             [], ["id", "name", "res_model"], order="name", limit=500
+        )
+
+    @api.model
+    def get_available_documents(self):
+        """Liste des documents SMQ utilisables pour procedure_document_id/
+        form_document_id. Pas de sudo() ici, à la différence de get_available_
+        models/get_available_actions : smq.document n'a pas la restriction
+        technique d'ir.model, les règles d'accès normales de l'utilisateur
+        s'appliquent."""
+        return self.env["smq.document"].search_read(
+            [], ["id", "name", "code", "document_type_id"], order="code", limit=1000
         )

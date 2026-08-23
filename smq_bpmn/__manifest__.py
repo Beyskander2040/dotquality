@@ -6,7 +6,7 @@
     "author": "Medianet",
     "license": "AGPL-3",
     "application": False,
-    "depends": ["smq_quality", "mail"],
+    "depends": ["smq_quality", "smq_document", "mail"],
     "data": [
         "security/ir.model.access.csv",
         "views/smq_bpmn_task_mapping_views.xml",

@@ -17,7 +17,7 @@
                 <field name="name" />
                 <field name="complete_name" string="Hiérarchie" optional="show" />
                 <field name="document_type_id" />
-                <field name="process_id" />
+                <field name="effective_process_id" string="Processus" />
                 <field name="current_version_id" string="Version" />
                 <field name="responsible_id" />
                 <field name="stage_id" />
@@ -262,7 +262,7 @@
                 <field name="code" />
                 <field name="name" />
                 <field name="document_type_id" />
-                <field name="process_id" />
+                <field name="effective_process_id" string="Processus" />
                 <field name="parent_document_id" />
                 <field name="responsible_id" />
                 <filter name="filter_draft" string="Brouillons" domain="[('stage_id.code', '=', 'draft')]" />
@@ -275,7 +275,7 @@
                 <filter name="filter_mine" string="Mes documents" domain="[('responsible_id', '=', uid)]" />
                 <group expand="0" string="Grouper par">
                     <filter name="group_by_type" string="Type" context="{'group_by': 'document_type_id'}" />
-                    <filter name="group_by_process" string="Processus" context="{'group_by': 'process_id'}" />
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'effective_process_id'}" />
                     <filter name="group_by_parent" string="Document parent" context="{'group_by': 'parent_document_id'}" />
                     <filter name="group_by_stage" string="Statut" context="{'group_by': 'stage_id'}" />
                 </group>

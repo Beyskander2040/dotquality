@@ -34,6 +34,16 @@ class SmqDocument(models.Model):
         "smq.document", "parent_document_id", string="Documents liés"
     )
     child_document_count = fields.Integer(compute="_compute_child_document_count")
+    effective_process_id = fields.Many2one(
+        "smq.process",
+        string="Processus (effectif)",
+        compute="_compute_effective_process_id",
+        store=True,
+        recursive=True,
+        help="process_id si renseigné, sinon celui hérité du document parent — "
+        "utilisé pour le regroupement afin qu'un document sans Processus propre "
+        "reste rattaché à celui de sa Procédure/Formulaire parent.",
+    )
     complete_name = fields.Char(
         string="Hiérarchie",
         compute="_compute_complete_name",
@@ -146,6 +156,11 @@ class SmqDocument(models.Model):
     def _compute_child_document_count(self):
         for doc in self:
             doc.child_document_count = len(doc.child_document_ids)
+
+    @api.depends("process_id", "parent_document_id.effective_process_id")
+    def _compute_effective_process_id(self):
+        for doc in self:
+            doc.effective_process_id = doc.process_id or doc.parent_document_id.effective_process_id
 
     @api.depends("name", "parent_document_id.complete_name")
     def _compute_complete_name(self):

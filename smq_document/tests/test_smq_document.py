@@ -168,6 +168,29 @@ class TestSmqDocument(TransactionCase):
         form.write({"parent_document_id": procedure.id})
         self.assertEqual(form.process_id, self.process)
 
+    def test_effective_process_uses_own_value_when_set(self):
+        doc = self.env["smq.document"].create(
+            {"name": "Doc", "document_type_id": self.type_form.id, "process_id": self.process.id}
+        )
+        self.assertEqual(doc.effective_process_id, self.process)
+
+    def test_effective_process_falls_back_to_parent_when_own_is_cleared(self):
+        procedure = self.env["smq.document"].create(
+            {"name": "Procédure", "document_type_id": self.type_proc.id, "process_id": self.process.id}
+        )
+        other_process = self.env["smq.process"].create({"code": "PR-OTHER2", "name": "Autre 2"})
+        form = self.env["smq.document"].create(
+            {
+                "name": "Formulaire",
+                "document_type_id": self.type_form.id,
+                "parent_document_id": procedure.id,
+                "process_id": other_process.id,
+            }
+        )
+        self.assertEqual(form.effective_process_id, other_process)
+        form.write({"process_id": False})
+        self.assertEqual(form.effective_process_id, self.process)
+
     def test_hierarchy_cycle_across_two_documents_is_rejected(self):
         doc_a = self.env["smq.document"].create(
             {"name": "Doc A", "document_type_id": self.type_form.id}

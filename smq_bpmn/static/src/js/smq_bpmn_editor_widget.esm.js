@@ -88,6 +88,7 @@ export class SmqBpmnEditorWidget extends Component {
                     readonly="props.readonly"
                     availableModels="state.availableModels"
                     availableActions="state.availableActions"
+                    availableDocuments="state.availableDocuments"
                     onElementPropertyChange="(elementId, vals) => this._onElementPropertyChange(elementId, vals)"
                     onMappingChange="(elementId, vals) => this._onMappingChange(elementId, vals)"
                 />
@@ -110,6 +111,7 @@ export class SmqBpmnEditorWidget extends Component {
             pendingMappings: {},
             availableModels: [],
             availableActions: [],
+            availableDocuments: [],
             mappingsDirty: false,
         });
 
@@ -136,6 +138,11 @@ export class SmqBpmnEditorWidget extends Component {
         this.state.availableActions = await this.orm.call(
             "smq.bpmn.task.mapping",
             "get_available_actions",
+            []
+        );
+        this.state.availableDocuments = await this.orm.call(
+            "smq.bpmn.task.mapping",
+            "get_available_documents",
             []
         );
     }
@@ -383,6 +390,8 @@ export class SmqBpmnEditorWidget extends Component {
             // write()/create() n'acceptent qu'un entier (ou False).
             if (Array.isArray(copy.odoo_model_id)) copy.odoo_model_id = copy.odoo_model_id[0];
             if (Array.isArray(copy.odoo_action_id)) copy.odoo_action_id = copy.odoo_action_id[0];
+            if (Array.isArray(copy.procedure_document_id)) copy.procedure_document_id = copy.procedure_document_id[0];
+            if (Array.isArray(copy.form_document_id)) copy.form_document_id = copy.form_document_id[0];
             return copy;
         });
 
