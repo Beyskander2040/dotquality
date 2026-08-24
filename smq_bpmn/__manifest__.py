@@ -11,6 +11,7 @@
         "security/ir.model.access.csv",
         "views/smq_bpmn_task_mapping_views.xml",
         "views/smq_process_version_reject_wizard_views.xml",
+        "views/smq_process_instance_views.xml",
         "views/smq_process_version_views.xml",
         "views/smq_process_views.xml",
         "views/smq_bpmn_menus.xml",

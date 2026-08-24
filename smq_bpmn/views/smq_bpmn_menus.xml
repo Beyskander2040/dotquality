@@ -19,4 +19,13 @@
         groups="smq_quality.group_smq_employee"
     />
 
+    <menuitem
+        id="menu_smq_process_instance_list"
+        name="Instances"
+        parent="smq_quality.menu_smq_process"
+        action="action_smq_process_instance"
+        sequence="30"
+        groups="smq_quality.group_smq_employee"
+    />
+
 </odoo>

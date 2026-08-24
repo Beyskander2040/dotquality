@@ -91,6 +91,14 @@
                         string="Vérifier les mappings"
                         type="object"
                     />
+                    <button
+                        name="action_start_instance_button"
+                        string="Démarrer une instance"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'effective'"
+                        groups="smq_quality.group_smq_writer"
+                    />
                     <field
                         name="state"
                         widget="statusbar"
@@ -98,6 +106,17 @@
                     />
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_instances"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-play-circle"
+                            invisible="instance_count == 0"
+                        >
+                            <field name="instance_count" widget="statinfo" string="Instances" />
+                        </button>
+                    </div>
                     <widget
                         name="web_ribbon"
                         title="Rejetée"
