@@ -182,6 +182,9 @@
                             <group string="Description / Objet">
                                 <field name="description" nolabel="1" placeholder="Objet du document..." />
                             </group>
+                            <group string="Formulaires utilisés">
+                                <field name="formulaire_ids" nolabel="1" widget="many2many_tags" />
+                            </group>
                         </page>
                         <page name="control" string="Contrôle documentaire">
                             <group>

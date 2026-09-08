@@ -6,6 +6,7 @@
         <field name="model">smq.bpmn.task.mapping</field>
         <field name="arch" type="xml">
             <tree editable="bottom">
+                <field name="process_version_id" />
                 <field name="bpmn_element_id" />
                 <field name="element_name" />
                 <field name="element_type" />
@@ -13,6 +14,8 @@
                 <field name="odoo_model_id" />
                 <field name="odoo_method" />
                 <field name="odoo_action_id" />
+                <field name="procedure_document_id" />
+                <field name="form_document_id" />
                 <field name="active" widget="boolean_toggle" />
                 <field
                     name="is_orphaned"
@@ -45,6 +48,10 @@
                             <field name="odoo_action_id" />
                             <field name="active" />
                         </group>
+                    </group>
+                    <group string="Documentation SMQ">
+                        <field name="procedure_document_id" />
+                        <field name="form_document_id" />
                     </group>
                     <group string="Notes">
                         <field name="notes" nolabel="1" />

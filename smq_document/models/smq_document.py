@@ -34,6 +34,16 @@ class SmqDocument(models.Model):
         "smq.document", "parent_document_id", string="Documents liés"
     )
     child_document_count = fields.Integer(compute="_compute_child_document_count")
+    formulaire_ids = fields.Many2many(
+        "smq.document",
+        "smq_document_formulaire_rel",
+        "procedure_id",
+        "formulaire_id",
+        string="Formulaires utilisés",
+        help="Formulaires que cette procédure utilise pour capturer ses données — relation "
+        "documentaire directe, indépendante de la hiérarchie (Document parent) et des "
+        "activités BPMN qui peuvent séparément référencer les mêmes documents.",
+    )
     effective_process_id = fields.Many2one(
         "smq.process",
         string="Processus (effectif)",

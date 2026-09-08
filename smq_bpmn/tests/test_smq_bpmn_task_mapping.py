@@ -437,3 +437,34 @@ class TestSmqBpmnTaskMapping(TransactionCase):
         procedure = self._new_document("Procédure")
         with self.assertRaises(ValidationError):
             mapping.write({"procedure_document_id": procedure.id})
+
+    # ------------------------------------------------------------------
+    # I. Visibilité inverse depuis le document (smart button smq.document) —
+    # la relation forward vit sur le mapping (procedure_document_id/
+    # form_document_id) ; ces tests vérifient sa lecture depuis l'autre bout,
+    # ajoutée sur smq.document via smq_bpmn/models/smq_document.py.
+    # ------------------------------------------------------------------
+
+    def test_i1_document_counts_mappings_referencing_it_as_procedure(self):
+        version = self._new_version("VI1", bpmn_xml=_XML_TASK_A)
+        procedure = self._new_document("Procédure")
+        self._new_mapping(version, "Task_A", procedure_document_id=procedure.id)
+        self.assertEqual(procedure.bpmn_task_mapping_count, 1)
+
+    def test_i2_document_counts_mappings_referencing_it_as_form(self):
+        version = self._new_version("VI2", bpmn_xml=_XML_TASK_A)
+        form = self._new_document("Formulaire")
+        self._new_mapping(version, "Task_A", form_document_id=form.id)
+        self.assertEqual(form.bpmn_task_mapping_count, 1)
+
+    def test_i3_document_mapping_count_zero_when_unreferenced(self):
+        procedure = self._new_document("Procédure")
+        self.assertEqual(procedure.bpmn_task_mapping_count, 0)
+
+    def test_i4_action_view_bpmn_task_mappings_domain(self):
+        version = self._new_version("VI4", bpmn_xml=_XML_TASK_A)
+        procedure = self._new_document("Procédure")
+        mapping = self._new_mapping(version, "Task_A", procedure_document_id=procedure.id)
+        action = procedure.action_view_bpmn_task_mappings()
+        found = self.env["smq.bpmn.task.mapping"].search(action["domain"])
+        self.assertEqual(found, mapping)

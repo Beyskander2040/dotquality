@@ -573,6 +573,92 @@ class TestSmqProcessVersion(TransactionCase):
         v2 = self.env["smq.process.version"].browse(action["res_id"])
         self.assertEqual(v2.version, "1.0")
 
+    def _new_document(self, type_name, code_prefix):
+        doc_type = self.env["smq.document.type"].create(
+            {"name": type_name, "code_prefix": code_prefix}
+        )
+        return self.env["smq.document"].create({"name": f"Doc {type_name}", "document_type_id": doc_type.id})
+
+    def _linear_description(self, version):
+        Step = self.env["smq.process.step"]
+        start = Step.create(
+            {"process_version_id": version.id, "code": "START", "name": "Début", "step_type": "start"}
+        )
+        task = Step.create(
+            {"process_version_id": version.id, "code": "TASK", "name": "Traiter", "step_type": "manual"}
+        )
+        end = Step.create(
+            {"process_version_id": version.id, "code": "END", "name": "Fin", "step_type": "end"}
+        )
+        Transition = self.env["smq.process.step.transition"]
+        Transition.create(
+            {"process_version_id": version.id, "source_step_id": start.id, "target_step_id": task.id}
+        )
+        Transition.create(
+            {"process_version_id": version.id, "source_step_id": task.id, "target_step_id": end.id}
+        )
+        return start, task, end
+
+    def test_k7_new_version_from_pure_generated_diagram_realigns_mapping(self):
+        # Scénario exact rapporté : un mapping documentaire configuré sur le
+        # diagramme cloné doit rester visible depuis le tableau d'activités
+        # de la NOUVELLE version, pas seulement de l'ancienne.
+        process = self.env["smq.process"].create({"code": "PROC-K7", "name": "K7"})
+        v1 = self._new_version(process, "1.0")
+        start, task, end = self._linear_description(v1)
+        v1.with_user(self.writer).action_generate_bpmn_from_description()
+        procedure = self._new_document("Procédure K7", "PK7")
+        self.env["smq.bpmn.task.mapping"].create(
+            {
+                "process_version_id": v1.id,
+                "bpmn_element_id": f"Step_{task.id}",
+                "procedure_document_id": procedure.id,
+            }
+        )
+        action = v1.with_user(self.writer).action_create_new_version()
+        v2 = self.env["smq.process.version"].browse(action["res_id"])
+        v2_task = v2.step_ids.filtered(lambda s: s.code == "TASK")
+        self.assertEqual(v2_task.procedure_document_id, procedure)
+        # Le diagramme cloné doit lui-même être cohérent avec les nouvelles
+        # étapes (sinon la vérification ci-dessus serait un faux positif
+        # basé sur une simple coïncidence de format de chaîne).
+        self.assertIn(f"Step_{v2_task.id}", v2.bpmn_xml)
+        self.assertNotIn(f"Step_{task.id}", v2.bpmn_xml)
+
+    def test_k8_hand_drawn_diagram_still_cloned_verbatim(self):
+        # Un diagramme jamais généré (ou modifié à la main après génération)
+        # ne doit jamais être touché par le réalignement — seul le clonage
+        # verbatim historique s'applique.
+        process = self.env["smq.process"].create({"code": "PROC-K8", "name": "K8"})
+        v1 = self._new_version(process, "1.0", bpmn_xml=_VALID_XML)
+        self.env["smq.bpmn.task.mapping"].create(
+            {"process_version_id": v1.id, "bpmn_element_id": "Task_1", "task_type": "document"}
+        )
+        action = v1.action_create_new_version()
+        v2 = self.env["smq.process.version"].browse(action["res_id"])
+        self.assertEqual(v2.bpmn_xml, _VALID_XML)
+        self.assertEqual(v2.mapping_ids.bpmn_element_id, "Task_1")
+
+    def test_k9_cloned_mapping_keeps_procedure_and_form_documents(self):
+        # Bug distinct trouvé en même temps : procedure_document_id/
+        # form_document_id n'étaient jamais recopiés du tout sur le clone.
+        process = self.env["smq.process"].create({"code": "PROC-K9", "name": "K9"})
+        v1 = self._new_version(process, "1.0", bpmn_xml=_VALID_XML)
+        procedure = self._new_document("Procédure K9", "PK9")
+        form = self._new_document("Formulaire K9", "FK9")
+        self.env["smq.bpmn.task.mapping"].create(
+            {
+                "process_version_id": v1.id,
+                "bpmn_element_id": "Task_1",
+                "procedure_document_id": procedure.id,
+                "form_document_id": form.id,
+            }
+        )
+        action = v1.action_create_new_version()
+        v2 = self.env["smq.process.version"].browse(action["res_id"])
+        self.assertEqual(v2.mapping_ids.procedure_document_id, procedure)
+        self.assertEqual(v2.mapping_ids.form_document_id, form)
+
     # ------------------------------------------------------------------
     # L. Sécurité — contournement ORM direct (§21)
     # ------------------------------------------------------------------

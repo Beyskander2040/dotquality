@@ -1,6 +1,8 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
+from .smq_bpmn_generator import _element_id
+
 # LOT 12 §6 — V1 volontairement restreinte (mêmes principes que task_type au
 # LOT 10 : "ne pas ajouter arbitrairement des types BPMN supplémentaires si
 # le besoin n'est pas démontré").
@@ -35,6 +37,30 @@ class SmqProcessStep(models.Model):
         string="Description",
         help="Deviendra la documentation BPMN (<bpmn:documentation>) de l'élément généré.",
     )
+    # Lecture seule — reflète le mapping BPMN de l'élément que "Générer le
+    # BPMN" produit pour cette étape (id déterministe, cf. _element_id dans
+    # smq_bpmn_generator.py). Configuré depuis le panneau de propriétés du
+    # diagramme, jamais depuis ce tableau : fiable tant que le diagramme
+    # n'a pas été redessiné à la main indépendamment de cette description.
+    procedure_document_id = fields.Many2one(
+        "smq.document", string="Procédure", compute="_compute_documentation_links"
+    )
+    form_document_id = fields.Many2one(
+        "smq.document", string="Formulaire", compute="_compute_documentation_links"
+    )
+
+    def _compute_documentation_links(self):
+        Mapping = self.env["smq.bpmn.task.mapping"]
+        for step in self:
+            mapping = Mapping.search(
+                [
+                    ("process_version_id", "=", step.process_version_id.id),
+                    ("bpmn_element_id", "=", _element_id(step)),
+                ],
+                limit=1,
+            )
+            step.procedure_document_id = mapping.procedure_document_id
+            step.form_document_id = mapping.form_document_id
 
     _sql_constraints = [
         (

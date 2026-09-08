@@ -14,7 +14,10 @@
         "views/smq_process_instance_views.xml",
         "views/smq_process_version_views.xml",
         "views/smq_process_views.xml",
+        "views/smq_document_views.xml",
+        "views/smq_process_template_views.xml",
         "views/smq_bpmn_menus.xml",
+        "data/smq_process_template_data.xml",
     ],
     "assets": {
         "web.assets_backend": [

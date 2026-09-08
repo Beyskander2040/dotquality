@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-from .smq_bpmn_generator import generate_bpmn_xml
+from .smq_bpmn_generator import _element_id, generate_bpmn_xml
 from .smq_bpmn_instance_engine import parse_graph
 
 # Champs figés dès qu'une version quitte le brouillon (mêmes principes que
@@ -443,6 +443,23 @@ class SmqProcessVersion(models.Model):
     def action_create_new_version(self):
         self.ensure_one()
         self._check_user_can("smq_quality.group_smq_writer", _("créer une nouvelle version"))
+
+        # Fix identifiants BPMN après clonage : les id générés par
+        # _element_id() sont dérivés de l'id technique de chaque étape
+        # (Step_<id>...). Ces id techniques changent forcément sur les
+        # étapes clonées ci-dessous — copier le XML et les mappings tels
+        # quels désynchronise donc silencieusement le nouveau tableau
+        # d'activités de son propre diagramme, dès qu'on redocumente une
+        # activité depuis le diagramme cloné. On ne régénère et on ne
+        # réaligne les mappings QUE si le diagramme actuel est encore une
+        # sortie fidèle et non modifiée du générateur : un diagramme dessiné
+        # (en partie ou en totalité) à la main reste cloné tel quel, comme
+        # avant, pour ne jamais perdre un travail manuel.
+        is_pure_generated = bool(self.step_ids) and not self._get_description_issues() and (
+            self.bpmn_xml == generate_bpmn_xml(self)
+        )
+        old_step_by_element_id = {_element_id(step): step for step in self.step_ids} if is_pure_generated else {}
+
         new_version = self.create(
             {
                 "process_id": self.process_id.id,
@@ -452,22 +469,6 @@ class SmqProcessVersion(models.Model):
                 "notes": self.notes,
             }
         )
-        Mapping = self.env["smq.bpmn.task.mapping"]
-        for mapping in self.mapping_ids:
-            Mapping.create(
-                {
-                    "process_version_id": new_version.id,
-                    "bpmn_element_id": mapping.bpmn_element_id,
-                    "element_name": mapping.element_name,
-                    "element_type": mapping.element_type,
-                    "task_type": mapping.task_type,
-                    "odoo_model_id": mapping.odoo_model_id.id,
-                    "odoo_method": mapping.odoo_method,
-                    "odoo_action_id": mapping.odoo_action_id.id,
-                    "active": mapping.active,
-                    "notes": mapping.notes,
-                }
-            )
         # LOT 12 : la description structurée appartient elle aussi à la
         # version (comme le BPMN XML et les mappings) — clonée en nouveaux
         # enregistrements indépendants, jamais partagés avec l'original.
@@ -495,6 +496,33 @@ class SmqProcessVersion(models.Model):
                     "target_step_id": new_step_id_by_old_id[transition.target_step_id.id],
                     "condition": transition.condition,
                     "sequence": transition.sequence,
+                }
+            )
+
+        if is_pure_generated:
+            new_version.write({"bpmn_xml": generate_bpmn_xml(new_version)})
+
+        Mapping = self.env["smq.bpmn.task.mapping"]
+        for mapping in self.mapping_ids:
+            bpmn_element_id = mapping.bpmn_element_id
+            old_step = old_step_by_element_id.get(mapping.bpmn_element_id)
+            if old_step and old_step.id in new_step_id_by_old_id:
+                new_step = Step.browse(new_step_id_by_old_id[old_step.id])
+                bpmn_element_id = _element_id(new_step)
+            Mapping.create(
+                {
+                    "process_version_id": new_version.id,
+                    "bpmn_element_id": bpmn_element_id,
+                    "element_name": mapping.element_name,
+                    "element_type": mapping.element_type,
+                    "task_type": mapping.task_type,
+                    "odoo_model_id": mapping.odoo_model_id.id,
+                    "odoo_method": mapping.odoo_method,
+                    "odoo_action_id": mapping.odoo_action_id.id,
+                    "procedure_document_id": mapping.procedure_document_id.id,
+                    "form_document_id": mapping.form_document_id.id,
+                    "active": mapping.active,
+                    "notes": mapping.notes,
                 }
             )
         self.message_post(body=_("Nouvelle version créée : %s.") % new_version.display_name)
@@ -562,6 +590,20 @@ class SmqProcessVersion(models.Model):
             "view_mode": "tree,form",
             "domain": [("process_version_id", "=", self.id)],
             "context": {"default_process_version_id": self.id},
+        }
+
+    def action_save_as_template(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Enregistrer comme modèle"),
+            "res_model": "smq.process.version.save.as.template.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_version_id": self.id,
+                "default_template_name": self.process_id.name,
+            },
         }
 
     # ------------------------------------------------------------------

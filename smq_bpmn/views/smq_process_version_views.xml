@@ -92,6 +92,13 @@
                         type="object"
                     />
                     <button
+                        name="action_save_as_template"
+                        string="Enregistrer comme modèle"
+                        type="object"
+                        invisible="not step_ids"
+                        groups="smq_quality.group_smq_admin"
+                    />
+                    <button
                         name="action_start_instance_button"
                         string="Démarrer une instance"
                         type="object"
@@ -177,6 +184,18 @@
                                 <field name="step_type" />
                                 <field name="responsible_user_id" />
                                 <field name="description" optional="hide" />
+                                <field
+                                    name="procedure_document_id"
+                                    readonly="1"
+                                    force_save="0"
+                                    help="Configuré depuis le panneau de propriétés du diagramme BPMN, pas depuis ce tableau."
+                                />
+                                <field
+                                    name="form_document_id"
+                                    readonly="1"
+                                    force_save="0"
+                                    help="Configuré depuis le panneau de propriétés du diagramme BPMN, pas depuis ce tableau."
+                                />
                             </tree>
                         </field>
                         <field name="transition_ids" nolabel="1" colspan="2" readonly="state != 'draft'">

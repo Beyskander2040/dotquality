@@ -204,3 +204,36 @@ class TestSmqDocument(TransactionCase):
         )
         with self.assertRaises(ValidationError):
             doc_a.write({"parent_document_id": doc_b.id})
+
+    def test_procedure_can_reference_several_formulaires(self):
+        procedure = self.env["smq.document"].create(
+            {"name": "Procédure", "document_type_id": self.type_proc.id, "process_id": self.process.id}
+        )
+        form_1 = self.env["smq.document"].create(
+            {"name": "Formulaire 1", "document_type_id": self.type_form.id}
+        )
+        form_2 = self.env["smq.document"].create(
+            {"name": "Formulaire 2", "document_type_id": self.type_form.id}
+        )
+        procedure.formulaire_ids = [(6, 0, [form_1.id, form_2.id])]
+        self.assertEqual(procedure.formulaire_ids, form_1 + form_2)
+
+    def test_formulaire_ids_independent_from_hierarchy_and_process(self):
+        # formulaire_ids ne doit rien partager avec parent_document_id/
+        # process_id — un document peut être rattaché comme "formulaire
+        # utilisé" sans devenir un enfant hiérarchique ni hériter du
+        # processus, à la différence de parent_document_id (§ effective_process_id).
+        procedure = self.env["smq.document"].create(
+            {"name": "Procédure", "document_type_id": self.type_proc.id, "process_id": self.process.id}
+        )
+        other_process = self.env["smq.process"].create({"code": "PR-OTHER3", "name": "Autre 3"})
+        form = self.env["smq.document"].create(
+            {
+                "name": "Formulaire",
+                "document_type_id": self.type_form.id,
+                "process_id": other_process.id,
+            }
+        )
+        procedure.formulaire_ids = [(6, 0, [form.id])]
+        self.assertFalse(form.parent_document_id)
+        self.assertEqual(form.effective_process_id, other_process)

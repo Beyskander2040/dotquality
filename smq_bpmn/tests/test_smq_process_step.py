@@ -557,3 +557,53 @@ class TestSmqProcessStep(TransactionCase):
         clone_receive.write({"name": "Nom modifié sur le clone"})
         self.assertEqual(receive.name, "Réception de la demande")
         self.assertEqual(clone_receive.name, "Nom modifié sur le clone")
+
+    # ------------------------------------------------------------------
+    # L. Documentation en lecture seule (Procédure/Formulaire) — reflète
+    # le mapping BPMN de l'élément généré pour chaque étape, sans dupliquer
+    # la donnée ni permettre de l'éditer depuis ce tableau.
+    # ------------------------------------------------------------------
+
+    def _new_document(self, type_name, code_prefix):
+        doc_type = self.env["smq.document.type"].create(
+            {"name": type_name, "code_prefix": code_prefix}
+        )
+        return self.env["smq.document"].create({"name": f"Doc {type_name}", "document_type_id": doc_type.id})
+
+    def test_l1_procedure_document_reflects_mapping_after_generation(self):
+        version = self._new_version("VL1")
+        start, receive, verify, end = self._linear_description(version)
+        version.with_user(self.writer).action_generate_bpmn_from_description()
+        procedure = self._new_document("Procédure L1", "PL1")
+        self.env["smq.bpmn.task.mapping"].create(
+            {
+                "process_version_id": version.id,
+                "bpmn_element_id": f"Step_{receive.id}",
+                "procedure_document_id": procedure.id,
+            }
+        )
+        self.assertEqual(receive.procedure_document_id, procedure)
+        self.assertFalse(receive.form_document_id)
+        # Une étape non mappée ne doit rien afficher.
+        self.assertFalse(verify.procedure_document_id)
+
+    def test_l2_form_document_reflects_mapping_after_generation(self):
+        version = self._new_version("VL2")
+        start, receive, verify, end = self._linear_description(version)
+        version.with_user(self.writer).action_generate_bpmn_from_description()
+        form = self._new_document("Formulaire L2", "FL2")
+        self.env["smq.bpmn.task.mapping"].create(
+            {
+                "process_version_id": version.id,
+                "bpmn_element_id": f"Step_{receive.id}",
+                "form_document_id": form.id,
+            }
+        )
+        self.assertEqual(receive.form_document_id, form)
+
+    def test_l3_no_mapping_leaves_fields_empty(self):
+        version = self._new_version("VL3")
+        start, receive, verify, end = self._linear_description(version)
+        version.with_user(self.writer).action_generate_bpmn_from_description()
+        self.assertFalse(receive.procedure_document_id)
+        self.assertFalse(receive.form_document_id)
