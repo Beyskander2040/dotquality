@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_document_form_bpmn" model="ir.ui.view">
+        <field name="name">smq.document.form.bpmn</field>
+        <field name="model">smq.document</field>
+        <field name="inherit_id" ref="smq_document.view_smq_document_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_view_bpmn_task_mappings"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-tasks"
+                    invisible="bpmn_task_mapping_count == 0"
+                >
+                    <field name="bpmn_task_mapping_count" widget="statinfo" string="Activités BPMN" />
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

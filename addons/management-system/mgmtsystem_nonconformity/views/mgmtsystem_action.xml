@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Actions: replace the related nonconformities section by a smart button -->
+    <record id="view_mgmtsystem_action_form" model="ir.ui.view">
+        <field name="name">mgmtsystem.action.form</field>
+        <field name="model">mgmtsystem.action</field>
+        <field name="inherit_id" ref="mgmtsystem_action.view_mgmtsystem_action_form" />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Add a smart button that opens the linked nonconformities -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_open_nonconformities"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-exclamation-triangle"
+                    invisible="nonconformity_count == 0"
+                >
+                    <field
+                        name="nonconformity_count"
+                        string="Nonconformities"
+                        widget="statinfo"
+                    />
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

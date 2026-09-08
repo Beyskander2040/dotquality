@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- ================================================================
+         NC-2026-001 — scénario CEO principal : Audit interne PR-07 →
+         analyse → traitement → (à terminer en direct pendant la démo :
+         clôturer l'action, marquer résolue, clôturer la NC).
+         ================================================================ -->
+    <record id="nc_2026_001" model="mgmtsystem.nonconformity">
+        <field name="name">Délai de traitement des réclamations dépassé</field>
+        <field name="date">2026-07-20 09:00:00</field>
+        <field name="quality_process_id" ref="smq_quality.smq_process_pr07" />
+        <field name="smq_document_ids" eval="[(4, ref('smq_document.smq_document_proc_003'))]" />
+        <field name="origin_ids" eval="[(4, ref('mgmtsystem_nonconformity.nc_origin_internal_audit'))]" />
+        <field name="severity_id" ref="mgmtsystem_nonconformity.nonconformity_severity_maj" />
+        <field name="priority">2</field>
+        <field name="impact">medium</field>
+        <field name="responsible_user_id" ref="base.user_admin" />
+        <field name="manager_user_id" ref="base.user_admin" />
+        <field name="description">3 réclamations ont été traitées avec un délai supérieur au délai défini dans la procédure PROC-003.</field>
+        <field name="observation">Lors de l'audit interne du processus Satisfaction client, 3 dossiers de réclamation ont dépassé le délai de traitement de 48 heures fixé par la procédure.</field>
+        <field name="requirement_concerned">PROC-003 — Procédure de traitement des réclamations clients, §4.2</field>
+        <field name="immediate_cause">Absence d'alerte automatique en cas de dépassement du délai.</field>
+        <field name="root_cause">Le délai maximum de traitement n'est pas formalisé comme une exigence contrôlée dans la procédure.</field>
+        <field name="analysis_method">5why</field>
+        <field name="analysis">5 Pourquoi réalisés avec l'équipe Satisfaction client : la cause racine est l'absence d'exigence de délai formalisée et contrôlée.</field>
+    </record>
+    <function model="mgmtsystem.nonconformity" name="action_start_analysis">
+        <value eval="[ref('nc_2026_001')]" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="write">
+        <value eval="[ref('nc_2026_001')]" />
+        <value eval="{'action_comments': 'Mettre en place un délai maximum de traitement de 48 heures et une alerte automatique en cas de dépassement.'}" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="action_start_treatment">
+        <value eval="[ref('nc_2026_001')]" />
+    </function>
+
+    <record id="act_2026_001" model="mgmtsystem.action">
+        <field name="name">Mettre en place un délai maximum de traitement de 48 heures</field>
+        <field name="type_action">correction</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="date_deadline" eval="(datetime.today() + relativedelta(days=10)).strftime('%Y-%m-%d')" />
+        <field name="description">Ajouter une règle de délai de 48h dans PROC-003 et une alerte automatique au responsable en cas de dépassement.</field>
+        <field name="stage_id" ref="mgmtsystem_action.stage_open" />
+    </record>
+    <function model="mgmtsystem.nonconformity" name="write">
+        <value eval="[ref('nc_2026_001')]" />
+        <value eval="{'action_ids': [(4, ref('act_2026_001'))]}" />
+    </function>
+
+    <!-- ================================================================
+         NC-2026-002 — Ouverte : révision documentaire en retard
+         ================================================================ -->
+    <record id="nc_2026_002" model="mgmtsystem.nonconformity">
+        <field name="name">Document non révisé dans le délai prévu</field>
+        <field name="date">2026-08-05 09:00:00</field>
+        <field name="quality_process_id" ref="smq_quality.smq_process_pr02" />
+        <field name="smq_document_ids" eval="[(4, ref('smq_document.smq_document_proc_001'))]" />
+        <field name="origin_ids" eval="[(4, ref('nc_origin_document'))]" />
+        <field name="severity_id" ref="mgmtsystem_nonconformity.nonconformity_severity_min" />
+        <field name="priority">1</field>
+        <field name="responsible_user_id" ref="base.user_admin" />
+        <field name="manager_user_id" ref="base.user_admin" />
+        <field name="description">La révision périodique de PROC-001 n'a pas été réalisée à l'échéance prévue.</field>
+        <field name="requirement_concerned">ISO 9001 §7.5.3.2 — Révision périodique des documents</field>
+    </record>
+
+    <!-- ================================================================
+         NC-2026-003 — En analyse : écart constaté lors d'un audit interne
+         ================================================================ -->
+    <record id="nc_2026_003" model="mgmtsystem.nonconformity">
+        <field name="name">Écart constaté lors d'un audit interne</field>
+        <field name="date">2026-08-08 09:00:00</field>
+        <field name="quality_process_id" ref="smq_quality.smq_process_pr01" />
+        <field name="origin_ids" eval="[(4, ref('mgmtsystem_nonconformity.nc_origin_internal_audit'))]" />
+        <field name="severity_id" ref="nonconformity_severity_critical" />
+        <field name="priority">3</field>
+        <field name="impact">high</field>
+        <field name="responsible_user_id" ref="base.user_admin" />
+        <field name="manager_user_id" ref="base.user_admin" />
+        <field name="description">L'audit interne du processus Management a relevé une revue de direction non tracée.</field>
+        <field name="observation">Le compte-rendu de la dernière revue de direction n'a pas été formalisé ni diffusé.</field>
+    </record>
+    <function model="mgmtsystem.nonconformity" name="action_start_analysis">
+        <value eval="[ref('nc_2026_003')]" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="write">
+        <value eval="[ref('nc_2026_003')]" />
+        <value eval="{'immediate_cause': 'Absence de modèle de compte-rendu de revue de direction.', 'analysis_method': 'ishikawa'}" />
+    </function>
+
+    <!-- ================================================================
+         NC-2026-004 — Clôturée : cycle complet avec vérification
+         d'efficacité concluante
+         ================================================================ -->
+    <record id="nc_2026_004" model="mgmtsystem.nonconformity">
+        <field name="name">Erreur dans un enregistrement qualité</field>
+        <field name="date">2026-06-10 09:00:00</field>
+        <field name="quality_process_id" ref="smq_quality.smq_process_pr05" />
+        <field name="origin_ids" eval="[(4, ref('mgmtsystem_nonconformity.nc_origin_process'))]" />
+        <field name="severity_id" ref="mgmtsystem_nonconformity.nonconformity_severity_min" />
+        <field name="priority">1</field>
+        <field name="responsible_user_id" ref="base.user_admin" />
+        <field name="manager_user_id" ref="base.user_admin" />
+        <field name="description">Une fiche d'enregistrement qualité comportait une erreur de saisie sur la référence produit.</field>
+        <field name="immediate_cause">Saisie manuelle sans contrôle de cohérence.</field>
+        <field name="root_cause">L'opérateur n'a pas été formé à la procédure de renseignement de la fiche.</field>
+        <field name="analysis_method">simple</field>
+        <field name="analysis">Analyse simple : erreur de saisie liée à un défaut de formation, sans impact client.</field>
+    </record>
+    <function model="mgmtsystem.nonconformity" name="action_start_analysis">
+        <value eval="[ref('nc_2026_004')]" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="write">
+        <value eval="[ref('nc_2026_004')]" />
+        <value eval="{'action_comments': 'Corriger la fiche et former l\'opérateur concerné.'}" />
+    </function>
+
+    <record id="act_2026_002" model="mgmtsystem.action">
+        <field name="name">Corriger la fiche d'enregistrement et former l'opérateur concerné</field>
+        <field name="type_action">correction</field>
+        <field name="user_id" ref="base.user_admin" />
+        <field name="date_deadline" eval="(datetime.today() - relativedelta(days=20)).strftime('%Y-%m-%d')" />
+        <field name="description">Corriger la référence produit sur la fiche et organiser une session de formation.</field>
+    </record>
+    <function model="mgmtsystem.nonconformity" name="write">
+        <value eval="[ref('nc_2026_004')]" />
+        <value eval="{'action_ids': [(4, ref('act_2026_002'))]}" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="action_start_treatment">
+        <value eval="[ref('nc_2026_004')]" />
+    </function>
+    <function model="mgmtsystem.action" name="write">
+        <value eval="[ref('act_2026_002')]" />
+        <value
+            eval="{
+                'stage_id': ref('mgmtsystem_action.stage_close'),
+                'efficacy_result': 'effective',
+                'efficacy_date': '2026-06-25 09:00:00',
+                'efficacy_user_id': ref('base.user_admin'),
+                'efficacy_description': 'La fiche corrigée et l\'opérateur formé : aucune récidive constatée sur les 2 semaines suivantes.',
+            }"
+        />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="write">
+        <value eval="[ref('nc_2026_004')]" />
+        <value eval="{'evaluation_comments': 'Vérification réalisée 15 jours après la formation : aucune récidive. Action jugée efficace.'}" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="action_mark_resolved">
+        <value eval="[ref('nc_2026_004')]" />
+    </function>
+    <function model="mgmtsystem.nonconformity" name="action_close">
+        <value eval="[ref('nc_2026_004')]" />
+    </function>
+
+</odoo>

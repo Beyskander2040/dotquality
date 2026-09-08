@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="smq_quality.menu_smq_nonconformity"
+        action="action_smq_nonconformity"
+        parent="smq_quality.menu_smq_root"
+        sequence="20"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="smq_quality.menu_smq_corrective_action"
+        action="action_smq_corrective_action"
+        parent="smq_quality.menu_smq_root"
+        sequence="30"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_action_template"
+        name="Modèles d'actions"
+        action="mgmtsystem_action_template.mgmtsystem_action_template_act_window"
+        parent="smq_quality.menu_smq_root"
+        sequence="35"
+        groups="smq_quality.group_smq_writer"
+    />
+
+    <menuitem
+        id="smq_quality.menu_smq_audit"
+        action="action_smq_audit"
+        parent="smq_quality.menu_smq_root"
+        sequence="40"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_management_review"
+        name="Revue de direction"
+        action="action_smq_management_review"
+        parent="smq_quality.menu_smq_root"
+        sequence="52"
+        groups="smq_quality.group_smq_quality_manager"
+    />
+
+    <menuitem
+        id="menu_smq_employee_skill"
+        name="Compétences"
+        action="action_smq_employee_skill"
+        parent="smq_quality.menu_smq_root"
+        sequence="70"
+        groups="smq_quality.group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_nonconformity_origin"
+        name="Origines de non-conformité"
+        action="mgmtsystem_nonconformity.open_mgmtsystem_nonconformity_origin_list"
+        parent="smq_quality.menu_smq_configuration"
+        sequence="20"
+        groups="smq_quality.group_smq_admin"
+    />
+
+    <menuitem
+        id="menu_smq_nonconformity_severity"
+        name="Sévérités de non-conformité"
+        action="mgmtsystem_nonconformity.open_mgmtsystem_nonconformity_severity_list"
+        parent="smq_quality.menu_smq_configuration"
+        sequence="21"
+        groups="smq_quality.group_smq_admin"
+    />
+
+    <menuitem
+        id="menu_smq_nonconformity_cause"
+        name="Causes de non-conformité"
+        action="mgmtsystem_nonconformity.open_mgmtsystem_nonconformity_cause_list"
+        parent="smq_quality.menu_smq_configuration"
+        sequence="22"
+        groups="smq_quality.group_smq_admin"
+    />
+
+</odoo>

@@ -1,0 +1,783 @@
+// Les variables $smq-* viennent de smq_tokens.scss, chargé avant ce
+// fichier dans le manifest : les bundles SCSS Odoo sont compilés comme un
+// seul document concaténé (cf. web/static/src/scss/primary_variables.scss,
+// jamais importé explicitement par les fichiers qui l'utilisent), un
+// @import relatif classique ne se résout pas dans ce contexte.
+
+.o_smq_dashboard {
+    // Un client action n'obtient pas automatiquement le wrapper standard
+    // (.o_action > .o_content) qui fournit habituellement le scroll : son
+    // parent direct (.o_action_manager) a overflow:hidden, donc sans ceci
+    // tout contenu dépassant la hauteur de l'écran est rogné plutôt que
+    // scrollable. On rend directement cette div scrollable.
+    height: 100%;
+    overflow-y: auto;
+    padding: $smq-space-6 $smq-space-6;
+    background: $smq-bg;
+    color: $smq-text;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: $smq-space-5;
+
+    // ---------------------------------------------------------------
+    // En-tête + actions rapides
+    // ---------------------------------------------------------------
+    .o_smq_hero {
+        display: flex;
+        flex-direction: column;
+        gap: $smq-space-2;
+        padding-bottom: $smq-space-4;
+        border-bottom: 1px solid $smq-border;
+    }
+
+    // Ligne de repère (société · date), façon fil d'ariane : redescend au
+    // rang de métadonnée ce qui était auparavant une salutation sans valeur
+    // informative pour l'utilisateur.
+    .o_smq_hero_context {
+        display: flex;
+        align-items: center;
+        gap: $smq-space-2;
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .o_smq_hero_context_sep {
+        color: $smq-border;
+    }
+
+    .o_smq_hero_row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: $smq-space-4;
+    }
+
+    .o_smq_hero_title {
+        font-size: $smq-font-size-title;
+        font-weight: 700;
+        color: $smq-text;
+        margin: 0;
+    }
+
+    .o_smq_quick_actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $smq-space-2;
+        max-width: 480px;
+        justify-content: flex-end;
+    }
+
+    .o_smq_quick_actions_toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: $smq-space-2;
+        font-size: 0.8rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .o_smq_quick_actions_dropdown .dropdown-menu {
+        min-width: 270px;
+        padding: $smq-space-2 0;
+        border-color: $smq-border;
+        border-radius: $smq-radius-md;
+        box-shadow: $smq-shadow-md;
+    }
+
+    .o_smq_quick_actions_dropdown .o_smq_dropdown_group_label {
+        padding: $smq-space-2 $smq-space-4 $smq-space-1;
+        font-size: $smq-font-size-label;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: $smq-text-muted;
+        pointer-events: none;
+    }
+
+    .o_smq_quick_actions_dropdown .dropdown-divider {
+        margin: $smq-space-1 0;
+        border-top-color: $smq-border;
+    }
+
+    .o_smq_quick_actions_dropdown .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: $smq-space-2;
+        padding: $smq-space-2 $smq-space-4;
+        font-size: $smq-font-size-body;
+        color: $smq-text;
+
+        &:hover,
+        &:focus {
+            background-color: $smq-primary-light;
+            color: $smq-primary;
+        }
+    }
+
+    .o_smq_dropdown_item_icon {
+        flex: 0 0 auto;
+        width: 1.1em;
+        text-align: center;
+        color: $smq-primary;
+    }
+
+    // ---------------------------------------------------------------
+    // Sections génériques
+    // ---------------------------------------------------------------
+    .o_smq_section {
+        background: $smq-surface;
+        border-radius: $smq-radius-md;
+        box-shadow: $smq-shadow-sm;
+        padding: $smq-space-4 $smq-space-5;
+    }
+
+    .o_smq_section_title {
+        font-size: $smq-font-size-section;
+        font-weight: 600;
+        color: $smq-text;
+        margin-bottom: $smq-space-3;
+    }
+
+    .o_smq_empty {
+        color: $smq-text-muted;
+        font-size: $smq-font-size-body;
+        padding: $smq-space-2 0;
+    }
+
+    // ---------------------------------------------------------------
+    // Quality Health Score
+    // ---------------------------------------------------------------
+    .o_smq_health {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .o_smq_health_score {
+        display: flex;
+        align-items: center;
+        gap: $smq-space-4;
+        padding: $smq-space-4 $smq-space-5;
+        cursor: pointer;
+        border-left: 6px solid $smq-inactive;
+
+        &.o_smq_health_good { border-left-color: $smq-success; }
+        &.o_smq_health_warning { border-left-color: $smq-warning; }
+        &.o_smq_health_critical { border-left-color: $smq-critical; }
+    }
+
+    .o_smq_health_value {
+        font-size: 2.75rem;
+        font-weight: 700;
+        color: $smq-text;
+        line-height: 1;
+        min-width: 110px;
+    }
+    .o_smq_health_max {
+        font-size: 1.1rem;
+        color: $smq-text-muted;
+        font-weight: 500;
+    }
+
+    .o_smq_health_label {
+        flex: 1;
+        font-weight: 600;
+        color: $smq-text;
+    }
+    .o_smq_health_sublabel {
+        font-weight: 400;
+        color: $smq-text-muted;
+        font-size: $smq-font-size-body;
+        margin-top: 2px;
+    }
+
+    .o_smq_health_toggle {
+        color: $smq-text-muted;
+    }
+
+    .o_smq_health_details {
+        border-top: 1px solid $smq-border;
+        padding: $smq-space-4 $smq-space-5;
+        display: flex;
+        flex-direction: column;
+        gap: $smq-space-3;
+    }
+
+    .o_smq_health_component_head {
+        display: flex;
+        justify-content: space-between;
+        font-size: $smq-font-size-body;
+        color: $smq-text;
+        margin-bottom: $smq-space-1;
+    }
+
+    .o_smq_health_bar {
+        height: 6px;
+        border-radius: 999px;
+        background: $smq-inactive-bg;
+        overflow: hidden;
+    }
+    .o_smq_health_bar_fill {
+        height: 100%;
+        background: $smq-primary;
+        border-radius: 999px;
+    }
+
+    .o_smq_health_component_detail {
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+        margin-top: 2px;
+    }
+
+    .o_smq_health_explain {
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+        margin: $smq-space-2 0 0;
+        font-style: italic;
+    }
+
+    // ---------------------------------------------------------------
+    // Ligne KPI
+    // ---------------------------------------------------------------
+    .o_smq_kpi_row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: $smq-space-4;
+    }
+
+    .o_smq_kpi_item {
+        background: $smq-surface;
+        border-radius: $smq-radius-md;
+        box-shadow: $smq-shadow-sm;
+        padding: $smq-space-4;
+        display: flex;
+        align-items: flex-start;
+        gap: $smq-space-3;
+
+        &.o_smq_kpi_clickable {
+            cursor: pointer;
+            transition: box-shadow 0.15s ease;
+            &:hover,
+            &:focus-visible {
+                box-shadow: $smq-shadow-md;
+            }
+        }
+    }
+
+    .o_smq_kpi_icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        border-radius: $smq-radius-sm;
+        background: $smq-primary-light;
+        color: $smq-primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .o_smq_kpi_text {
+        min-width: 0;
+    }
+
+    .o_smq_kpi_value {
+        font-size: $smq-font-size-kpi;
+        font-weight: 700;
+        color: $smq-text;
+        line-height: 1;
+    }
+
+    .o_smq_kpi_label {
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+        margin-top: 2px;
+    }
+
+    .o_smq_kpi_trend {
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-top: $smq-space-2;
+
+        &.o_smq_trend_up { color: $smq-critical; }
+        &.o_smq_trend_down { color: $smq-success; }
+        &.o_smq_trend_flat { color: $smq-text-muted; }
+    }
+
+    // ---------------------------------------------------------------
+    // Priorités (anciennement "À surveiller")
+    // ---------------------------------------------------------------
+    .o_smq_priority_group {
+        border-top: 1px solid $smq-border;
+        padding-top: $smq-space-2;
+        margin-top: $smq-space-2;
+
+        &:first-child {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+    }
+
+    .o_smq_priority_head {
+        display: flex;
+        align-items: center;
+        gap: $smq-space-3;
+        padding: $smq-space-1 0;
+        cursor: pointer;
+
+        &:hover { .o_smq_priority_label { text-decoration: underline; } }
+    }
+
+    .o_smq_dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex: none;
+
+        &_critical { background: $smq-critical; }
+        &_warning { background: $smq-warning; }
+        &_info { background: $smq-info; }
+    }
+
+    .o_smq_priority_count {
+        font-weight: 700;
+        color: $smq-text;
+    }
+
+    .o_smq_priority_label {
+        color: $smq-text;
+        flex: 1;
+    }
+
+    .o_smq_priority_arrow {
+        color: $smq-text-muted;
+        font-size: 0.75rem;
+    }
+
+    .o_smq_priority_records {
+        display: flex;
+        flex-direction: column;
+        margin-left: 22px;
+    }
+
+    .o_smq_priority_record {
+        display: flex;
+        align-items: center;
+        gap: $smq-space-3;
+        padding: $smq-space-1 $smq-space-2;
+        border-radius: $smq-radius-sm;
+        cursor: pointer;
+        font-size: 0.82rem;
+
+        &:hover { background: $smq-bg; }
+    }
+
+    .o_smq_priority_record_name {
+        color: $smq-text;
+        font-weight: 500;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .o_smq_priority_record_meta {
+        display: flex;
+        gap: $smq-space-2;
+        color: $smq-text-muted;
+        font-size: 0.78rem;
+    }
+
+    .o_smq_priority_record_action {
+        color: $smq-primary;
+        font-weight: 600;
+        font-size: 0.78rem;
+        white-space: nowrap;
+    }
+
+    // ---------------------------------------------------------------
+    // Mes tâches
+    // ---------------------------------------------------------------
+    .o_smq_my_work_row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: $smq-space-3;
+    }
+
+    .o_smq_my_work_item {
+        border: 1px solid $smq-border;
+        border-radius: $smq-radius-md;
+        padding: $smq-space-3;
+        cursor: pointer;
+        transition: box-shadow 0.15s ease;
+
+        &:hover { box-shadow: $smq-shadow-md; }
+    }
+
+    .o_smq_my_work_count {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: $smq-primary;
+        line-height: 1;
+    }
+    .o_smq_my_work_label {
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+        margin-top: $smq-space-1;
+    }
+    .o_smq_my_work_sub {
+        font-size: 0.72rem;
+        color: $smq-critical;
+        margin-top: 2px;
+        font-weight: 600;
+    }
+
+    // ---------------------------------------------------------------
+    // Chaîne qualité
+    // ---------------------------------------------------------------
+    .o_smq_chain_row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: $smq-space-2;
+    }
+
+    .o_smq_chain_step {
+        padding: $smq-space-2 $smq-space-4;
+        border-radius: $smq-radius-md;
+        font-size: $smq-font-size-body;
+        font-weight: 600;
+        text-align: center;
+
+        &_active {
+            background: $smq-primary-light;
+            color: $smq-primary;
+            cursor: pointer;
+            &:hover { background: darken($smq-primary-light, 4%); }
+        }
+        &_disabled {
+            background: $smq-inactive-bg;
+            color: $smq-inactive;
+        }
+    }
+
+    .o_smq_chain_step_label {
+        display: block;
+    }
+    .o_smq_chain_step_stats {
+        display: block;
+        font-size: 0.74rem;
+        font-weight: 400;
+        opacity: 0.9;
+        margin-top: 2px;
+    }
+
+    .o_smq_chain_arrow {
+        color: $smq-text-muted;
+        font-size: 0.8rem;
+    }
+
+    // ---------------------------------------------------------------
+    // Graphique NC (barres légères, données réelles)
+    // ---------------------------------------------------------------
+    .o_smq_chart_row {
+        display: flex;
+        align-items: flex-end;
+        gap: $smq-space-3;
+        height: 140px;
+        padding-top: $smq-space-3;
+    }
+
+    .o_smq_chart_col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+    }
+
+    .o_smq_chart_bars {
+        flex: 1;
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .o_smq_chart_bar {
+        width: 14px;
+        min-height: 2px;
+        border-radius: 3px 3px 0 0;
+
+        &_opened { background: $smq-info; }
+        &_closed { background: $smq-success; }
+    }
+
+    .o_smq_chart_label {
+        margin-top: $smq-space-2;
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+        text-transform: capitalize;
+    }
+
+    .o_smq_chart_legend {
+        display: flex;
+        gap: $smq-space-4;
+        margin-top: $smq-space-3;
+        font-size: $smq-font-size-label;
+        color: $smq-text-muted;
+    }
+
+    .o_smq_chart_swatch {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        margin-right: $smq-space-1;
+
+        &_opened { background: $smq-info; }
+        &_closed { background: $smq-success; }
+    }
+
+    // ---------------------------------------------------------------
+    // Modules SMQ
+    // ---------------------------------------------------------------
+    .o_smq_module_grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: $smq-space-3;
+    }
+
+    .o_smq_module_card {
+        border: 1px solid $smq-border;
+        border-radius: $smq-radius-md;
+        padding: $smq-space-3 $smq-space-4;
+        display: flex;
+        align-items: center;
+        gap: $smq-space-3;
+        cursor: pointer;
+        transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+        &:hover,
+        &:focus-visible {
+            box-shadow: $smq-shadow-md;
+        }
+    }
+
+    .o_smq_module_future {
+        border-style: dashed;
+        opacity: 0.85;
+    }
+
+    .o_smq_module_icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: $smq-radius-sm;
+        background: $smq-bg;
+        color: $smq-text-muted;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .o_smq_module_body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .o_smq_module_name {
+        font-weight: 600;
+        color: $smq-text;
+        font-size: $smq-font-size-body;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .o_smq_status {
+        font-size: 0.78rem;
+        color: $smq-text-muted;
+    }
+
+    .o_smq_module_count {
+        font-weight: 700;
+        color: $smq-text;
+    }
+
+    // ---------------------------------------------------------------
+    // Bas de page : processus récents + activité
+    // ---------------------------------------------------------------
+    .o_smq_bottom_row {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: $smq-space-4;
+    }
+
+    .o_smq_recent_row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $smq-space-3 0;
+        border-top: 1px solid $smq-border;
+        flex-wrap: wrap;
+        gap: $smq-space-2;
+
+        &:first-child { border-top: none; }
+    }
+
+    .o_smq_recent_main {
+        display: flex;
+        gap: $smq-space-2;
+        align-items: baseline;
+    }
+
+    .o_smq_recent_code {
+        font-family: "SF Mono", "Consolas", monospace;
+        color: $smq-text-muted;
+        font-size: 0.82rem;
+    }
+
+    .o_smq_recent_name {
+        font-weight: 500;
+        color: $smq-text;
+    }
+
+    .o_smq_recent_meta {
+        display: flex;
+        gap: $smq-space-3;
+        align-items: center;
+        font-size: 0.82rem;
+        color: $smq-text-muted;
+    }
+
+    .o_smq_badge {
+        padding: 0.2em 0.7em;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+    .o_smq_badge_active { background: $smq-success-bg; color: $smq-success; }
+    .o_smq_badge_draft { background: $smq-inactive-bg; color: $smq-text-muted; }
+    .o_smq_badge_archived { background: $smq-critical-bg; color: $smq-critical; }
+
+    .o_smq_activity_row {
+        display: flex;
+        align-items: center;
+        gap: $smq-space-2;
+        padding: $smq-space-2 0;
+        border-top: 1px solid $smq-border;
+        cursor: pointer;
+        font-size: $smq-font-size-body;
+
+        &:first-child { border-top: none; }
+        &:hover { background: $smq-bg; }
+    }
+
+    .o_smq_activity_dot {
+        color: $smq-info;
+        font-size: 0.5rem;
+    }
+
+    .o_smq_activity_name {
+        font-weight: 500;
+        color: $smq-text;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .o_smq_activity_author {
+        color: $smq-text-muted;
+        font-size: 0.78rem;
+    }
+}
+
+.o_smq_coming_soon_dialog {
+    text-align: center;
+    padding: $smq-space-4 0;
+
+    .o_smq_coming_soon_icon {
+        font-size: 2rem;
+        color: $smq-inactive;
+        margin-bottom: $smq-space-3;
+        display: block;
+    }
+}
+
+// Masque la ligne de menu horizontale native d'Odoo (nom de l'app "SMQ" +
+// items Tableau de bord/Documents/...), devenue redondante avec la
+// sidebar SMQ. Scopé à body.o_smq_app_active (posé par SmqSidebar
+// uniquement pendant que l'app SMQ est active) : la grille d'apps, les
+// notifications et le menu utilisateur restent visibles et fonctionnels,
+// et aucune autre application Odoo n'est affectée.
+// !important nécessaire : ces éléments portent les classes utilitaires
+// Bootstrap "d-none d-md-flex", elles-mêmes déclarées avec !important.
+body.o_smq_app_active .o_main_navbar {
+    .o_menu_brand,
+    .o_menu_sections {
+        display: none !important;
+    }
+}
+
+// Recolore la navbar (mauve Odoo par défaut) pour rester cohérente avec la
+// sidebar SMQ, uniquement pendant que l'app SMQ est active.
+// - background/border-bottom : $o-navbar-background et $o-navbar-border-bottom
+//   sont des variables SCSS substituées à la compilation (pas de var() CSS),
+//   donc réécrites ici directement (la double classe body.o_smq_app_active
+//   .o_main_navbar suffit à gagner en spécificité, !important en sécurité).
+// - couleurs des icônes/texte (grille d'apps, systray, menu utilisateur) :
+//   navbar.variables.scss les définit toutes via var(--NavBar-xxx, fallback)
+//   sans jamais poser ces propriétés personnalisées ailleurs — il suffit de
+//   les définir ici pour que tout l'arbre de la navbar les récupère par
+//   héritage CSS, sans avoir à cibler chaque sélecteur interne un par un.
+body.o_smq_app_active {
+    --NavBar-entry-color: #{$smq-text-muted};
+    --NavBar-entry-color--hover: #{$smq-text};
+    --NavBar-entry-color--active: #{$smq-primary};
+    --NavBar-entry-backgroundColor: #{$smq-sidebar-bg};
+    --NavBar-entry-backgroundColor--hover: #{$smq-sidebar-bg-hover};
+    --NavBar-entry-backgroundColor--active: #{$smq-primary-light};
+    --NavBar-entry-borderColor-active: #{$smq-primary};
+    --NavBar-brand-color: #{$smq-text};
+    --o-navbar-badge-bg: #{$smq-critical};
+    --o-navbar-badge-color: #{$smq-surface};
+
+    .o_main_navbar {
+        background: $smq-sidebar-bg !important;
+        border-bottom: 1px solid $smq-border !important;
+    }
+}
+
+// ---------------------------------------------------------------------
+// Responsive : tablette (priorité desktop, lisibilité conservée en dessous)
+// ---------------------------------------------------------------------
+@media (max-width: 1024px) {
+    .o_smq_dashboard {
+        padding: $smq-space-4;
+
+        .o_smq_hero {
+            flex-direction: column;
+        }
+
+        .o_smq_quick_actions {
+            justify-content: flex-start;
+        }
+
+        .o_smq_kpi_row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .o_smq_bottom_row {
+            grid-template-columns: 1fr;
+        }
+    }
+}

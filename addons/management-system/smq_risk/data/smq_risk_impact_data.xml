@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_risk_impact_1" model="smq.risk.impact">
+        <field name="name">Mineur</field>
+        <field name="value">1</field>
+        <field name="sequence">10</field>
+        <field name="description">Conséquence négligeable, absorbée sans action particulière.</field>
+    </record>
+
+    <record id="smq_risk_impact_2" model="smq.risk.impact">
+        <field name="name">Modéré</field>
+        <field name="value">2</field>
+        <field name="sequence">20</field>
+        <field name="description">Conséquence limitée, gérable avec les moyens courants.</field>
+    </record>
+
+    <record id="smq_risk_impact_3" model="smq.risk.impact">
+        <field name="name">Significatif</field>
+        <field name="value">3</field>
+        <field name="sequence">30</field>
+        <field name="description">Conséquence notable sur le processus, le client ou le SMQ.</field>
+    </record>
+
+    <record id="smq_risk_impact_4" model="smq.risk.impact">
+        <field name="name">Majeur</field>
+        <field name="value">4</field>
+        <field name="sequence">40</field>
+        <field name="description">Conséquence grave, pouvant affecter la certification ou un client clé.</field>
+    </record>
+
+    <record id="smq_risk_impact_5" model="smq.risk.impact">
+        <field name="name">Critique</field>
+        <field name="value">5</field>
+        <field name="sequence">50</field>
+        <field name="description">Conséquence majeure, mettant en cause la conformité ou la continuité d'activité.</field>
+    </record>
+
+</odoo>

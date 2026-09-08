@@ -1,0 +1,26 @@
+{
+    "name": "SMQ - Fournisseurs",
+    "summary": "Évaluation et qualification des fournisseurs (ISO 9001 §8.4)",
+    "version": "17.0.1.0.0",
+    "category": "Quality",
+    "author": "Medianet",
+    "license": "AGPL-3",
+    "application": False,
+    "depends": [
+        "smq_quality",
+        "smq_organization",
+        "mgmtsystem_action",
+        "contacts",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/ir_sequence_data.xml",
+        "data/smq_supplier_criterion_data.xml",
+        "data/smq_supplier_qualification_level_data.xml",
+        "data/smq_dashboard_tile_data.xml",
+        "views/smq_supplier_evaluation_views.xml",
+        "views/smq_supplier_config_views.xml",
+        "views/smq_supplier_menus.xml",
+        "demo/smq_supplier_evaluation_demo.xml",
+    ],
+}

@@ -1,0 +1,4 @@
+from . import smq_process_version_reject_wizard
+from . import smq_process_instance_advance_wizard
+from . import smq_process_template_import_wizard
+from . import smq_process_version_save_as_template_wizard

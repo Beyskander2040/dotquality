@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="smq_quality.SmqSidebar" owl="1">
+        <nav
+            t-if="isSmqApp"
+            class="o_smq_sidebar"
+            t-att-class="{ o_smq_sidebar_collapsed: state.collapsed }"
+            aria-label="Navigation SMQ"
+        >
+            <div class="o_smq_sidebar_header">
+                <div class="o_smq_sidebar_brand">
+                    <img
+                        t-if="!state.collapsed"
+                        class="o_smq_sidebar_brand_logo"
+                        src="/smq_quality/static/src/img/dotquality_logo.png"
+                        alt="DotQuality"
+                    />
+                    <img
+                        t-else=""
+                        class="o_smq_sidebar_brand_mark"
+                        src="/smq_quality/static/src/img/dotquality_mark.png"
+                        alt="DotQuality"
+                    />
+                </div>
+                <button
+                    class="o_smq_sidebar_toggle"
+                    t-on-click="toggleCollapsed"
+                    t-att-aria-label="state.collapsed ? 'Développer la navigation' : 'Réduire la navigation'"
+                >
+                    <i t-attf-class="fa #{state.collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left'}" />
+                </button>
+            </div>
+
+            <div class="o_smq_sidebar_body">
+                <t t-foreach="nav" t-as="group" t-key="group.key">
+
+                    <!-- En-tête de section : regroupe visuellement plusieurs
+                    groupes sous un même intitulé (ex. "Qualité" au-dessus de
+                    Organisation & Périmètre / Quality Management /
+                    Référentiels). Le trait supérieur reste visible même
+                    replié ; seul le libellé se cache. -->
+                    <div t-if="group.sectionLabel" class="o_smq_sidebar_section_title">
+                        <span t-if="!state.collapsed" t-esc="group.sectionLabel" />
+                    </div>
+
+                    <!-- Entrée simple sans sous-menu (ex. Dashboard) -->
+                    <a
+                        t-if="!group.children"
+                        href="#"
+                        class="o_smq_sidebar_link o_smq_sidebar_top_link"
+                        tabindex="0"
+                        t-on-click.prevent="() => this.onItemClick(group)"
+                        t-on-keydown="(ev) => this.onKeydown(() => this.onItemClick(group), ev)"
+                    >
+                        <i t-attf-class="fa #{group.icon} o_smq_sidebar_icon" />
+                        <span class="o_smq_sidebar_label" t-if="!state.collapsed" t-esc="group.label" />
+                    </a>
+
+                    <!-- Groupe avec sous-menus : replié par défaut, l'en-tête
+                    est cliquable et ne fait qu'afficher/masquer ses
+                    sous-modules (accordéon), sans naviguer lui-même. -->
+                    <div t-if="group.children" class="o_smq_sidebar_group">
+                        <div
+                            class="o_smq_sidebar_group_title"
+                            tabindex="0"
+                            role="button"
+                            t-att-aria-expanded="isGroupExpanded(group.key) ? 'true' : 'false'"
+                            t-on-click="() => this.onGroupHeaderClick(group)"
+                            t-on-keydown="(ev) => this.onKeydown(() => this.onGroupHeaderClick(group), ev)"
+                        >
+                            <i t-attf-class="fa #{group.icon} o_smq_sidebar_icon" />
+                            <span class="o_smq_sidebar_label" t-if="!state.collapsed" t-esc="group.label" />
+                            <span
+                                t-if="!state.collapsed and group.comingSoon"
+                                class="o_smq_sidebar_soon_tag"
+                            >À venir</span>
+                            <i
+                                t-if="!state.collapsed"
+                                t-attf-class="fa #{isGroupExpanded(group.key) ? 'fa-chevron-down' : 'fa-chevron-right'} o_smq_sidebar_group_caret"
+                            />
+                        </div>
+                        <div class="o_smq_sidebar_children" t-if="!state.collapsed and isGroupExpanded(group.key)">
+                            <a
+                                t-foreach="group.children"
+                                t-as="child"
+                                t-key="child.key"
+                                href="#"
+                                class="o_smq_sidebar_link o_smq_sidebar_child_link"
+                                t-att-class="{ o_smq_sidebar_link_soon: child.comingSoon }"
+                                tabindex="0"
+                                t-on-click.prevent="() => this.onItemClick(child)"
+                                t-on-keydown="(ev) => this.onKeydown(() => this.onItemClick(child), ev)"
+                            >
+                                <span t-esc="child.label" />
+                                <i t-if="child.comingSoon" class="fa fa-lock o_smq_sidebar_lock" />
+                            </a>
+                        </div>
+                    </div>
+
+                </t>
+            </div>
+        </nav>
+    </t>
+
+</templates>

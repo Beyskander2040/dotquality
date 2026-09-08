@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- La taxonomie OCA a déjà Majeure/Mineure/Infondée : on ajoute le
+         niveau "Critique" demandé pour le SMQ plutôt que dupliquer avec un
+         champ Selection. -->
+    <record id="nonconformity_severity_critical" model="mgmtsystem.nonconformity.severity" context="{'lang': 'fr_FR'}">
+        <field name="name">Critique</field>
+        <field name="sequence">5</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Référentiel de compétences minimal pour la démonstration : le type
+         "Languages" livré par hr_skills ne convient pas à des compétences
+         qualité. Ces enregistrements sont de la donnée de référence pure
+         (hr.skill.type/hr.skill/hr.skill.level, modèles natifs OCA
+         hr_skills) — aucun nouveau modèle, aucune nouvelle fonctionnalité. -->
+    <record id="hr_skill_type_quality" model="hr.skill.type">
+        <field name="name">Qualité &amp; Processus</field>
+    </record>
+
+    <record id="hr_skill_level_beginner" model="hr.skill.level">
+        <field name="name">Débutant</field>
+        <field name="level_progress">25</field>
+        <field name="skill_type_id" ref="hr_skill_type_quality" />
+    </record>
+
+    <record id="hr_skill_level_confirmed" model="hr.skill.level">
+        <field name="name">Confirmé</field>
+        <field name="level_progress">60</field>
+        <field name="skill_type_id" ref="hr_skill_type_quality" />
+    </record>
+
+    <record id="hr_skill_level_expert" model="hr.skill.level">
+        <field name="name">Expert</field>
+        <field name="level_progress">100</field>
+        <field name="skill_type_id" ref="hr_skill_type_quality" />
+    </record>
+
+    <record id="hr_skill_internal_audit" model="hr.skill">
+        <field name="name">Audit interne ISO 9001</field>
+        <field name="skill_type_id" ref="hr_skill_type_quality" />
+    </record>
+
+    <record id="hr_skill_root_cause_analysis" model="hr.skill">
+        <field name="name">Analyse des causes (5 pourquoi / Ishikawa)</field>
+        <field name="skill_type_id" ref="hr_skill_type_quality" />
+    </record>
+
+    <!-- Deux employés fictifs (aucune donnée personnelle réelle), dans le
+         même univers que le scénario NC/Audit déjà présent (BTSNet). -->
+    <record id="hr_employee_sonia_trabelsi" model="hr.employee">
+        <field name="name">Sonia Trabelsi</field>
+        <field name="job_title">Responsable Assurance Qualité</field>
+    </record>
+
+    <record id="hr_employee_karim_belhadj" model="hr.employee">
+        <field name="name">Karim Belhadj</field>
+        <field name="job_title">Technicien Support BTSNet</field>
+    </record>
+
+    <!-- Formation 1 : cycle complet jusqu'à l'évaluation d'efficacité -->
+    <record id="smq_training_audit_iso" model="smq.training">
+        <field name="name">Formation Audit interne ISO 9001:2015</field>
+        <field name="training_type">interne</field>
+        <field name="trainer">Responsable Qualité</field>
+        <field name="date_start">2026-06-15</field>
+        <field name="date_end">2026-06-16</field>
+        <field name="process_id" ref="smq_quality.smq_process_pr04" />
+        <field name="employee_ids" eval="[(4, ref('hr_employee_sonia_trabelsi')), (4, ref('hr_employee_karim_belhadj'))]" />
+        <field name="skill_ids" eval="[(4, ref('hr_skill_internal_audit'))]" />
+        <field name="description">Formation aux principes de l'audit interne selon ISO 9001:2015 : préparation, conduite d'entretien, formulation des constats.</field>
+        <field name="state">evaluee</field>
+        <field name="efficacy_date">2026-07-15 09:00:00</field>
+        <field name="efficacy_result">effective</field>
+        <field name="efficacy_user_id" ref="base.user_admin" />
+        <field name="efficacy_comment">Les deux participants ont mené leur premier audit interne encadré en juillet avec un niveau d'autonomie satisfaisant.</field>
+    </record>
+
+    <!-- Formation 2 : planifiée, pas encore réalisée (variété d'états pour
+         la démonstration) -->
+    <record id="smq_training_root_cause" model="smq.training">
+        <field name="name">Sensibilisation à l'analyse des causes (5 pourquoi)</field>
+        <field name="training_type">interne</field>
+        <field name="trainer">Responsable Qualité</field>
+        <field name="date_start">2026-09-10</field>
+        <field name="date_end">2026-09-10</field>
+        <field name="process_id" ref="smq_quality.smq_process_pr05" />
+        <field name="employee_ids" eval="[(4, ref('hr_employee_karim_belhadj'))]" />
+        <field name="skill_ids" eval="[(4, ref('hr_skill_root_cause_analysis'))]" />
+        <field name="description">Sensibilisation aux méthodes 5 pourquoi et Ishikawa utilisées dans l'analyse des non-conformités.</field>
+        <field name="state">planifiee</field>
+    </record>
+
+</odoo>

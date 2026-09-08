@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_smq_root"
+        name="SMQ"
+        sequence="15"
+        groups="group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_dashboard"
+        name="Tableau de bord"
+        parent="menu_smq_root"
+        action="action_smq_dashboard_client"
+        sequence="0"
+        groups="group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_documents"
+        name="Documents"
+        parent="menu_smq_root"
+        action="action_smq_coming_soon_documents"
+        sequence="10"
+        groups="group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_nonconformity"
+        name="Non-conformités"
+        parent="menu_smq_root"
+        action="action_smq_coming_soon_nonconformity"
+        sequence="20"
+        groups="group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_corrective_action"
+        name="Actions correctives"
+        parent="menu_smq_root"
+        action="action_smq_coming_soon_action"
+        sequence="30"
+        groups="group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_audit"
+        name="Audits"
+        parent="menu_smq_root"
+        action="action_smq_coming_soon_audit"
+        sequence="40"
+        groups="group_smq_employee"
+    />
+
+    <menuitem
+        id="menu_smq_revision"
+        name="Révisions"
+        parent="menu_smq_root"
+        action="action_smq_coming_soon_revision"
+        sequence="50"
+        groups="group_smq_employee"
+    />
+
+    <!-- LOT 8 (smq_bpmn) : ce menu devient un dossier (deux enfants —
+         Processus / Versions — déclarés dans smq_bpmn/views/smq_bpmn_menus.xml)
+         plutôt que de créer une arborescence BPMN parallèle. "action" est
+         explicitement vidé ci-dessous : omettre l'attribut ne suffit pas à
+         effacer une valeur déjà chargée par une exécution précédente (un
+         write() d'update ne touche que les champs explicitement présents). -->
+    <menuitem
+        id="menu_smq_process"
+        name="Processus"
+        parent="menu_smq_root"
+        sequence="60"
+        groups="group_smq_employee"
+    />
+    <record id="menu_smq_process" model="ir.ui.menu">
+        <field name="action" eval="False" />
+    </record>
+
+    <menuitem
+        id="menu_smq_configuration"
+        name="Configuration"
+        parent="menu_smq_root"
+        sequence="100"
+        groups="group_smq_admin"
+    />
+
+    <menuitem
+        id="menu_smq_process_category"
+        name="Catégories de processus"
+        parent="menu_smq_configuration"
+        action="action_smq_process_category"
+        sequence="10"
+        groups="group_smq_admin"
+    />
+
+</odoo>

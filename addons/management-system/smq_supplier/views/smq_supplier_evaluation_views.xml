@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_supplier_evaluation_tree" model="ir.ui.view">
+        <field name="name">smq.supplier.evaluation.tree</field>
+        <field name="model">smq.supplier.evaluation</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'draft'">
+                <field name="reference" />
+                <field name="partner_id" />
+                <field name="evaluation_date" />
+                <field name="global_score" sum="Total" />
+                <field name="qualification_level_id" />
+                <field name="state" widget="badge" decoration-success="state == 'done'" />
+                <field name="responsible_user_id" widget="many2one_avatar_user" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_supplier_evaluation_form" model="ir.ui.view">
+        <field name="name">smq.supplier.evaluation.form</field>
+        <field name="model">smq.supplier.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Évaluation fournisseur">
+                <header>
+                    <button
+                        name="action_validate"
+                        string="Valider"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'draft'"
+                        groups="smq_quality.group_smq_quality_manager"
+                    />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_actions"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-tasks"
+                            invisible="action_count == 0"
+                        >
+                            <field name="action_count" string="Actions" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="partner_id" />
+                        <h1>
+                            <field name="reference" readonly="1" class="oe_inline" />
+                            <span> — </span>
+                            <field name="partner_id" placeholder="Fournisseur évalué" class="oe_inline" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="stakeholder_id" />
+                            <field name="evaluation_date" />
+                        </group>
+                        <group>
+                            <field name="global_score" />
+                            <field name="qualification_level_id" />
+                            <field name="responsible_user_id" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Critères d'évaluation" name="criteria">
+                            <field name="criteria_line_ids">
+                                <tree editable="bottom">
+                                    <field name="criterion_id" />
+                                    <field name="weight" />
+                                    <field name="score" />
+                                    <field name="comment" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Actions" name="actions">
+                            <button
+                                name="action_create_treatment_action"
+                                type="object"
+                                string="Créer une action"
+                                class="btn-primary mb-2"
+                            />
+                            <field name="action_ids" nolabel="1">
+                                <tree>
+                                    <field name="reference" />
+                                    <field name="name" />
+                                    <field name="type_action" />
+                                    <field name="user_id" />
+                                    <field name="date_deadline" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_supplier_evaluation_search" model="ir.ui.view">
+        <field name="name">smq.supplier.evaluation.search</field>
+        <field name="model">smq.supplier.evaluation</field>
+        <field name="arch" type="xml">
+            <search string="Évaluations fournisseurs">
+                <field name="reference" />
+                <field name="partner_id" />
+                <field name="responsible_user_id" />
+                <separator />
+                <filter name="filter_draft" string="Brouillons" domain="[('state', '=', 'draft')]" />
+                <filter name="filter_done" string="Validées" domain="[('state', '=', 'done')]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_partner" string="Fournisseur" context="{'group_by': 'partner_id'}" />
+                    <filter name="group_by_qualification" string="Niveau de qualification" context="{'group_by': 'qualification_level_id'}" />
+                    <filter name="group_by_state" string="Statut" context="{'group_by': 'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_supplier_evaluation" model="ir.actions.act_window">
+        <field name="name">Fournisseurs</field>
+        <field name="res_model">smq.supplier.evaluation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_smq_supplier_evaluation_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune évaluation fournisseur enregistrée pour le moment.
+            </p>
+        </field>
+    </record>
+
+</odoo>

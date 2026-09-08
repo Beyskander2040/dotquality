@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Fournisseurs fictifs (aucune donnée personnelle réelle) -->
+    <record id="res_partner_tunisie_fournitures" model="res.partner">
+        <field name="name">Tunisie Fournitures Bureautiques</field>
+        <field name="is_company">True</field>
+        <field name="email">contact@tunisie-fournitures-demo.tn</field>
+    </record>
+
+    <record id="res_partner_infranet_solutions" model="res.partner">
+        <field name="name">InfraNet Solutions</field>
+        <field name="is_company">True</field>
+        <field name="email">contact@infranet-solutions-demo.tn</field>
+    </record>
+
+    <!-- Évaluation 1 : bon score global -> qualification "Agréé" -->
+    <record id="smq_supplier_evaluation_tunisie_fournitures" model="smq.supplier.evaluation">
+        <field name="partner_id" ref="res_partner_tunisie_fournitures" />
+        <field name="evaluation_date">2026-06-30</field>
+        <field name="state">done</field>
+    </record>
+    <record id="smq_supplier_evaluation_line_tf_quality" model="smq.supplier.evaluation.line">
+        <field name="evaluation_id" ref="smq_supplier_evaluation_tunisie_fournitures" />
+        <field name="criterion_id" ref="smq_supplier.smq_supplier_criterion_quality" />
+        <field name="score">4</field>
+    </record>
+    <record id="smq_supplier_evaluation_line_tf_delay" model="smq.supplier.evaluation.line">
+        <field name="evaluation_id" ref="smq_supplier_evaluation_tunisie_fournitures" />
+        <field name="criterion_id" ref="smq_supplier.smq_supplier_criterion_delay" />
+        <field name="score">3</field>
+    </record>
+    <record id="smq_supplier_evaluation_line_tf_responsiveness" model="smq.supplier.evaluation.line">
+        <field name="evaluation_id" ref="smq_supplier_evaluation_tunisie_fournitures" />
+        <field name="criterion_id" ref="smq_supplier.smq_supplier_criterion_responsiveness" />
+        <field name="score">4</field>
+    </record>
+
+    <!-- Évaluation 2 : score moyen -> qualification "Sous surveillance",
+         encore en brouillon (variété d'états pour la démonstration) -->
+    <record id="smq_supplier_evaluation_infranet" model="smq.supplier.evaluation">
+        <field name="partner_id" ref="res_partner_infranet_solutions" />
+        <field name="evaluation_date">2026-07-31</field>
+        <field name="state">draft</field>
+    </record>
+    <record id="smq_supplier_evaluation_line_infranet_quality" model="smq.supplier.evaluation.line">
+        <field name="evaluation_id" ref="smq_supplier_evaluation_infranet" />
+        <field name="criterion_id" ref="smq_supplier.smq_supplier_criterion_quality" />
+        <field name="score">2</field>
+    </record>
+    <record id="smq_supplier_evaluation_line_infranet_delay" model="smq.supplier.evaluation.line">
+        <field name="evaluation_id" ref="smq_supplier_evaluation_infranet" />
+        <field name="criterion_id" ref="smq_supplier.smq_supplier_criterion_delay" />
+        <field name="score">2</field>
+    </record>
+    <record id="smq_supplier_evaluation_line_infranet_responsiveness" model="smq.supplier.evaluation.line">
+        <field name="evaluation_id" ref="smq_supplier_evaluation_infranet" />
+        <field name="criterion_id" ref="smq_supplier.smq_supplier_criterion_responsiveness" />
+        <field name="score">3</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,61 @@
+// Design system SMQ — variables partagées par le dashboard et la sidebar.
+// Palette sobre : une couleur primaire (identité SMQ) + couleurs
+// fonctionnelles (jamais utilisées comme simple décoration).
+
+// Neutres
+$smq-bg: #f5f6f8;
+$smq-surface: #ffffff;
+// Sidebar sur fond clair (plutôt que sombre) : plus proche des standards
+// SaaS actuels (Notion/Linear/Asana) et évite la rupture de contraste
+// brutale entre une sidebar sombre et un contenu clair.
+$smq-sidebar-bg: #fbfbfc;
+$smq-sidebar-bg-hover: #eef1f5;
+$smq-text: #1a1f29;
+$smq-text-muted: #565f6d;
+$smq-border: #e5e7eb;
+
+// Primaire (identité SMQ, distincte du violet Odoo)
+$smq-primary: #2b4c6f;
+$smq-primary-light: #e8eef4;
+
+// Fonctionnelles
+$smq-success: #2f8a5b;
+$smq-success-bg: #e3f1ea;
+$smq-warning: #d9750c;
+$smq-warning-bg: #fbeadb;
+$smq-critical: #c0392b;
+$smq-critical-bg: #f8e3e1;
+$smq-info: #3366a6;
+$smq-info-bg: #e8eef7;
+$smq-inactive: #9aa1ac;
+$smq-inactive-bg: #eef0f2;
+
+// Espacements (grille 4px)
+$smq-space-1: 4px;
+$smq-space-2: 8px;
+$smq-space-3: 12px;
+$smq-space-4: 16px;
+$smq-space-5: 24px;
+$smq-space-6: 32px;
+$smq-space-7: 48px;
+
+// Radius
+$smq-radius-sm: 8px;
+$smq-radius-md: 12px;
+$smq-radius-lg: 16px;
+
+// Ombres (subtiles, pas de glow)
+$smq-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+$smq-shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px -4px rgba(16, 24, 40, 0.08);
+$smq-shadow-lg: 0 2px 4px rgba(16, 24, 40, 0.06), 0 8px 20px -6px rgba(16, 24, 40, 0.14);
+
+// Typo
+$smq-font-size-title: 1.75rem;
+$smq-font-size-section: 1.1rem;
+$smq-font-size-kpi: 2rem;
+$smq-font-size-body: 0.925rem;
+$smq-font-size-label: 0.8rem;
+
+// Sidebar
+$smq-sidebar-width: 304px;
+$smq-sidebar-width-collapsed: 64px;

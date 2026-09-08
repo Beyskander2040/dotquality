@@ -1,0 +1,17 @@
+// La majorité du style vient gratuitement des classes réelles d'Odoo
+// (o_list_table, o_group_header, o_data_row...) déjà chargées globalement —
+// seule la cellule de pliage document/document (propre à cette vue, sans
+// équivalent natif) a besoin d'un style dédié ici.
+.o_smq_doc_hierarchy_list {
+    .o_smq_doc_tree_toggle_cell {
+        width: 28px;
+        white-space: nowrap;
+    }
+
+    .o_smq_doc_tree_toggle {
+        display: inline-flex;
+        width: 14px;
+        justify-content: center;
+        cursor: pointer;
+    }
+}

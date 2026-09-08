@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_process_form_organization" model="ir.ui.view">
+        <field name="name">smq.process.form.organization</field>
+        <field name="model">smq.process</field>
+        <field name="inherit_id" ref="smq_quality.view_smq_process_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='responsible_id']" position="after">
+                <field name="site_id" />
+                <field name="department_id" />
+                <field name="smq_activity_ids" widget="many2many_tags" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,119 @@
+// LOT 9 — styles strictement encapsulés sous .o_smq_bpmn_editor_widget /
+// .o_smq_bpmn_editor_canvas_wrapper. Aucune règle globale, aucune
+// modification des styles Odoo existants.
+
+.o_smq_bpmn_editor_widget {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.o_smq_bpmn_editor_toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.o_smq_bpmn_editor_toolbar_group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.o_smq_bpmn_editor_file_input {
+    display: none;
+}
+
+.o_smq_bpmn_editor_status {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+// LOT 10 — le canvas et le panneau de propriétés partagent une même ligne :
+// le canvas occupe l'espace disponible, le panneau garde une largeur fixe.
+.o_smq_bpmn_editor_body {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    height: 600px;
+}
+
+.o_smq_bpmn_editor_canvas_wrapper {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.o_smq_bpmn_editor_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.o_smq_bpmn_properties_panel {
+    flex: 0 0 300px;
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: 4px;
+    padding: 8px;
+    background-color: var(--o-view-background-color, #fff);
+}
+
+.o_smq_bpmn_properties_section {
+    margin-bottom: 16px;
+
+    h6 {
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--o-gray-500, #6c757d);
+        border-bottom: 1px solid var(--border-color, #dee2e6);
+        padding-bottom: 4px;
+        margin-bottom: 8px;
+    }
+}
+
+.o_smq_bpmn_properties_field {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    label {
+        font-size: 11px;
+        color: var(--o-gray-500, #6c757d);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        width: 100%;
+        font-size: 13px;
+        padding: 2px 4px;
+    }
+
+    textarea {
+        min-height: 50px;
+        resize: vertical;
+    }
+}
+
+.o_smq_bpmn_properties_no_mapping {
+    text-align: center;
+}

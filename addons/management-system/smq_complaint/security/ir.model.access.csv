@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_complaint_employee,smq.complaint employee,model_smq_complaint,smq_quality.group_smq_employee,1,0,0,0
+access_smq_complaint_writer,smq.complaint writer,model_smq_complaint,smq_quality.group_smq_writer,1,1,1,0
+access_smq_complaint_quality_manager,smq.complaint quality manager,model_smq_complaint,smq_quality.group_smq_quality_manager,1,1,1,1

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_document_stage_draft" model="smq.document.stage">
+        <field name="name">Brouillon</field>
+        <field name="code">draft</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="smq_document_stage_in_validation" model="smq.document.stage">
+        <field name="name">En validation</field>
+        <field name="code">in_validation</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="smq_document_stage_approved" model="smq.document.stage">
+        <field name="name">Approuvé</field>
+        <field name="code">approved</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="smq_document_stage_published" model="smq.document.stage">
+        <field name="name">Publié</field>
+        <field name="code">published</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="smq_document_stage_effective" model="smq.document.stage">
+        <field name="name">En vigueur</field>
+        <field name="code">effective</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <record id="smq_document_stage_obsolete" model="smq.document.stage">
+        <field name="name">Obsolète</field>
+        <field name="code">obsolete</field>
+        <field name="sequence">60</field>
+        <field name="fold">1</field>
+    </record>
+
+</odoo>

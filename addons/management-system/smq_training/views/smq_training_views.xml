@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_training_tree" model="ir.ui.view">
+        <field name="name">smq.training.tree</field>
+        <field name="model">smq.training</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'annulee'">
+                <field name="reference" />
+                <field name="name" />
+                <field name="training_type" widget="badge" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="process_id" optional="hide" />
+                <field name="state" widget="badge" decoration-success="state == 'evaluee'" decoration-info="state == 'realisee'" decoration-danger="state == 'annulee'" />
+                <field name="responsible_user_id" widget="many2one_avatar_user" optional="hide" />
+                <field name="company_id" groups="base.group_multi_company" optional="hide" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_training_kanban" model="ir.ui.view">
+        <field name="name">smq.training.kanban</field>
+        <field name="model">smq.training</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="training_type" />
+                <field name="employee_ids" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="reference" />
+                                        <span> — </span>
+                                        <field name="name" />
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="training_type" widget="badge" />
+                                <div>
+                                    <field name="process_id" />
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="date_start" />
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="responsible_user_id" widget="many2one_avatar_user" />
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_smq_training_form" model="ir.ui.view">
+        <field name="name">smq.training.form</field>
+        <field name="model">smq.training</field>
+        <field name="arch" type="xml">
+            <form string="Formation">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="identifiee,planifiee,realisee,evaluee,annulee" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_actions"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-tasks"
+                            invisible="action_count == 0"
+                        >
+                            <field name="action_count" string="Actions" widget="statinfo" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="reference" readonly="1" class="oe_inline" />
+                            <span> — </span>
+                            <field name="name" placeholder="Intitulé de la formation" class="oe_inline" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="training_type" />
+                            <field name="trainer" />
+                            <field name="process_id" />
+                        </group>
+                        <group>
+                            <field name="date_start" />
+                            <field name="date_end" />
+                            <field name="responsible_user_id" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Objectifs / contenu de la formation..." />
+                    <notebook>
+                        <page string="Participants et compétences" name="participants">
+                            <group>
+                                <field name="employee_ids" widget="many2many_tags" />
+                                <field name="skill_ids" widget="many2many_tags" />
+                            </group>
+                        </page>
+                        <page string="Évaluation d'efficacité" name="efficacy">
+                            <group>
+                                <field name="efficacy_date" />
+                                <field name="efficacy_result" />
+                                <field name="efficacy_user_id" />
+                            </group>
+                            <field name="efficacy_comment" placeholder="Commentaire de vérification..." />
+                        </page>
+                        <page string="Actions" name="actions">
+                            <button
+                                name="action_create_treatment_action"
+                                type="object"
+                                string="Créer une action"
+                                class="btn-primary mb-2"
+                            />
+                            <field name="action_ids" nolabel="1">
+                                <tree>
+                                    <field name="reference" />
+                                    <field name="name" />
+                                    <field name="type_action" />
+                                    <field name="user_id" />
+                                    <field name="date_deadline" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_training_search" model="ir.ui.view">
+        <field name="name">smq.training.search</field>
+        <field name="model">smq.training</field>
+        <field name="arch" type="xml">
+            <search string="Formations">
+                <field name="reference" />
+                <field name="name" />
+                <field name="employee_ids" />
+                <field name="skill_ids" />
+                <field name="process_id" />
+                <separator />
+                <filter name="filter_mine" string="Mes formations" domain="[('responsible_user_id', '=', uid)]" />
+                <filter name="filter_open" string="En cours" domain="[('state', 'not in', ('evaluee', 'annulee'))]" />
+                <filter name="filter_evaluated" string="Évaluées" domain="[('state', '=', 'evaluee')]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_type" string="Type" context="{'group_by': 'training_type'}" />
+                    <filter name="group_by_state" string="Statut" context="{'group_by': 'state'}" />
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'process_id'}" />
+                    <filter name="group_by_responsible" string="Responsable" context="{'group_by': 'responsible_user_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_training" model="ir.actions.act_window">
+        <field name="name">Formations</field>
+        <field name="res_model">smq.training</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_smq_training_search" />
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune formation enregistrée pour le moment.
+            </p>
+        </field>
+    </record>
+
+</odoo>

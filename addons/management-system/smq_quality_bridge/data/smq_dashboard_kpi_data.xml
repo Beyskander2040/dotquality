@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!-- Complète la ligne d'en-tête KPI (kind="kpi") définie dans
+         smq_quality/data/smq_dashboard_tile_data.xml — même mécanisme,
+         nouvelles clés propres aux modèles OCA intégrés par ce pont. -->
+
+    <record id="smq_dashboard_kpi_nc_open" model="smq.dashboard.tile">
+        <field name="sequence">30</field>
+        <field name="kind">kpi</field>
+        <field name="key">nc_open</field>
+        <field name="name">NC ouvertes</field>
+        <field name="icon">fa-exclamation-triangle</field>
+    </record>
+
+    <record id="smq_dashboard_kpi_action_late" model="smq.dashboard.tile">
+        <field name="sequence">40</field>
+        <field name="kind">kpi</field>
+        <field name="key">action_late</field>
+        <field name="name">Actions en retard</field>
+        <field name="icon">fa-clock-o</field>
+    </record>
+
+    <record id="smq_dashboard_kpi_audit_upcoming" model="smq.dashboard.tile">
+        <field name="sequence">50</field>
+        <field name="kind">kpi</field>
+        <field name="key">audit_upcoming</field>
+        <field name="name">Audits à venir</field>
+        <field name="icon">fa-search</field>
+    </record>
+
+    <!-- Tuile "module" réelle pour la Revue de direction : le modèle
+         (mgmtsystem.review) est opérationnel depuis le premier jour de
+         l'intégration OCA, seule la carte dashboard manquait. -->
+    <record id="smq_dashboard_tile_management_review" model="smq.dashboard.tile">
+        <field name="sequence">45</field>
+        <field name="key">management_review</field>
+        <field name="name">Revue de direction</field>
+        <field name="icon">fa-users</field>
+    </record>
+
+</odoo>

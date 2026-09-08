@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- mgmtsystem (OCA) assigne base.user_admin à group_mgmtsystem_manager
+         par défaut (mgmtsystem/security/mgmtsystem_security.xml). Cela
+         rend visible, pour l'administrateur SMQ, une seconde application
+         "Management System" en anglais (menu_mgmtsystem_root) redondante
+         avec l'écran "Revue de direction" du SMQ. On retire uniquement
+         cette appartenance (opération M2M "unlink", pas de suppression du
+         groupe ni de l'utilisateur) — aucun fichier OCA n'est modifié,
+         le module mgmtsystem_review continue de fonctionner normalement
+         pour quiconque resterait dans ce groupe. -->
+    <record id="mgmtsystem.group_mgmtsystem_manager" model="res.groups">
+        <field name="users" eval="[(3, ref('base.user_admin'))]" />
+    </record>
+
+</odoo>

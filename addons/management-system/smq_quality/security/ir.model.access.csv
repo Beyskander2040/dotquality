@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_process_employee,smq.process employee,model_smq_process,group_smq_employee,1,0,0,0
+access_smq_process_quality_manager,smq.process quality manager,model_smq_process,group_smq_quality_manager,1,1,1,1
+access_smq_process_category_employee,smq.process.category employee,model_smq_process_category,group_smq_employee,1,0,0,0
+access_smq_process_category_admin,smq.process.category admin,model_smq_process_category,group_smq_admin,1,1,1,1
+access_smq_dashboard_tile_employee,smq.dashboard.tile employee,model_smq_dashboard_tile,group_smq_employee,1,0,0,0
+access_smq_dashboard_tile_admin,smq.dashboard.tile admin,model_smq_dashboard_tile,group_smq_admin,1,1,1,1
+access_smq_coming_soon_employee,smq.coming.soon employee,model_smq_coming_soon,group_smq_employee,1,0,0,0

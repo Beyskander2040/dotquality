@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_audit_tree" model="ir.ui.view">
+        <field name="name">smq.audit.tree</field>
+        <field name="model">mgmtsystem.audit</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reference" />
+                <field name="name" />
+                <field name="quality_process_id" />
+                <field name="date" />
+                <field name="user_id" />
+                <field name="nonconformity_count" string="NC" />
+                <field name="tag_ids" widget="many2many_tags" optional="hide" />
+                <field name="state" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_audit_form" model="ir.ui.view">
+        <field name="name">smq.audit.form</field>
+        <field name="model">mgmtsystem.audit</field>
+        <field name="arch" type="xml">
+            <form string="Audit interne">
+                <header>
+                    <button
+                        name="button_close"
+                        string="Clôturer"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'open'"
+                        groups="smq_quality.group_smq_quality_manager"
+                    />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_nonconformities"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-exclamation-triangle"
+                            invisible="nonconformity_count == 0"
+                        >
+                            <field name="nonconformity_count" widget="statinfo" string="Non-conformités" />
+                        </button>
+                        <button
+                            name="action_view_imp_opp"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-lightbulb-o"
+                            invisible="imp_opp_count == 0"
+                        >
+                            <field name="imp_opp_count" widget="statinfo" string="Actions / améliorations" />
+                        </button>
+                        <button
+                            name="action_view_smq_documents"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o"
+                            invisible="smq_document_count == 0"
+                        >
+                            <field name="smq_document_count" widget="statinfo" string="Documents" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="reference" string="Référence" />
+                        <h2>
+                            <field name="reference" />
+                        </h2>
+                        <label for="name" string="Nom" />
+                        <h1>
+                            <field name="name" placeholder="ex. Audit interne — Processus Satisfaction client" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" />
+                            <field name="user_id" string="Responsable audit" required="1" />
+                            <field name="quality_process_id" />
+                        </group>
+                        <group>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="participants" string="Auditeurs &amp; Audités">
+                            <group>
+                                <group string="Auditeurs">
+                                    <field name="auditor_user_ids" nolabel="1" widget="many2many_tags" />
+                                </group>
+                                <group string="Audités">
+                                    <field name="auditee_user_ids" nolabel="1" widget="many2many_tags" />
+                                </group>
+                            </group>
+                        </page>
+                        <page name="checklist" string="Checklist">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="seq" widget="handle" />
+                                    <field name="name" />
+                                    <field name="is_conformed" />
+                                    <field name="comments" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="documents" string="Documents audités">
+                            <field name="smq_document_ids" />
+                        </page>
+                        <page name="nonconformities" string="Non-conformités">
+                            <field name="nonconformity_ids" />
+                        </page>
+                        <page name="conclusions" string="Points forts / Points à améliorer">
+                            <group string="Points forts">
+                                <field name="strong_points" nolabel="1" />
+                            </group>
+                            <group string="Points à améliorer">
+                                <field name="to_improve_points" nolabel="1" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_audit_search" model="ir.ui.view">
+        <field name="name">smq.audit.search</field>
+        <field name="model">mgmtsystem.audit</field>
+        <field name="arch" type="xml">
+            <search string="Audits">
+                <field name="reference" />
+                <field name="name" />
+                <field name="quality_process_id" />
+                <field name="user_id" />
+                <field name="tag_ids" />
+                <filter name="filter_open" string="Ouverts" domain="[('state', '=', 'open')]" />
+                <filter name="filter_done" string="Clôturés" domain="[('state', '=', 'done')]" />
+                <separator />
+                <filter name="filter_mine" string="Mes audits" domain="['|', ('user_id', '=', uid), ('auditor_user_ids', 'in', uid)]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'quality_process_id'}" />
+                    <filter name="group_by_state" string="État" context="{'group_by': 'state'}" />
+                    <filter name="group_by_user" string="Responsable" context="{'group_by': 'user_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_audit" model="ir.actions.act_window">
+        <field name="name">Audits</field>
+        <field name="res_model">mgmtsystem.audit</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_smq_audit_search" />
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Planifiez votre premier audit interne.</p>
+        </field>
+    </record>
+
+    <!-- Fixe explicitement la vue utilisée par chaque mode d'affichage :
+         mgmtsystem.audit porte à la fois les vues OCA (natives) et les
+         vues SMQ définies ci-dessus. Sans cette précision, le choix de la
+         vue par défaut dépend d'un ordre implicite et n'est pas garanti
+         (cf. LOT 2 sur mgmtsystem.review) — on l'épingle donc explicitement
+         pour les trois modes. Aucune vue SMQ dédiée n'existe pour le
+         calendrier : on réutilise le calendrier OCA natif, pleinement
+         fonctionnel, plutôt que d'en créer un pour rien. -->
+    <record id="action_smq_audit_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence">10</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_smq_audit_tree" />
+        <field name="act_window_id" ref="action_smq_audit" />
+    </record>
+
+    <record id="action_smq_audit_view_form" model="ir.actions.act_window.view">
+        <field name="sequence">20</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_smq_audit_form" />
+        <field name="act_window_id" ref="action_smq_audit" />
+    </record>
+
+    <record id="action_smq_audit_view_calendar" model="ir.actions.act_window.view">
+        <field name="sequence">30</field>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="mgmtsystem_audit.view_audit_calendar" />
+        <field name="act_window_id" ref="action_smq_audit" />
+    </record>
+
+</odoo>

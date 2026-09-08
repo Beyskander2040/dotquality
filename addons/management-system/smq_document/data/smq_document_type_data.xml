@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_document_type_pol" model="smq.document.type">
+        <field name="name">Politique</field>
+        <field name="code_prefix">POL</field>
+        <field name="sequence">10</field>
+        <field name="review_period">24</field>
+    </record>
+
+    <record id="smq_document_type_man" model="smq.document.type">
+        <field name="name">Manuel</field>
+        <field name="code_prefix">MAN</field>
+        <field name="sequence">20</field>
+        <field name="review_period">24</field>
+    </record>
+
+    <record id="smq_document_type_proc" model="smq.document.type">
+        <field name="name">Procédure</field>
+        <field name="code_prefix">PROC</field>
+        <field name="sequence">30</field>
+        <field name="requires_process">1</field>
+        <field name="review_period">12</field>
+    </record>
+
+    <record id="smq_document_type_ins" model="smq.document.type">
+        <field name="name">Instruction</field>
+        <field name="code_prefix">INS</field>
+        <field name="sequence">40</field>
+        <field name="requires_process">1</field>
+        <field name="review_period">12</field>
+    </record>
+
+    <record id="smq_document_type_form" model="smq.document.type">
+        <field name="name">Formulaire</field>
+        <field name="code_prefix">FORM</field>
+        <field name="sequence">50</field>
+        <field name="review_period">12</field>
+    </record>
+
+    <record id="smq_document_type_rec" model="smq.document.type">
+        <field name="name">Enregistrement</field>
+        <field name="code_prefix">REC</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <record id="smq_document_type_rap" model="smq.document.type">
+        <field name="name">Rapport</field>
+        <field name="code_prefix">RAP</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <record id="smq_document_type_ext" model="smq.document.type">
+        <field name="name">Document externe</field>
+        <field name="code_prefix">EXT</field>
+        <field name="sequence">80</field>
+    </record>
+
+</odoo>

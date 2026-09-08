@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_document_stage_tree" model="ir.ui.view">
+        <field name="name">smq.document.stage.tree</field>
+        <field name="model">smq.document.stage</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle" />
+                <field name="code" />
+                <field name="name" />
+                <field name="fold" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_document_stage" model="ir.actions.act_window">
+        <field name="name">Statuts de document</field>
+        <field name="res_model">smq.document.stage</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Critères -->
+    <record id="view_smq_supplier_criterion_tree" model="ir.ui.view">
+        <field name="name">smq.supplier.criterion.tree</field>
+        <field name="model">smq.supplier.criterion</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="weight" />
+                <field name="active" widget="boolean_toggle" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_supplier_criterion" model="ir.actions.act_window">
+        <field name="name">Critères d'évaluation</field>
+        <field name="res_model">smq.supplier.criterion</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- Niveaux de qualification -->
+    <record id="view_smq_supplier_qualification_level_tree" model="ir.ui.view">
+        <field name="name">smq.supplier.qualification.level.tree</field>
+        <field name="model">smq.supplier.qualification.level</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="min_score" />
+                <field name="max_score" />
+                <field name="color" widget="color_picker" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_smq_supplier_qualification_level" model="ir.actions.act_window">
+        <field name="name">Niveaux de qualification</field>
+        <field name="res_model">smq.supplier.qualification.level</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

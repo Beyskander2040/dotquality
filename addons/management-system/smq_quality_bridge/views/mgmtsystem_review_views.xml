@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_management_review_tree" model="ir.ui.view">
+        <field name="name">smq.management.review.tree</field>
+        <field name="model">mgmtsystem.review</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'done'">
+                <field name="reference" />
+                <field name="name" />
+                <field name="date" />
+                <field name="state" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_management_review_form" model="ir.ui.view">
+        <field name="name">smq.management.review.form</field>
+        <field name="model">mgmtsystem.review</field>
+        <field name="arch" type="xml">
+            <form string="Revue de direction">
+                <header>
+                    <button
+                        name="button_close"
+                        string="Clôturer"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'open'"
+                        groups="smq_quality.group_smq_quality_manager"
+                    />
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Titre" />
+                        <h1>
+                            <field name="name" placeholder="ex. Revue de direction — 1er semestre 2026" readonly="state == 'done'" />
+                        </h1>
+                        <label for="reference" string="Référence" />
+                        <h3>
+                            <field name="reference" readonly="1" />
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state == 'done'" />
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="participants" string="Participants">
+                            <field
+                                name="user_ids"
+                                nolabel="1"
+                                readonly="state == 'done'"
+                                widget="many2many_tags"
+                                options="{'no_create': True}"
+                            />
+                        </page>
+                        <page name="inputs" string="Entrées de la revue">
+                            <group string="Politique qualité">
+                                <field name="policy" nolabel="1" readonly="state == 'done'" />
+                            </group>
+                            <group string="Changements ayant un impact sur le SMQ">
+                                <field name="changes" nolabel="1" readonly="state == 'done'" />
+                            </group>
+                            <separator string="Non-conformités et actions correctives examinées" />
+                            <field name="line_ids" readonly="state == 'done'">
+                                <tree editable="bottom">
+                                    <field name="name" />
+                                    <field name="type" />
+                                    <field name="action_id" invisible="type != 'action'" />
+                                    <field name="nonconformity_id" invisible="type != 'nonconformity'" />
+                                    <field name="decision" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="conclusion" string="Conclusion &amp; décisions">
+                            <field name="conclusion" nolabel="1" readonly="state == 'done'" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="activity_ids" widget="mail_activity" />
+                    <field name="message_ids" widget="mail_thread" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_management_review_search" model="ir.ui.view">
+        <field name="name">smq.management.review.search</field>
+        <field name="model">mgmtsystem.review</field>
+        <field name="arch" type="xml">
+            <search string="Revue de direction">
+                <field name="name" />
+                <field name="reference" />
+                <field name="user_ids" />
+                <filter name="filter_open" string="Ouvertes" domain="[('state', '=', 'open')]" />
+                <filter name="filter_done" string="Clôturées" domain="[('state', '=', 'done')]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_state" string="État" context="{'group_by': 'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_management_review" model="ir.actions.act_window">
+        <field name="name">Revue de direction</field>
+        <field name="res_model">mgmtsystem.review</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_smq_management_review_search" />
+        <field name="context">{'search_default_filter_open': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Planifiez votre première revue de direction.
+            </p>
+        </field>
+    </record>
+
+    <!-- Fixe explicitement la vue utilisée par chaque mode d'affichage :
+         mgmtsystem.review porte à la fois les vues OCA (anglaises) et les
+         vues SMQ (françaises) définies ci-dessus. Sans cette précision, le
+         choix de la vue par défaut dépend d'un ordre implicite (priorité,
+         nom, id) et n'est pas garanti — on l'épingle donc explicitement,
+         plutôt que de laisser Odoo deviner. -->
+    <record id="action_smq_management_review_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence">10</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_smq_management_review_tree" />
+        <field name="act_window_id" ref="action_smq_management_review" />
+    </record>
+
+    <record id="action_smq_management_review_view_form" model="ir.actions.act_window.view">
+        <field name="sequence">20</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_smq_management_review_form" />
+        <field name="act_window_id" ref="action_smq_management_review" />
+    </record>
+
+    <record id="action_smq_management_review_view_calendar" model="ir.actions.act_window.view">
+        <field name="sequence">30</field>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="mgmtsystem_review.view_review_calendar" />
+        <field name="act_window_id" ref="action_smq_management_review" />
+    </record>
+
+    <!-- Rattache l'onglet "Réponses de sondage" (ajouté par
+         mgmtsystem_review_survey sur la vue OCA anglaise) à la vue
+         française réellement utilisée par le SMQ : sans ce patch,
+         l'onglet n'apparaît jamais dans l'écran "Revue de direction". -->
+    <record id="view_smq_management_review_form_survey_fr" model="ir.ui.view">
+        <field name="name">smq.management.review.form.survey.fr</field>
+        <field name="model">mgmtsystem.review</field>
+        <field name="inherit_id" ref="view_smq_management_review_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inputs']" position="inside">
+                <separator string="Réponses de sondage" />
+                <field name="response_ids" nolabel="1" readonly="state == 'done'">
+                    <tree>
+                        <field name="survey_id" />
+                        <field name="create_date" />
+                        <field name="partner_id" />
+                        <field name="state" />
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

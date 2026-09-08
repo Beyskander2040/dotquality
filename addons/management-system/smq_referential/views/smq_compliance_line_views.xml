@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_compliance_line_tree" model="ir.ui.view">
+        <field name="name">smq.compliance.line.tree</field>
+        <field name="model">smq.compliance.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="referential_id" />
+                <field name="requirement_id" />
+                <field name="process_id" />
+                <field name="applicable" />
+                <field name="state" decoration-success="state == 'compliant'" decoration-warning="state == 'partial'" decoration-danger="state == 'non_compliant'" decoration-muted="state == 'not_evaluated'" widget="badge" />
+                <field name="evaluation_date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_compliance_line_form" model="ir.ui.view">
+        <field name="name">smq.compliance.line.form</field>
+        <field name="model">smq.compliance.line</field>
+        <field name="arch" type="xml">
+            <form string="Ligne de conformité">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="not_evaluated,compliant,partial,non_compliant" />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="requirement_id" />
+                            <field name="referential_id" readonly="1" />
+                            <field name="process_id" />
+                            <field name="applicable" />
+                        </group>
+                        <group>
+                            <field name="evaluation_date" />
+                            <field name="evaluated_by" />
+                            <field name="company_id" groups="base.group_multi_company" />
+                        </group>
+                    </group>
+                    <group string="Preuves">
+                        <field name="evidence_document_ids" widget="many2many_tags" />
+                        <field name="evidence_attachment_ids" widget="many2many_binary" />
+                    </group>
+                    <group string="Écart constaté" invisible="state not in ('partial', 'non_compliant')">
+                        <field name="gap_description" nolabel="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_compliance_line_search" model="ir.ui.view">
+        <field name="name">smq.compliance.line.search</field>
+        <field name="model">smq.compliance.line</field>
+        <field name="arch" type="xml">
+            <search string="Matrice de conformité">
+                <field name="requirement_id" />
+                <field name="referential_id" />
+                <field name="process_id" />
+                <filter name="filter_applicable" string="Applicables" domain="[('applicable', '=', True)]" />
+                <filter name="filter_gaps" string="Écarts" domain="[('state', 'in', ('partial', 'non_compliant'))]" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_referential" string="Référentiel" context="{'group_by': 'referential_id'}" />
+                    <filter name="group_by_requirement" string="Exigence" context="{'group_by': 'requirement_id'}" />
+                    <filter name="group_by_process" string="Processus" context="{'group_by': 'process_id'}" />
+                    <filter name="group_by_state" string="État" context="{'group_by': 'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_compliance_line" model="ir.actions.act_window">
+        <field name="name">Matrice de conformité</field>
+        <field name="res_model">smq.compliance.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_smq_compliance_line_search" />
+        <field name="context">{'search_default_group_by_referential': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune ligne de conformité : ouvrez un référentiel et générez les lignes manquantes.
+            </p>
+        </field>
+    </record>
+
+</odoo>

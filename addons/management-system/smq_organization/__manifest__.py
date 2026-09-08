@@ -1,0 +1,20 @@
+{
+    "name": "SMQ - Organisation & Périmètre",
+    "summary": "Sites, activités, parties intéressées et périmètre du système de management de la qualité",
+    "version": "17.0.1.0.0",
+    "category": "Quality",
+    "author": "Medianet",
+    "license": "AGPL-3",
+    "application": False,
+    "depends": ["smq_quality", "hr"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/smq_site_views.xml",
+        "views/smq_activity_views.xml",
+        "views/smq_stakeholder_views.xml",
+        "views/smq_scope_views.xml",
+        "views/smq_process_views.xml",
+        "views/smq_organization_menus.xml",
+        "demo/smq_organization_demo.xml",
+    ],
+}

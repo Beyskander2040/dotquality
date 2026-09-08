@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_dashboard_tile_supplier" model="smq.dashboard.tile">
+        <field name="sequence">57</field>
+        <field name="key">supplier</field>
+        <field name="name">Fournisseurs</field>
+        <field name="icon">fa-truck</field>
+        <field name="action_xmlid">smq_supplier.action_smq_supplier_evaluation</field>
+    </record>
+
+</odoo>

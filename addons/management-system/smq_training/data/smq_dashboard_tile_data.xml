@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_dashboard_tile_training" model="smq.dashboard.tile">
+        <field name="sequence">56</field>
+        <field name="key">training</field>
+        <field name="name">Formations</field>
+        <field name="icon">fa-graduation-cap</field>
+        <field name="action_xmlid">smq_training.action_smq_training</field>
+    </record>
+
+</odoo>

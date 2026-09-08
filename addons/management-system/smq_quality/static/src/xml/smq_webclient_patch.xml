@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <!-- Extension officielle OWL du template du webclient (t-inherit) —
+         aucun fichier du module "web" n'est modifié. web.WebClient monte
+         <NavBar/>, <ActionContainer/> et <MainComponentsContainer/> comme
+         enfants directs de <body> (voir web/static/src/start.js) : on
+         insère la sidebar SMQ juste avant <ActionContainer/>. Le
+         positionnement visuel (largeur, décalage du contenu) est géré en
+         CSS via smq_sidebar.scss, pas par la structure DOM. -->
+    <t t-name="smq_quality.WebClientPatch" t-inherit="web.WebClient" t-inherit-mode="extension" owl="1">
+        <xpath expr="//ActionContainer" position="before">
+            <SmqSidebar />
+        </xpath>
+    </t>
+
+</templates>

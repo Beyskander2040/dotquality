@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="smq_process_template_complaint" model="smq.process.template">
+        <field name="name">Traitement des réclamations</field>
+        <field name="description">Réception d'une réclamation client, qualification, correction si le dossier est incomplet, validation de la réponse et notification au client.</field>
+    </record>
+
+    <record id="smq_process_template_complaint_start" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">10</field>
+        <field name="code">START</field>
+        <field name="name">Début</field>
+        <field name="step_type">start</field>
+    </record>
+    <record id="smq_process_template_complaint_receive" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">20</field>
+        <field name="code">RECEIVE</field>
+        <field name="name">Réception de la réclamation</field>
+        <field name="step_type">manual</field>
+    </record>
+    <record id="smq_process_template_complaint_qualify" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">30</field>
+        <field name="code">QUALIFY</field>
+        <field name="name">Qualifier la réclamation</field>
+        <field name="step_type">document</field>
+    </record>
+    <record id="smq_process_template_complaint_gateway" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">40</field>
+        <field name="code">GATEWAY</field>
+        <field name="name">Réclamation fondée ?</field>
+        <field name="step_type">gateway</field>
+    </record>
+    <record id="smq_process_template_complaint_correct" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">50</field>
+        <field name="code">CORRECT</field>
+        <field name="name">Compléter le dossier</field>
+        <field name="step_type">manual</field>
+    </record>
+    <record id="smq_process_template_complaint_validate" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">60</field>
+        <field name="code">VALIDATE</field>
+        <field name="name">Valider la réponse</field>
+        <field name="step_type">approval</field>
+    </record>
+    <record id="smq_process_template_complaint_notify" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">70</field>
+        <field name="code">NOTIFY</field>
+        <field name="name">Notifier le client</field>
+        <field name="step_type">notification</field>
+    </record>
+    <record id="smq_process_template_complaint_end" model="smq.process.template.step">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">80</field>
+        <field name="code">END</field>
+        <field name="name">Fin</field>
+        <field name="step_type">end</field>
+    </record>
+
+    <record id="smq_process_template_complaint_t1" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">10</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_start" />
+        <field name="target_step_id" ref="smq_process_template_complaint_receive" />
+    </record>
+    <record id="smq_process_template_complaint_t2" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">20</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_receive" />
+        <field name="target_step_id" ref="smq_process_template_complaint_qualify" />
+    </record>
+    <record id="smq_process_template_complaint_t3" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">30</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_qualify" />
+        <field name="target_step_id" ref="smq_process_template_complaint_gateway" />
+    </record>
+    <record id="smq_process_template_complaint_t4" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">40</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_gateway" />
+        <field name="target_step_id" ref="smq_process_template_complaint_validate" />
+        <field name="condition">fondée</field>
+    </record>
+    <record id="smq_process_template_complaint_t5" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">50</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_gateway" />
+        <field name="target_step_id" ref="smq_process_template_complaint_correct" />
+        <field name="condition">incomplète</field>
+    </record>
+    <record id="smq_process_template_complaint_t6" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">60</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_correct" />
+        <field name="target_step_id" ref="smq_process_template_complaint_qualify" />
+    </record>
+    <record id="smq_process_template_complaint_t7" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">70</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_validate" />
+        <field name="target_step_id" ref="smq_process_template_complaint_notify" />
+    </record>
+    <record id="smq_process_template_complaint_t8" model="smq.process.template.step.transition">
+        <field name="template_id" ref="smq_process_template_complaint" />
+        <field name="sequence">80</field>
+        <field name="source_step_id" ref="smq_process_template_complaint_notify" />
+        <field name="target_step_id" ref="smq_process_template_complaint_end" />
+    </record>
+
+</odoo>

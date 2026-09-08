@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_smq_site_employee,smq.site employee,model_smq_site,smq_quality.group_smq_employee,1,0,0,0
+access_smq_site_admin,smq.site admin,model_smq_site,smq_quality.group_smq_admin,1,1,1,1
+access_smq_activity_employee,smq.activity employee,model_smq_activity,smq_quality.group_smq_employee,1,0,0,0
+access_smq_activity_admin,smq.activity admin,model_smq_activity,smq_quality.group_smq_admin,1,1,1,1
+access_smq_stakeholder_employee,smq.stakeholder employee,model_smq_stakeholder,smq_quality.group_smq_employee,1,0,0,0
+access_smq_stakeholder_quality_manager,smq.stakeholder quality manager,model_smq_stakeholder,smq_quality.group_smq_quality_manager,1,1,1,1
+access_smq_scope_employee,smq.scope employee,model_smq_scope,smq_quality.group_smq_employee,1,0,0,0
+access_smq_scope_quality_manager,smq.scope quality manager,model_smq_scope,smq_quality.group_smq_quality_manager,1,1,1,1

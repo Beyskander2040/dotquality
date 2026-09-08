@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_smq_training"
+        name="Formations"
+        action="action_smq_training"
+        parent="smq_quality.menu_smq_root"
+        sequence="71"
+        groups="smq_quality.group_smq_employee"
+    />
+
+</odoo>

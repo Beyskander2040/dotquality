@@ -1,0 +1,3 @@
+from . import smq_document_version_reject_wizard
+from . import smq_document_version_effective_wizard
+from . import smq_document_periodic_review_wizard

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_smq_process_template_import_wizard_form" model="ir.ui.view">
+        <field name="name">smq.process.template.import.wizard.form</field>
+        <field name="model">smq.process.template.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importer un modèle de processus">
+                <field name="template_id" invisible="1" />
+                <group>
+                    <field name="process_code" placeholder="ex. PROC-042" />
+                    <field name="process_name" />
+                    <field name="category_id" />
+                    <field name="responsible_id" />
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Importer" type="object" class="btn-primary" />
+                    <button string="Annuler" special="cancel" class="btn-secondary" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_process_version_save_as_template_wizard_form" model="ir.ui.view">
+        <field name="name">smq.process.version.save.as.template.wizard.form</field>
+        <field name="model">smq.process.version.save.as.template.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Enregistrer comme modèle de processus">
+                <field name="version_id" invisible="1" />
+                <group>
+                    <field name="template_name" />
+                    <field name="category_id" />
+                    <field name="description" placeholder="Objectif du modèle, contexte d'utilisation recommandé..." />
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Enregistrer comme modèle" type="object" class="btn-primary" />
+                    <button string="Annuler" special="cancel" class="btn-secondary" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_process_template_tree" model="ir.ui.view">
+        <field name="name">smq.process.template.tree</field>
+        <field name="model">smq.process.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="category_id" />
+                <field name="step_count" string="Activités" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_smq_process_template_form" model="ir.ui.view">
+        <field name="name">smq.process.template.form</field>
+        <field name="model">smq.process.template</field>
+        <field name="arch" type="xml">
+            <form string="Modèle de processus">
+                <header>
+                    <button
+                        name="action_open_import_wizard"
+                        string="Importer ce modèle"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="not template_step_ids"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="ex. Traitement des réclamations" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id" />
+                            <field name="active" invisible="1" />
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" placeholder="Objectif du modèle, contexte d'utilisation recommandé..." />
+                    </group>
+                    <group string="Activités">
+                        <field name="template_step_ids" nolabel="1" colspan="2">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle" />
+                                <field name="code" />
+                                <field name="name" />
+                                <field name="step_type" />
+                                <field name="description" optional="hide" />
+                            </tree>
+                        </field>
+                        <field name="template_transition_ids" nolabel="1" colspan="2">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle" />
+                                <field
+                                    name="source_step_id"
+                                    domain="[('template_id', '=', parent.id)]"
+                                />
+                                <field
+                                    name="target_step_id"
+                                    domain="[('template_id', '=', parent.id)]"
+                                />
+                                <field name="condition" />
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_smq_process_template_search" model="ir.ui.view">
+        <field name="name">smq.process.template.search</field>
+        <field name="model">smq.process.template</field>
+        <field name="arch" type="xml">
+            <search string="Modèles de processus">
+                <field name="name" />
+                <field name="category_id" />
+                <group expand="0" string="Grouper par">
+                    <filter name="group_by_category" string="Catégorie" context="{'group_by': 'category_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_smq_process_template" model="ir.actions.act_window">
+        <field name="name">Modèles de processus</field>
+        <field name="res_model">smq.process.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_smq_process_template_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez un modèle réutilisable, ou enregistrez-en un depuis une version de processus existante.
+            </p>
+        </field>
+    </record>
+
+</odoo>

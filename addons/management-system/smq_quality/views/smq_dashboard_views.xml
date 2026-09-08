@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="action_smq_dashboard_client" model="ir.actions.client">
+        <field name="name">Tableau de bord</field>
+        <field name="tag">smq_dashboard</field>
+    </record>
+
+    <!-- Écrans "à venir" réutilisés par les menus non encore développés -->
+
+    <record id="action_smq_coming_soon_documents" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">smq.coming.soon</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Gestion documentaire — bientôt disponible</p>
+            <p>Politiques, manuels, procédures, instructions, formulaires : identité, versions, workflow de validation et de publication.</p>
+        </field>
+    </record>
+
+    <record id="action_smq_coming_soon_nonconformity" model="ir.actions.act_window">
+        <field name="name">Non-conformités</field>
+        <field name="res_model">smq.coming.soon</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Suivi des non-conformités — bientôt disponible</p>
+            <p>Déclaration, analyse des causes et suivi des non-conformités, rattachés aux processus qualité.</p>
+        </field>
+    </record>
+
+    <record id="action_smq_coming_soon_action" model="ir.actions.act_window">
+        <field name="name">Actions correctives</field>
+        <field name="res_model">smq.coming.soon</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Actions correctives — bientôt disponible</p>
+            <p>Plan d'action, responsable, échéance et vérification d'efficacité.</p>
+        </field>
+    </record>
+
+    <record id="action_smq_coming_soon_audit" model="ir.actions.act_window">
+        <field name="name">Audits</field>
+        <field name="res_model">smq.coming.soon</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Audits — bientôt disponible</p>
+            <p>Planification, constats et suivi des audits internes et externes.</p>
+        </field>
+    </record>
+
+    <record id="action_smq_coming_soon_revision" model="ir.actions.act_window">
+        <field name="name">Révisions</field>
+        <field name="res_model">smq.coming.soon</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Révisions périodiques — bientôt disponible</p>
+            <p>Échéances de révision des documents, rappels et escalade.</p>
+        </field>
+    </record>
+
+</odoo>
